@@ -1,0 +1,54 @@
+CS44 W10
+HW2 Problem 2
+
+
+a) If there are k robots, how would you represent the state of the system?
+
+a k-1 array of tuples for locations
+
+b) Give an upper bound on the number of states in the system, in terms of n, and k.
+
+n^2 choose k
+
+c) Give a rough estimate on how many of these states are "bad" if the number of wall squares is w, and n is much larger than k.
+
+(n^2 choose k) - (n^2 - w) choose k 
+
+d) If there are not many walls, n is large (say 100x100), and several robots (say 10), do you expect a straightforwards breadth-first search on the state space to be effective in all cases? Why or why not?
+
+ask about this one?  confused
+
+e) Describe a useful, optimistic heuristic function for this search space. Show that your heuristic is optimistic.
+
+A useful optimistic heuristic would simply be distance in squares from the goal for each robot
+(that is number of squares intersected by a straight line from current position to goal position).
+It is optimistic because it is the shortest distance (it doesn't consider obstacles or other robots).
+Thus it is either exactly correct or the actual path was longer and so it is guaranteed to be optimistic.
+
+f) Implement an A* search algorithm that takes as input a map, a start state, and a goal state,
+and plans an optimal or near-optimal collision-free path (for every robot!) from start to goal.
+In this case, cost function for the path is defined as the number of steps taken by the robot that is
+last to reach the goal. Use ASCII art for output (preferably in such a way that you can see the cool
+animation as the robots move!) You may hard-code mazes.
+
+I'll give you some freedom as to how you implement a solution.
+The state space is large, and you could make different simplifying assumptions, at the cost of optimality.
+For example, I recommend you assume that the robots always move in the same order (robot a, then b, then c) --
+but recognize that in this case you might need a "do_nothing" action for each robot.
+I also recommend that you assume robots can't swap spaces.
+Describe in words the assumptions you made, why you made them,
+and the effect on the types of plans that you get.
+
+g) Test your program on mazes with between one and three robots,
+of sizes varying from 5x5 to 40x40. (You might want to randomly generate the 40x40 mazes.)
+I'll leave it up to you to devise some cool examples --
+but give me at least five and describe why they are interesting.
+(For example, what if the robots were in some sort of corridor, in the "wrong" order,
+and had to do something tricky to reverse their order?)
+
+h) Describe why the 8-puzzle in the book is a special case of this problem.
+Is the heuristic function you chose a good one for the 8-puzzle?
+
+i) The state space of the 8-puzzle is made of two disjoint sets.
+Describe how you would modify your program to prove this. (You do not have to implement this.) 
+

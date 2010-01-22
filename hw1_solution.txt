@@ -1,0 +1,18 @@
+Found a solution to your Cannibal Vs Missionaries problems!
+Total Moves: 12
+Here they are:
+One missionary and one cannibal go across.
+One missionary comes back.
+Two cannibals go across.
+One cannibal comes back.
+Two missionaries go across.
+One missionary and one cannibal come back.
+Two missionaries go across.
+One cannibal comes back.
+Two cannibals go across.
+One cannibal comes back.
+Two cannibals go across.
+and we are done!
+
+in short notation the moves (in mcb) are: 
+331 220 321 300 311 110 221 020 031 010 021 000 
