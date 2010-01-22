@@ -1,31 +1,22 @@
 package hw2_P2;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Set;
 
 public class RobotSolver
 {
 	
-	public Map<RobotState, RobotState> RtoF;
-	public RobotState A;
-	public Maps mazes;
+
+	public MMap mazes;
 	
 	/**
 	 * constructor, initializes the robots and some maps. 
 	 */
-	public RobotSolver()
+	public RobotSolver(MMap m)
 	{
-				
-		mazes = new Maps();
-		
-		A = new RobotState(mazes.map1AStart); //TODO: make this use a method in mazemaps to get appropropriate robot for maze
-		
-		RtoF = new HashMap<RobotState, RobotState>();
-		RtoF.put(A, mazes.map1AFinish);
+		mazes = m;
 	}
 	
 	
@@ -39,7 +30,7 @@ public class RobotSolver
 		
 		LinkedList<RobotState> solution = new LinkedList<RobotState>();
 		
-		frontier.add(new Node(A, null, 0 + heuristic(A, mazes.map1AFinish))); //add the first robot state
+		frontier.add(new Node(mazes.starts[0], null, 0 + heuristic(mazes.starts[0], mazes.finishes[0]))); //add the first robot state
 		explored = new HashSet<RobotState>();
 		
 		while (!frontier.isEmpty())
@@ -65,14 +56,14 @@ public class RobotSolver
 			{
 				if (! explored.contains(possibles.get(i)))
 				{
-					frontier.add(new Node(possibles.get(i), current, current.distance + 1  + heuristic(A, mazes.map1AFinish)));
+					frontier.add(new Node(possibles.get(i), current, current.distance + 1  + heuristic(mazes.starts[0], mazes.finishes[0])));
 				}
 				else
 				{
 					Node n = frontier.get(current.state);
 					if (n != null && n.distance > current.distance + 1)
 					{
-					frontier.update(current, new Node(possibles.get(i), current, current.distance + 1  + heuristic(A, mazes.map1AFinish)));
+					frontier.update(current, new Node(possibles.get(i), current, current.distance + 1  + heuristic(mazes.starts[0],  mazes.finishes[0])));
 					}
 				}
 			}
@@ -133,7 +124,7 @@ public class RobotSolver
 		//System.out.println("GOALTEST: " +r.toString() +"with"+mazes.map1AF.toString()+ "and get: "+r.equals(mazes.map1AF));
 		//return r.equals(RtoF.get(r));
 		//System.out.println("Checking coords: " + r.x + "," + r.y);
-		return r.equals(mazes.map1AFinish); //TODO: fix this hack
+		return r.equals(mazes.finishes[0]); //TODO: fix this hack
 		//TODO make real test for all robots
 	}
 	

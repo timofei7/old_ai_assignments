@@ -25,7 +25,7 @@ public class P2Graphical extends Applet implements ActionListener
 	private final int VERT_OFFSET = 30;
 	private final int WIN_SIZE = SQUARE_SIZE * GRID_SIZE; // how big to make the
 															// window
-	private Maps maze;
+	private MMap maze;
 	private RobotSolver rs;
 	private Timer timer;
 	private LinkedList<RobotState> solution;
@@ -37,9 +37,9 @@ public class P2Graphical extends Applet implements ActionListener
 	public void init()
 	{
 		setSize(WIN_SIZE, WIN_SIZE);
-		maze = new Maps();
+		maze = new MMap(MMap.MapSet.MAP2);
 		repaint();
-		rs = new RobotSolver();
+		rs = new RobotSolver(maze);
 		solution = rs.astar();
 	    timer = new Timer(1000, this);            // lets have a timer for drawing wavelets
 	    timer.start();                                          // start up the timer
