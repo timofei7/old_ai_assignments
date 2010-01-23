@@ -14,11 +14,15 @@ public class MMap
 	
 	public MapSet currentMap;	
 	
+	public int numRobots;
+	
+	public int gridSize;
+	
 	
 	public MMap(MapSet map)
 	{
 		
-		currentMap = map;  // this one thing setting changes EVERYTHING
+		currentMap = map; 
 		
 		switch (currentMap)
 		{
@@ -87,8 +91,10 @@ public class MMap
 	
 	private void buildMap1()
 	{
-		starts = new RobotState[3];
-		finishes = new RobotState[3];
+		numRobots = 3;
+		
+		starts = new RobotState[numRobots];
+		finishes = new RobotState[numRobots];
 		
 		starts[0] = new RobotState(0,6);
 		starts[1] = new RobotState(1,0);
@@ -97,8 +103,9 @@ public class MMap
 		finishes[1] = new RobotState(6,4);
 		finishes[2] = new RobotState(6,6);
 
+		gridSize = 7;
 		
-		current_map = new String[7];
+		current_map = new String[gridSize];
 		current_map[0] = ".......";
 		current_map[1] = ".##....";
 		current_map[2] = "..##...";
@@ -110,13 +117,19 @@ public class MMap
 	
 	private void buildMap2()
 	{
-		starts = new RobotState[1];
-		finishes = new RobotState[1];
+		numRobots = 2;
+		
+		starts = new RobotState[numRobots];
+		finishes = new RobotState[numRobots];
 		
 		starts[0] = new RobotState(0,6);
+		starts[1] = new RobotState(0,5);
 		finishes[0] = new RobotState(3,2);
+		finishes[1] = new RobotState(3,3);
 		
-		current_map = new String[7];
+		gridSize = 7;
+		
+		current_map = new String[gridSize];
 		current_map[0] = ".......";
 		current_map[1] = "..###..";
 		current_map[2] = "..#.#..";
@@ -128,29 +141,79 @@ public class MMap
 	
 	private void buildMap3()
 	{
-		current_map = new String[7];
-		current_map[0]  = "...........";
-		current_map[1]  = "...........";
-		current_map[2]  = "...........";
-		current_map[3]  = "...........";
-		current_map[4]  = "...........";
-		current_map[5]  = "...........";
-		current_map[6]  = "...........";
-		current_map[7]  = "...........";
-		current_map[8]  = "...........";
-		current_map[9]  = "...........";
-		current_map[10] = "...........";
-		current_map[11] = "...........";
+		numRobots = 2;
+		
+		starts = new RobotState[numRobots];
+		finishes = new RobotState[numRobots];
+		
+		starts[0] = new RobotState(0,3);
+		starts[1] = new RobotState(1,3);
+		finishes[0] = new RobotState(18,3);
+		finishes[1] = new RobotState(16,3);
+
+		gridSize = 20;
+		
+		current_map = new String[gridSize];
+		current_map[0]  = "....................";
+		current_map[1]  = "....................";
+		current_map[2]  = "####################";
+		current_map[3]  = "....................";
+		current_map[4]  = "######.#########.###";
+		current_map[5]  = "....................";
+		current_map[6]  = "....................";
+		current_map[7]  = "....................";
+		current_map[8]  = "....................";
+		current_map[9]  = "....................";
+		current_map[10] = "....................";
+		current_map[11] = "....................";
+		current_map[12] = "....................";
+		current_map[13] = "....................";
+		current_map[14] = "....................";
+		current_map[15] = "....................";
+		current_map[16] = "....................";
+		current_map[17] = "....................";
+		current_map[18] = "....................";
+		current_map[19] = "....................";
+
+		
 	}
 	
 	private void buildMap4()
 	{
-		current_map = new String[7];
+		numRobots = 3;
+		
+		starts = new RobotState[numRobots];
+		finishes = new RobotState[numRobots];
+		
+		starts[0] = new RobotState(0,6);
+		starts[1] = new RobotState(1,0);
+		starts[2] = new RobotState(4,1);
+		finishes[0] = new RobotState(6,5);
+		finishes[1] = new RobotState(6,4);
+		finishes[2] = new RobotState(6,6);
+		
+		gridSize = 7;
+		
+		current_map = new String[gridSize];
 	}
 	
 	private void buildMap5()
 	{
-		current_map = new String[7];
+		numRobots = 3;
+		
+		starts = new RobotState[numRobots];
+		finishes = new RobotState[numRobots];
+		
+		starts[0] = new RobotState(0,6);
+		starts[1] = new RobotState(1,0);
+		starts[2] = new RobotState(4,1);
+		finishes[0] = new RobotState(6,5);
+		finishes[1] = new RobotState(6,4);
+		finishes[2] = new RobotState(6,6);
+		
+		gridSize=7;
+		
+		current_map = new String[gridSize];
 	}
 	
 }

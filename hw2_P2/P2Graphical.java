@@ -1,34 +1,34 @@
 package hw2_P2;
 
 /**
- * 
- * @author Tim Tregubov
- * using some code written for cs5
- * @version 0.1 4/21/2006
+ * Draws P2 solutions graphically
+ * for CS44 W10 hw2 p2
+ * @author tim tregubov
+ * using some code I wrote for cs5 :-)
  */
 
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javax.swing.Timer;
 
 public class P2Graphical extends Applet implements ActionListener
 {
-
 	private static final long serialVersionUID = 4596161053061003374L;
 
-	private final int GRID_SIZE = 7; // how many cols/rows we want.
-	private final int SQUARE_SIZE = 50; // how big to make each square
-	private final int HORIZ_OFFSET = 18;
-	private final int VERT_OFFSET = 30;
-	private final int WIN_SIZE = SQUARE_SIZE * GRID_SIZE; // how big to make the
+	private int GRID_SIZE; // how many cols/rows we want.
+	private final int SQUARE_SIZE = 30; // how big to make each square
+	private final int HORIZ_OFFSET = 10;
+	private final int VERT_OFFSET = 20;
+	private int WIN_SIZE; // how big to make the
 															// window
 	private MMap maze;
 	private RobotSolver rs;
 	private Timer timer;
-	private LinkedList<RobotState> solution;
+	private ArrayList<LinkedList<RobotState>> solutions;
 	private frameManager fm;
 
 	/**
@@ -36,14 +36,18 @@ public class P2Graphical extends Applet implements ActionListener
 	 */
 	public void init()
 	{
-		setSize(WIN_SIZE, WIN_SIZE);
-		maze = new MMap(MMap.MapSet.MAP2);
+		maze = new MMap(MMap.MapSet.MAP2);  //initialize our map of choice
+		rs = new RobotSolver(maze);			//initialize solver
+		solutions = rs.multipathAstar();    //start solving
+	    timer = new Timer(750, this);    // lets have a timer for changinging animation frames
+	    timer.start();                    // start up the timer
+	    fm = new frameManager();          // lets manage the animation frames
+	    
+	    GRID_SIZE = maze.gridSize;
+	    WIN_SIZE = SQUARE_SIZE * GRID_SIZE;
+	    
+	    setSize(WIN_SIZE, WIN_SIZE);
 		repaint();
-		rs = new RobotSolver(maze);
-		solution = rs.astar();
-	    timer = new Timer(1000, this);            // lets have a timer for drawing wavelets
-	    timer.start();                                          // start up the timer
-	    fm = new frameManager();
 	}
 
 	/**
@@ -65,7 +69,7 @@ public class P2Graphical extends Applet implements ActionListener
 		{ // create each column up till our gridsize
 			for (int j = 0; j < GRID_SIZE; j++)
 			{ // create each row up till our gridsize
-				if (maze.isCollision(i, j)) // TODO: change this to display walls!
+				if (maze.isCollision(i, j))
 				{
 					page.setColor(Color.gray);
 				}
@@ -76,25 +80,24 @@ public class P2Graphical extends Applet implements ActionListener
 				page.fillRect((i * SQUARE_SIZE), (j * SQUARE_SIZE),
 						SQUARE_SIZE, SQUARE_SIZE); // draw our squares!
 				
-				page.setColor(Color.red);
-				if (fm.isA(i, j))
+				page.setColor(Color.blue);
+				page.setFont(new Font("Arial", Font.BOLD, 18));
+				
+				for (int k = 0; k < maze.numRobots; k++)
 				{
-					page.drawString("A", ((i * SQUARE_SIZE) + HORIZ_OFFSET), ((j * SQUARE_SIZE) + VERT_OFFSET));
-				}
-				if (fm.isB(i,j))
-				{
-					page.drawString("B", ((i * SQUARE_SIZE) + HORIZ_OFFSET), ((j * SQUARE_SIZE) + VERT_OFFSET));
-
-				}
-				if (fm.isC(i,j))
-				{
-					page.drawString("C", ((i * SQUARE_SIZE) + HORIZ_OFFSET), ((j * SQUARE_SIZE) + VERT_OFFSET));
-
+					if (fm.isRobot(i, j, k))
+					{
+						page.drawString(Integer.toString(k), ((i * SQUARE_SIZE) + HORIZ_OFFSET), ((j * SQUARE_SIZE) + VERT_OFFSET));
+					}
 				}
 			}
 		}
 	}
 
+	
+	/**
+	 * on timer click move to next frame
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
@@ -103,7 +106,9 @@ public class P2Graphical extends Applet implements ActionListener
 	}
 	
 	
-	
+	/**
+	 * this manages the animation frames we are displaying
+	 */
 	public class frameManager
 	{
 		private int currentFrame;
@@ -112,27 +117,56 @@ public class P2Graphical extends Applet implements ActionListener
 		frameManager()
 		{
 			currentFrame = 0;
-			numFrames = solution.size();;
+			numFrames = getLongestSize();
 		}
 		
-		public boolean isA(int x, int y)
+		
+		/**
+		 * checks if this location and this robot index is a hit
+		 * @param x
+		 * @param y
+		 * @param i
+		 * @return
+		 */
+		public boolean isRobot(int x, int y, int i)
 		{
-			return x==solution.get(currentFrame).x && y==solution.get(currentFrame).y;
-		}
-		public boolean isB(int x, int y)
-		{
-			return false;
-			//return x==solution.get(currentFrame).x && y==solution.get(currentFrame).y;
-		}
-		public boolean isC(int x, int y)
-		{
-			return false;
-			//return x==solution.get(currentFrame).x && y==solution.get(currentFrame).y;
+			int f = solutions.get(i).size() - 1;
+			boolean b = false;
+			
+			if (f < currentFrame) //make sure to display the stopped bots for the whole anim
+			{
+				b = x==solutions.get(i).get(f).x && y==solutions.get(i).get(f).y;
+			}
+			else
+			{
+				b = x==solutions.get(i).get(currentFrame).x && y==solutions.get(i).get(currentFrame).y;
+			}
+			return b;
 		}
 		
+		
+		/**
+		 * go to the next frame
+		 */
 		public void next()
 		{
 			currentFrame = (currentFrame + 1) % numFrames;
+		}
+		
+		
+		/**
+		 * find the longest solution in terms of steps
+		 * @return the size 
+		 */
+		private int getLongestSize()
+		{
+			int max = 0;
+			
+			for (int i = 0; i < maze.numRobots; i++)
+			{
+				max = Math.max(max, solutions.get(i).size());
+			}
+			return max;
 		}
 	}
 
