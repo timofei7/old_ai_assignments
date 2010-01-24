@@ -200,21 +200,22 @@ public class MMap
 	
 	private void buildMap5()
 	{
-		numRobots = 3;
+		numRobots = 2;
 		
 		starts = new Loc[numRobots];
 		finishes = new Loc[numRobots];
 		
-		starts[0] = new Loc(0,6);
-		starts[1] = new Loc(1,0);
-		starts[2] = new Loc(4,1);
-		finishes[0] = new Loc(6,5);
-		finishes[1] = new Loc(6,4);
-		finishes[2] = new Loc(6,6);
+		starts[0] = new Loc(0,0);
+		starts[1] = new Loc(0,1);
+		finishes[0] = new Loc(0,1);
+		finishes[1] = new Loc(0,0);
 		
-		gridSize=7;
+		gridSize=2;
 		
 		current_map = new String[gridSize];
+		current_map[0] = "..";
+		current_map[1] = "..";
+
 	}
 	
 }

@@ -34,6 +34,14 @@ public class TimeLoc
 		this.t = r.t;
 	}
 	
+	public TimeLoc(Loc r, int t)
+	{
+		this.x = r.x;
+		this.y = r.y;
+		this.t = t;
+	}
+	
+	
 	public boolean equals(TimeLoc r)
 	{
 		return r.x == this.x && r.y == this.y && r.t == this.t;

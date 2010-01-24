@@ -11,7 +11,7 @@ public class P2Main
 	 */
 	public static void main(String[] args)
 	{
-		RobotSolver rs = new RobotSolver(new MMap(MMap.MapSet.MAP1));
+		RobotSolver rs = new RobotSolver(new MMap(MMap.MapSet.MAP5));
 		
 //		MultiLoc foo = new MultiLoc(1);
 //		foo.rs[0] = new Loc(1,4);

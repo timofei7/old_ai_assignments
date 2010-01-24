@@ -9,7 +9,7 @@ import java.util.PriorityQueue;
  * But we are using twice the memory... 
  * @author tim tregubov
  */
-public class MPriorityHashQueue extends PriorityQueue<MultiNode>
+public class TPriorityHashQueue extends PriorityQueue<TimeNode>
 {
 
 	/**
@@ -17,16 +17,16 @@ public class MPriorityHashQueue extends PriorityQueue<MultiNode>
 	 */
 	private static final long serialVersionUID = 3830101596032534204L;
 
-	private HashMap<MultiLoc, MultiNode> hash;
+	private HashMap<TimeLoc, TimeNode> hash;
 	
-	public MPriorityHashQueue()
+	public TPriorityHashQueue()
 	{
 		super();
-		hash = new HashMap<MultiLoc, MultiNode>();
+		hash = new HashMap<TimeLoc, TimeNode>();
 	}
 	
 	@Override
-	public boolean add(MultiNode o)
+	public boolean add(TimeNode o)
 	{
 		hash.put(o.state, o);
 		return super.add(o);
@@ -35,14 +35,14 @@ public class MPriorityHashQueue extends PriorityQueue<MultiNode>
 	@Override
 	public boolean contains(Object o)
 	{
-		MultiNode n = (MultiNode) o;
+		TimeNode n = (TimeNode) o;
 		return hash.containsKey(n.state);  //now we're fast!
 	}
 	
 	@Override
-	public MultiNode poll()
+	public TimeNode poll()
 	{
-		MultiNode o = super.poll();
+		TimeNode o = super.poll();
 		hash.remove(o.state);
 		return o;
 	}
@@ -57,7 +57,7 @@ public class MPriorityHashQueue extends PriorityQueue<MultiNode>
 	@Override
 	public boolean remove(Object o)
 	{
-		MultiNode n = (MultiNode) o;
+		TimeNode n = (TimeNode) o;
 		hash.remove(n.state);
 		return super.remove(o);
 	}
@@ -68,12 +68,12 @@ public class MPriorityHashQueue extends PriorityQueue<MultiNode>
 	 * @param o
 	 * @return
 	 */
-	public boolean update(MultiNode o, MultiNode n)
+	public boolean update(TimeNode o, TimeNode n)
 	{
 		return remove(o) && add(n);
 	}
 	
-	public MultiNode get(MultiLoc s)
+	public TimeNode get(TimeLoc s)
 	{
 		return hash.get(s);
 	}

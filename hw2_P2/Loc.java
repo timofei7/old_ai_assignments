@@ -30,6 +30,12 @@ public class Loc
 		this.y = r.y;
 	}
 	
+	public Loc(TimeLoc r)
+	{
+		this.x = r.x;
+		this.y = r.y;
+	}
+	
 	public boolean equals(Loc r)
 	{
 		return r.x == this.x && r.y == this.y;

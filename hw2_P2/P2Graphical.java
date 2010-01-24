@@ -36,9 +36,9 @@ public class P2Graphical extends Applet implements ActionListener
 	 */
 	public void init()
 	{
-		maze = new MMap(MMap.MapSet.MAP1);  //initialize our map of choice
+		maze = new MMap(MMap.MapSet.MAP5);  //initialize our map of choice
 		rs = new RobotSolver(maze);			//initialize solver
-		solutions = rs.solutions;    //TODO: only for testing
+		solutions = rs.solutions3d;    //TODO: only for testing
 	    timer = new Timer(500, this);    // lets have a timer for changinging animation frames
 	    timer.start();                    // start up the timer
 	    fm = new frameManager();          // lets manage the animation frames
