@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -16,46 +17,62 @@ import java.util.Set;
  */
 public class RobotSolver
 {
-	
+	public final int searchDepth = 10; //we only search this far per iteration
 
 	public MMap map; //the map object
 	
-	public ArrayList<Map<Loc,Double>> waveFronts;  //generated complete distance maps to use as true heuristic
+	private ArrayList<Map<Loc,Double>> waveFronts;  //generated complete distance maps to use as true heuristic
 	
-	public ArrayList<LinkedList<Loc>> solutions2d; //the initial non-cooperative paths
-	public ArrayList<LinkedList<Loc>> solutions3d; //the final cooperative paths for display
+	public ArrayList<LinkedList<Loc>> solutions; //the final cooperative paths for display
 		
-	public ArrayList<Set<TimeLoc>> blocked;  //this holds the paths that are currently blocked
-		
+	private Set<TimeLoc> blocked;  //this holds the paths that are currently blocked
+	
+	private Random random;
+	
+	private Boolean[] terminalStops; // records finishes per robot index
 	
 	/**
 	 * constructor, initializes the robots and some maps. 
 	 */
 	public RobotSolver(MMap m)
 	{
-		waveFronts = new ArrayList<Map<Loc,Double>>();
-		solutions2d = new ArrayList<LinkedList<Loc>>();
-		solutions3d = new ArrayList<LinkedList<Loc>>();
-		blocked = new ArrayList<Set<TimeLoc>>();
-		
 		map = m;
-				
+		
+		waveFronts = new ArrayList<Map<Loc,Double>>();
+		solutions = new ArrayList<LinkedList<Loc>>();
+		blocked = new HashSet<TimeLoc>();
+		terminalStops = new Boolean[map.numRobots];
+		random = new Random();
+							
+		// build our wavefront plans!
 		for (int i = 0; i < map.numRobots; i++)
 		{
 			waveFronts.add(astar2d(map.starts[i], map.finishes[i]));
 		}
 		
-		
+		//run a search for each bot
 		for (int i = 0; i < map.numRobots; i++)
 		{
+			solutions.add(new LinkedList<Loc>());  //fill in empty
 			astar3d(map.starts[i], map.finishes[i], i);
 		}
 		
-		//TODO: make it loop so that once it reaches terminal it can still move
-		//TODO: make it iterative and only look d deep each time and swap order of robots going first
+//		//then run some more if we must, alternate randomly to increase likelihood of blockage clearage
+//		int last=0;
+//		while (!terminalStopCheck())
+//		{
+//			int i = random.nextInt(map.numRobots);
+//
+//			if (last==i)
+//			{
+//				i = random.nextInt(map.numRobots);
+//			}
+//			
+//			astar3d(solutions.get(i).getLast(), map.finishes[i], i); //restart from last position
+//			last = i;
+//		}
 		
 	}
-	
 	
 
 	
@@ -69,64 +86,86 @@ public class RobotSolver
 	 */
 	private void astar3d(Loc strt, Loc f, int robotindex)
 	{
-		boolean solSeen = false; //mark that we've seen a solution but don't quit quite yet
-
 		TimeLoc s = new TimeLoc(strt.x, strt.y, 0); //make the start at 0 time
+		int depth = 0;   //depth level counter
 		
-		TPriorityHashQueue frontier = new TPriorityHashQueue();
-		Map<Loc,Double> explored = new HashMap<Loc,Double>();
+		TPriorityHashQueue frontier = new TPriorityHashQueue(); //states to look at
+		Map<Loc,Double> explored = new HashMap<Loc,Double>();   //explored locations
 		
-		LinkedList<Loc> solution = new LinkedList<Loc>(); //my solution
-		Set<TimeLoc> myblocks = new HashSet<TimeLoc>(); //where you shouldn't go
+		LinkedList<Loc> solution = new LinkedList<Loc>(); //this robots solution
 		
+		//TODO: do I need a parent if I'm resuming from a partial solution?
 		frontier.add(new TimeNode(s, null, 0 + heuristic(s, robotindex))); //add the first robot state
 		
+		//run the search
 		while (!frontier.isEmpty())
 		{
 			TimeNode current = frontier.poll(); //chooses the lowest cost node in frontier
 			
-			if (goalTest(new Loc(current.state), f) && !solSeen)
+			//this only happens if we reach the reaaaal goal
+			if (goalTest(new Loc(current.state), map.finishes[robotindex]))
 			{
-				solSeen = true;
+				terminalStops[robotindex] = true; //note that we've finished
+			}
+			
+			if (terminalStops[robotindex] !=null && terminalStops[robotindex])
+			{	//make sure no matter what that our current location if we're done is on the blocked list
+				blocked.add(current.state);
+				blocked.add(new TimeLoc(current.state.x, current.state.y, current.state.t+1));
+			}
+
+			// goal test
+			if (goalTest(new Loc(current.state), f) || (terminalStops[robotindex] !=null && terminalStops[robotindex] && depth >= searchDepth ))
+			{
 				for (TimeNode node = current; node != null; node = node.parent)
 				{
 					solution.addFirst(new Loc(node.state));  //add path nodes to solution
-					myblocks.add(node.state); //add nodes so others don't try to go here
-					myblocks.add(new TimeLoc(node.state.x, node.state.y, node.state.t+1));  //to prevent swaps
+					blocked.add(node.state); //add nodes so others don't try to go here
+					blocked.add(new TimeLoc(node.state.x, node.state.y, node.state.t+1));  //to prevent swaps
 				}
-				System.out.println("FOUND *THE* SOLUTION:" + solution.toString());
-				solutions3d.add(solution);
-				blocked.add(myblocks);
+				System.out.println("FOUND SOLUTION:" + solution.toString());
+				solutions.get(robotindex).addAll(solution);
 				return;
-				//TODO: make it loop and wait at destination so it can move if necessary
 			}
+			
 			
 			explored.put(new Loc(current.state), current.distance);
 			
-			ArrayList<TimeLoc> possibles = getMoves(current.state);
+			ArrayList<TimeLoc> possibles = getMoves(current.state, robotindex);
 			
-			for (int i=0; i < possibles.size(); i++)
+			for (int i=0; i < possibles.size(); i++) // for all the children
 			{
-				TimeLoc possib = possibles.get(i);
-				if (! explored.containsKey(new Loc(possib)) && !checkBlocks(possib, robotindex))
+				TimeLoc possib = possibles.get(i); 
+				
+				// if we haven't explored it yet
+				// add it to frontier with a distance
+				if (! explored.containsKey(new Loc(possib)))
 				{
 					frontier.add(new TimeNode(possib, current, current.distance + 1  + heuristic(current.state, robotindex)));
 				}
-				else
+				else // if we've explored it check that its not at a lower cost now
 				{
 					TimeNode n = frontier.get(current.state);
 					if (n != null && n.distance > current.distance + 1)
 					{
-						frontier.update(current, new TimeNode(possib, current, current.distance + 1  + heuristic(current.state, robotindex)));
+						if (terminalStops[robotindex] && current.state == new TimeLoc(map.finishes[robotindex], current.state.t))
+						{   //if we are paused on the goal.. make cost 0 but keep planning in case we need to move
+							frontier.update(current, new TimeNode(possib, current, current.distance + 0)); 
+						}else
+						{
+							frontier.update(current, new TimeNode(possib, current, current.distance + 1  + heuristic(current.state, robotindex)));
+						}
 					}
 				}
 			}
+			depth++;
 		}
 	}
 	
 	
+	
 	/**
-	 * search positions!
+	 * build wavefront heuristic
 	 * instead of returning the solution here though, we return the explored graph
 	 * which is now going to be the best heuristic
 	 * remember to goes backwards from finish to start
@@ -136,12 +175,9 @@ public class RobotSolver
 	 */
 	private Map<Loc,Double> astar2d(Loc s, Loc f)
 	{
-		boolean solSeen = false; //mark that we've seen a solution but don't quit quite yet
 		
 		PriorityHashQueue frontier = new PriorityHashQueue();
-		Map<Loc,Double> explored = new HashMap<Loc,Double>();
-		
-		LinkedList<Loc> solution = new LinkedList<Loc>();
+		Map<Loc,Double> explored = new HashMap<Loc,Double>();		
 		
 		frontier.add(new Node(f, null, 0 + manhattan(f, s))); //add the first robot state
 		
@@ -149,17 +185,10 @@ public class RobotSolver
 		{
 			Node current = frontier.poll(); //chooses the lowest cost node in frontier
 			
-			if (goalTest(current.state, s) && !solSeen)
-			{
-				solSeen = true;
-				for (Node node = current; node != null; node = node.parent)
-				{
-					solution.addFirst(node.state);  //add path nodes to solution
-				}
-				System.out.println("FOUND INITIAL PLANNING SOLUTION:" + solution.toString());
-				solutions2d.add(reverse(solution));
-				//NOTE: we do not return here but we wait and fully populate the explored graph
-			}
+			//NOTE we do not backtrack and make a solution here
+			//NOTE we also don't return once we've found the solution
+			//NOTE instead we consider all options exhaustively
+			//NOTE to create a wavefront planned heuristic
 			
 			explored.put(current.state, current.distance);
 			
@@ -181,30 +210,19 @@ public class RobotSolver
 				}
 			}
 		}
-		return explored;  //if the frontier is empty return failure
+		return explored;  
 	}
 	
 	
-	/**
-	 * checks the blocked list for blocks
-	 * @param l
-	 * @param r
-	 * @return
-	 */
-	private boolean checkBlocks(TimeLoc l, int r)
+	
+	private boolean onBlocked(TimeLoc tl, int ri)
 	{
-		boolean b = false;
-		for (int i=0; i< blocked.size(); i++)
-		{
-			if (i!=r)
-			{
-				if (blocked.get(i).contains(l))
-				{
-					b = true;  // return true for any collision
-				}
-			}
-		}return b;
+		boolean b = blocked.contains(tl);
+		System.out.println("checking: " + tl +" for: " + ri + " = " + b);
+
+		return b;
 	}
+	
 	
 	/**
 	 * gets all the *possible* moves for a robot on the map
@@ -251,7 +269,7 @@ public class RobotSolver
 	 * @param r
 	 * @return
 	 */
-	private ArrayList<TimeLoc> getMoves(TimeLoc r)
+	private ArrayList<TimeLoc> getMoves(TimeLoc r, int ri)
 	{
 		ArrayList<Loc> sts = getMoves(new Loc(r));
 		
@@ -259,7 +277,11 @@ public class RobotSolver
 		
 		for (int i = 0; i < sts.size(); i++)
 		{
-			tsts.add(new TimeLoc(sts.get(i), r.t + 1));
+			TimeLoc n = new TimeLoc(sts.get(i), r.t + 1);
+			if (!onBlocked(n, ri))  //checks for time block
+			{
+				tsts.add(n);
+			}
 		}
 		tsts.add(new TimeLoc(r.x, r.y, r.t +1 )); //also have a pause action!
 		
@@ -308,19 +330,28 @@ public class RobotSolver
 	
 	
 	/**
-	 * for testing printout purposes just reverses a linked list
-	 * @param ll
+	 * checks if all robots have finished
 	 * @return
 	 */
-	private LinkedList<Loc> reverse(LinkedList<Loc> ll)
+	private boolean terminalStopCheck()
 	{
-		LinkedList<Loc> nll = new LinkedList<Loc>();
-		for (int i = 0; i < ll.size(); i++)
+		int c = 0;
+		for (int i = 0; i < terminalStops.length; i++)
 		{
-			nll.addFirst(ll.get(i));
-		}
-		return nll;
-	}
+			if (terminalStops[i] != null && terminalStops[i])
+			{
+				c = c + 1;
+			}
 
+		}
+		if (c == map.numRobots)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 }
