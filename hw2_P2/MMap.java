@@ -1,24 +1,26 @@
 package hw2_P2;
 
-import java.util.ArrayList;
-
 
 public class MMap
 {
 	public static enum MapSet { MAP1, MAP2, MAP3, MAP4, MAP5 };
 	
-	public Loc[] starts;
-	public Loc[] finishes;
+	public Loc[] starts;  //the robot starts indexed by robot
+	public Loc[] finishes; //the finishes
 	
-	public String[] current_map;
+	public String[] current_map; //how we store maps
 	
-	public MapSet currentMap;	
+	public MapSet currentMap;	//which is the current one
 	
-	public int numRobots;
+	public int numRobots;  //the number of robots on the map
 	
-	public int gridSize;
+	public int gridSize;  //the gridsize, only supports squares right now 
 	
 	
+	/**
+	 * initialize the map
+	 * @param map
+	 */
 	public MMap(MapSet map)
 	{
 		
@@ -47,17 +49,6 @@ public class MMap
 		}
 	}
 	
-	public ArrayList<Loc> getRobotStarts()
-	{
-		return null;
-	}
-	
-	
-	public ArrayList<Loc> getRobotFinishes()
-	{
-		return null;
-	}
-
 	
 	
 	/**
@@ -89,6 +80,9 @@ public class MMap
 		}
 	}
 	
+	/**
+	 * build map 1
+	 */
 	private void buildMap1()
 	{
 		numRobots = 3;
@@ -115,6 +109,9 @@ public class MMap
 		current_map[6] = "....##.";
 	}
 	
+	/**
+	 * build map 2
+	 */
 	private void buildMap2()
 	{
 		numRobots = 2;
@@ -139,6 +136,9 @@ public class MMap
 		current_map[6] = "..#....";
 	}
 	
+	/**
+	 * build map 3
+	 */
 	private void buildMap3()
 	{
 		numRobots = 2;
@@ -178,6 +178,9 @@ public class MMap
 		
 	}
 	
+	/**
+	 * build map 4
+	 */
 	private void buildMap4()
 	{
 		numRobots = 1;
@@ -198,6 +201,9 @@ public class MMap
 		current_map[4] = ".....";
 	}
 	
+	/**
+	 * build map 5
+	 */
 	private void buildMap5()
 	{
 		numRobots = 2;

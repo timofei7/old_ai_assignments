@@ -3,6 +3,8 @@ package hw2_P2;
 
 /**
  * the node object for storing a state its parent and its distance
+ * this one deals with time state
+ * TODO:  make a generic class of Node to handle both
  */
 public class TimeNode implements Comparable<TimeNode> 
 {

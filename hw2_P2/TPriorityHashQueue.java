@@ -7,6 +7,7 @@ import java.util.PriorityQueue;
  * For speed sake we're keeping a hashset along with our priority queue.
  * Thus membership testing and pulling specific objects is fast
  * But we are using twice the memory... 
+ * TODO: make a generic class of PriorityHashQueue to handle both
  * @author tim tregubov
  */
 public class TPriorityHashQueue extends PriorityQueue<TimeNode>

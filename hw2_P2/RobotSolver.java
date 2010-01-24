@@ -7,19 +7,26 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * this is an a* based cooperative multi robot motion solver
+ * nice
+ * @author tim tregubov
+ * for: CS44 W10
+ *
+ */
 public class RobotSolver
 {
 	
 
-	public MMap mazes;
+	public MMap map; //the map object
 	
 	public ArrayList<Map<Loc,Double>> waveFronts;  //generated complete distance maps to use as true heuristic
 	
-	public ArrayList<LinkedList<Loc>> solutions2d; //simple solutions
-	public ArrayList<LinkedList<Loc>> solutions3d; //simple solutions
+	public ArrayList<LinkedList<Loc>> solutions2d; //the initial non-cooperative paths
+	public ArrayList<LinkedList<Loc>> solutions3d; //the final cooperative paths for display
 		
 	public ArrayList<Set<TimeLoc>> blocked;  //this holds the paths that are currently blocked
-	
+		
 	
 	/**
 	 * constructor, initializes the robots and some maps. 
@@ -31,25 +38,36 @@ public class RobotSolver
 		solutions3d = new ArrayList<LinkedList<Loc>>();
 		blocked = new ArrayList<Set<TimeLoc>>();
 		
-		mazes = m;
-		
-		for (int i = 0; i < mazes.numRobots; i++)
+		map = m;
+				
+		for (int i = 0; i < map.numRobots; i++)
 		{
-			waveFronts.add(astar2d(mazes.starts[i], mazes.finishes[i]));
+			waveFronts.add(astar2d(map.starts[i], map.finishes[i]));
 		}
 		
-		for (int i = 0; i < mazes.numRobots; i++)
+		
+		for (int i = 0; i < map.numRobots; i++)
 		{
-			astar3d(mazes.starts[i], mazes.finishes[i], i);
+			astar3d(map.starts[i], map.finishes[i], i);
 		}
+		
+		//TODO: make it loop so that once it reaches terminal it can still move
+		//TODO: make it iterative and only look d deep each time and swap order of robots going first
 		
 	}
 	
 	
 
 	
-	
-	public void astar3d(Loc strt, Loc f, int robotindex)
+	/**
+	 * does an a* search, using the true heuristic and the builds/looks at a
+	 * blocked list of other robots to prevent run ins
+	 * @param strt is start
+	 * @param f is finish
+	 * @param robotindex the index of the current robot
+	 * @return 
+	 */
+	private void astar3d(Loc strt, Loc f, int robotindex)
 	{
 		boolean solSeen = false; //mark that we've seen a solution but don't quit quite yet
 
@@ -74,12 +92,12 @@ public class RobotSolver
 				{
 					solution.addFirst(new Loc(node.state));  //add path nodes to solution
 					myblocks.add(node.state); //add nodes so others don't try to go here
-					myblocks.add(new TimeLoc(node.state.x, node.state.y, node.state.t+1));  //to prevent swaps 
+					myblocks.add(new TimeLoc(node.state.x, node.state.y, node.state.t+1));  //to prevent swaps
 				}
 				System.out.println("FOUND *THE* SOLUTION:" + solution.toString());
 				solutions3d.add(solution);
 				blocked.add(myblocks);
-				//NOTE: we do not return here but we wait and fully populate the explored graph
+				return;
 				//TODO: make it loop and wait at destination so it can move if necessary
 			}
 			
@@ -104,9 +122,6 @@ public class RobotSolver
 				}
 			}
 		}
-		System.out.println(explored.toString());
-		System.out.println(explored.size());
-		//return explored;  //if the frontier is empty return failure
 	}
 	
 	
@@ -119,7 +134,7 @@ public class RobotSolver
 	 * @param f is finish
 	 * @return a hashset of Nodes of all locations (hashed by location state)
 	 */
-	public Map<Loc,Double> astar2d(Loc s, Loc f)
+	private Map<Loc,Double> astar2d(Loc s, Loc f)
 	{
 		boolean solSeen = false; //mark that we've seen a solution but don't quit quite yet
 		
@@ -207,21 +222,21 @@ public class RobotSolver
 		Loc left = new Loc(r.x - 1, r.y);
 		Loc right = new Loc(r.x + 1, r.y);
 		
-		if (r.y > 0  && !mazes.isCollision(up))
+		if (r.y > 0  && !map.isCollision(up))
 		{
 			sts.add(up);
 		}
-		if (r.y < mazes.gridSize -1 && !mazes.isCollision(down))
+		if (r.y < map.gridSize -1 && !map.isCollision(down))
 		{
 			sts.add(down);
 		}
 		
-		if (r.x > 0 && !mazes.isCollision(left))
+		if (r.x > 0 && !map.isCollision(left))
 		{
 			sts.add(left);
 		}
 		
-		if (r.x < mazes.gridSize -1  && !mazes.isCollision(right))
+		if (r.x < map.gridSize -1  && !map.isCollision(right))
 		{
 			sts.add(right);
 		}
@@ -229,6 +244,13 @@ public class RobotSolver
 	}
 	
 	
+	/**
+	 * get all the *possible* moves with time in mind
+	 * available to populate the graph
+	 * this includes a pause action
+	 * @param r
+	 * @return
+	 */
 	private ArrayList<TimeLoc> getMoves(TimeLoc r)
 	{
 		ArrayList<Loc> sts = getMoves(new Loc(r));
@@ -259,7 +281,7 @@ public class RobotSolver
 	
 	
 	/**
-	 * distance heuristic in squares from the goal
+	 * manhattan distance heuristic in squares from the goal
 	 * 
      * It is optimistic because it is the shortest distance (it doesn't consider obstacles, non-diagonal moves, or other robots).
      * Thus it is either exactly correct or the actual path was longer and so it is guaranteed to be optimistic.
@@ -267,7 +289,7 @@ public class RobotSolver
 	 * @param t the target position (robot object holding coordinates)
 	 * @return
 	 */
-	public int manhattan(Loc r, Loc t)
+	private int manhattan(Loc r, Loc t)
 	{
 		return Math.abs((t.x - r.x) + (t.y - r.y));
 	}
@@ -275,20 +297,18 @@ public class RobotSolver
 	
 	/**
 	 * distance heuristic from the wavefront plan given
-	 * this is sum of distances
 	 * @param r the location to test
 	 * @param i the index of the robot
 	 * @return the distance value recorded
 	 */
-	public double heuristic(TimeLoc r, int i)
+	private double heuristic(TimeLoc r, int i)
 	{
 		return waveFronts.get(i).get(new Loc(r.x, r.y));
 	}
 	
 	
-	
 	/**
-	 * for testing purposes just reverses a linked list
+	 * for testing printout purposes just reverses a linked list
 	 * @param ll
 	 * @return
 	 */

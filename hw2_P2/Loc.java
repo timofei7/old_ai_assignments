@@ -48,10 +48,12 @@ public class Loc
 		return equals(r);
 	}
 	
+	/**
+	 * the hashcode is simply an int of the 2 states cat'd together
+	 */
 	@Override
 	public int hashCode()
 	{
-		//return (x * 10) + y;
 		return Integer.parseInt(Integer.toString(x) + Integer.toString(y));
 	}
 	

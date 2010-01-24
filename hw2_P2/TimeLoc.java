@@ -2,7 +2,7 @@ package hw2_P2;
 
 
 /**
- *  is the robot location
+ *  is the robot location with time 
  */
 public class TimeLoc
 {
@@ -34,6 +34,11 @@ public class TimeLoc
 		this.t = r.t;
 	}
 	
+	/**
+	 * different constructor
+	 * @param r
+	 * @param t
+	 */
 	public TimeLoc(Loc r, int t)
 	{
 		this.x = r.x;
@@ -54,6 +59,9 @@ public class TimeLoc
 		return equals(r);
 	}
 	
+	/**
+	 * the hashcode is simply an integer of all 3 state items cat'd together
+	 */
 	@Override
 	public int hashCode()
 	{

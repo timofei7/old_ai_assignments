@@ -34,24 +34,4 @@ public class Node implements Comparable<Node>
 
 		return s;
 	}
-//	
-//	public boolean equals(Node n)
-//	{ //TODO check this, we're basically making nodes equal by state but in our case this is desirable
-//		return this.state.equals(n.state); // && this.parent.state.equals(n.parent.state) && this.distance == n.distance;
-//	}
-//	
-//	@Override
-//	public boolean equals(Object o)
-//	{
-//		Node n = (Node) o;
-//		return this.equals(n);
-//	}
-//
-//
-//	@Override
-//	public int hashCode()
-//	{
-//		return this.state.hashCode(); //just hash by state we don't care about distance or parent in this case
-//	}
-	 
 }
