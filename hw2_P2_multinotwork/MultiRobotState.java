@@ -62,7 +62,7 @@ public class MultiRobotState
 		String s = "";
 		for (int i = 0; i< size; i++)
 		{
-			s = s + rs[i].toString() + "\n";
+			s = s + rs[i].toString() + ",";
 		}
 		return s;
 	}
