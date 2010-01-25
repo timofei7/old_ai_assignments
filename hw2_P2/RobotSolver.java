@@ -420,13 +420,31 @@ public class RobotSolver
 		
 		for (int i = 0; i < ls.size(); i++)
 		{
-			MLoc nml = ml.clone();
-			nml.locs[r] = ls.get(i);
-			mls.add(nml);
+			if (!colTest(ls.get(i), ml, r))
+			{
+				MLoc nml = ml.clone();
+				nml.locs[r] = ls.get(i);
+				mls.add(nml);
+			}
 		}
 		return mls;
 		
 	}
+	
+	
+	private boolean colTest(Loc l, MLoc ml, int r)
+	{
+		boolean b = true;
+		for (int i = 0; i < map.numRobots; i++)
+		{
+			if (r != i)
+			{
+				b = b && l.equals(ml.locs[i]);
+			}
+		}
+		return b;
+	}
+	
 		
 	/**
 	 * tests if we're at goal state
