@@ -183,21 +183,24 @@ public class MMap
 	 */
 	private void buildMap4()
 	{
-		numRobots = 1;
+		numRobots = 2;
 		
 		starts = new Loc[numRobots];
 		finishes = new Loc[numRobots];
 		
-		starts[0] = new Loc(0,4);
-		finishes[0] = new Loc(4,4);
+		starts[0] = new Loc(4,4);
+		finishes[0] = new Loc(1,0);
+		
+		starts[1] = new Loc(3,4);
+		finishes[1] = new Loc(1,1);
 		
 		gridSize = 5;
 		
 		current_map = new String[gridSize];
-		current_map[0] = ".....";
-		current_map[1] = ".....";
-		current_map[2] = ".....";
-		current_map[3] = ".....";
+		current_map[0] = "#.###";
+		current_map[1] = "#.###";
+		current_map[2] = "#.###";
+		current_map[3] = "#.###";
 		current_map[4] = ".....";
 	}
 	

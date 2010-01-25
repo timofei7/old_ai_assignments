@@ -65,11 +65,11 @@ public class P2Graphical extends Applet implements ActionListener
 	 */
 	private void drawCheckBoard(Graphics page)
 	{
-		for (int i = 0; i < GRID_SIZE; i++)
+		for (int x = 0; x < GRID_SIZE; x++)
 		{ // create each column up till our gridsize
-			for (int j = 0; j < GRID_SIZE; j++)
+			for (int y = 0; y < GRID_SIZE; y++)
 			{ // create each row up till our gridsize
-				if (maze.isCollision(i, j))
+				if (maze.isCollision(x, y))
 				{
 					page.setColor(Color.gray);
 				}
@@ -77,17 +77,17 @@ public class P2Graphical extends Applet implements ActionListener
 				{
 					page.setColor(Color.lightGray);
 				}
-				page.fillRect((i * SQUARE_SIZE), (j * SQUARE_SIZE),
+				page.fillRect((x * SQUARE_SIZE), (y * SQUARE_SIZE),
 						SQUARE_SIZE, SQUARE_SIZE); // draw our squares!
 				
 				page.setColor(Color.blue);
 				page.setFont(new Font("Arial", Font.BOLD, 18));
 				
-				for (int k = 0; k < maze.numRobots; k++)
+				for (int i = 0; i < maze.numRobots; i++)
 				{
-					if (fm.isRobot(i, j, k))
+					if (fm.isRobot(x, y, i))
 					{
-						page.drawString(Integer.toString(k), ((i * SQUARE_SIZE) + HORIZ_OFFSET), ((j * SQUARE_SIZE) + VERT_OFFSET));
+						page.drawString(Integer.toString(i), ((x * SQUARE_SIZE) + HORIZ_OFFSET), ((y * SQUARE_SIZE) + VERT_OFFSET));
 					}
 				}
 			}

@@ -4,11 +4,11 @@ package hw2_P2;
 /**
  *  is the robot location
  */
-public class Loc
+public class Loc implements Cloneable
 {
 	public int x;
 	public int y;
-	
+		
 	/**
 	 * make me a robot state plz
 	 * @param x
@@ -34,6 +34,13 @@ public class Loc
 	{
 		this.x = r.x;
 		this.y = r.y;
+	}
+	
+	@Override
+	public Loc clone()
+	{
+		Loc l = new Loc(x, y);
+		return l;
 	}
 	
 	public boolean equals(Loc r)
