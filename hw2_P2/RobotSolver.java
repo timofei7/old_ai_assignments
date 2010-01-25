@@ -145,7 +145,12 @@ public class RobotSolver
 				{
 					frontier.add(new MNode(possib, current, current.distance + 1  + heuristic(current.state)));
 				}
-				else // if we've explored it check that its not at a lower cost now
+				else if (current.state.equals(possib)) //allow for a turn skip if we're stuck
+				{
+					frontier.add(new MNode(possib, current, current.distance + 0  + heuristic(current.state)));
+				}
+				// if we've explored it check that its not at a lower cost now
+				else
 				{
 					MNode n = frontier.get(current.state);
 					if (n != null && n.distance > current.distance)// + 1)
@@ -434,9 +439,44 @@ public class RobotSolver
 		return mls;
 		
 	}
-	//TODO:  make simultanous moves
-
 	
+	
+	//TODO:  make simultaneous moves
+	
+
+//	public ArrayList<MLoc> getAllMoves(MLoc ml)
+//	{
+//		ArrayList<ArrayList<Loc>> allNewMoves = new ArrayList<ArrayList<Loc>>();
+//		for (int i = 0; i < map.numRobots; i++)
+//		{
+//			allNewMoves.add(getMovesWithPause(ml.locs[i]));
+//		}
+//				
+//		
+//		for (int i = 0; i < map.numRobots; i++)
+//		{
+//			
+//		}
+//		ArrayList<MLoc> mls = new ArrayList<MLoc>();
+//		System.out.println("ls: " + ls);
+//		for (int j = 0; j < ls.size(); j++)
+//		{
+//			if (!colTest(ls.get(j), ml, r))
+//			{
+//				MLoc nml = ml.clone();
+//				nml.locs[r] = ls.get(j);
+//				mls.add(nml);
+//				System.out.println("built: " + mls);
+//			}
+//		}
+//		return mls;
+//		
+//	}
+	
+	
+	/**
+	 * checks collisions between a robot and its neighbors
+	 */
 	private boolean colTest(Loc l, MLoc ml, int r)
 	{
 		boolean b = true;
@@ -507,32 +547,6 @@ public class RobotSolver
 			cost = cost + waveFronts.get(i).get(r.locs[i]); //sum of distances from wavefront
 		}
 		return cost;
-	}
-	
-	
-	/**
-	 * checks if all robots have finished
-	 * @return
-	 */
-	private boolean terminalStopCheck()
-	{
-		int c = 0;
-		for (int i = 0; i < terminalStops.length; i++)
-		{
-			if (terminalStops[i] != null && terminalStops[i])
-			{
-				c = c + 1;
-			}
-
-		}
-		if (c == map.numRobots)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
 	}
 
 }
