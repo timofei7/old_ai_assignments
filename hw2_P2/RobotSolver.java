@@ -133,6 +133,8 @@ public class RobotSolver
 			
 			ArrayList<MLoc> possibles = getMoves(current.state, turnKeeper);
 			
+			System.out.println("current: " + current.state + "possibs: " + possibles);
+			
 			for (int i=0; i < possibles.size(); i++) // for all the children
 			{
 				MLoc possib = possibles.get(i); 
@@ -152,7 +154,8 @@ public class RobotSolver
 					}
 				}
 			}
-			turnKeeper = (turnKeeper + 1) % map.numRobots;
+			System.out.println(turnKeeper);
+			turnKeeper = (turnKeeper + 1) % map.numRobots; //next robot
 		}
 		if (solution.isEmpty())
 		{
@@ -417,7 +420,7 @@ public class RobotSolver
 		ArrayList<Loc> ls = getMovesWithPause(ml.locs[r]);
 				
 		ArrayList<MLoc> mls = new ArrayList<MLoc>();
-		
+		System.out.println("ls: " + ls);
 		for (int i = 0; i < ls.size(); i++)
 		{
 			if (!colTest(ls.get(i), ml, r))
@@ -425,12 +428,14 @@ public class RobotSolver
 				MLoc nml = ml.clone();
 				nml.locs[r] = ls.get(i);
 				mls.add(nml);
+				System.out.println("built: " + mls);
 			}
 		}
 		return mls;
 		
 	}
-	
+	//TODO:  make simultanous moves
+
 	
 	private boolean colTest(Loc l, MLoc ml, int r)
 	{
@@ -442,6 +447,7 @@ public class RobotSolver
 				b = b && l.equals(ml.locs[i]);
 			}
 		}
+		System.out.println("comparing: " + l + " to " + ml.toString() + " res: " + b);
 		return b;
 	}
 	
