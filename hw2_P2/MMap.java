@@ -209,7 +209,7 @@ public class MMap
 	 */
 	private void buildMap5()
 	{
-		numRobots = 10;
+		numRobots = 2;
 		
 		starts = new Loc[numRobots];
 		finishes = new Loc[numRobots];
@@ -220,29 +220,29 @@ public class MMap
 		starts[1] = new Loc(38,39);
 		finishes[1] = new Loc(0,2); //blocks 0
 		
-		starts[2] = new Loc(37,39);
-		finishes[2] = new Loc(14,3);
+//		starts[2] = new Loc(37,39);
+//		finishes[2] = new Loc(14,3);
 		
-		starts[3] = new Loc(36,39);
-		finishes[3] = new Loc(6,23);
-		
-		starts[4] = new Loc(35,39);
-		finishes[4] = new Loc(5,29);
-		
-		starts[5] = new Loc(34,39);
-		finishes[5] = new Loc(21,30);
-		
-		starts[6] = new Loc(33,39);
-		finishes[6] = new Loc(6,30);
-		
-		starts[7] = new Loc(32,39);
-		finishes[7] = new Loc(9,23);// blocks 3
-		
-		starts[8] = new Loc(31,39);
-		finishes[8] = new Loc(8,8);
-		
-		starts[9] = new Loc(30,39);
-		finishes[9] = new Loc(19,13);
+//		starts[3] = new Loc(36,39);
+//		finishes[3] = new Loc(6,23);
+//		
+//		starts[4] = new Loc(35,39);
+//		finishes[4] = new Loc(5,29);
+//		
+//		starts[5] = new Loc(34,39);
+//		finishes[5] = new Loc(21,30);
+//		
+//		starts[6] = new Loc(33,39);
+//		finishes[6] = new Loc(6,30);
+//		
+//		starts[7] = new Loc(32,39);
+//		finishes[7] = new Loc(9,23);// blocks 3
+//		
+//		starts[8] = new Loc(31,39);
+//		finishes[8] = new Loc(8,8);
+//		
+//		starts[9] = new Loc(30,39);
+//		finishes[9] = new Loc(19,13);
 		
 		gridSize=40;
 		

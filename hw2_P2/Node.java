@@ -6,9 +6,9 @@ package hw2_P2;
  */
 public class Node implements Comparable<Node> 
 {
-	Loc state;
+	public Loc state;
 	Node parent;
-	double distance;
+	public double distance;
 	
 	int rid; //not generally used
 
@@ -18,7 +18,7 @@ public class Node implements Comparable<Node>
 	 * @param parent
 	 * @param distance
 	 */
-	Node(Loc current, Node parent, double distance)
+	public Node(Loc current, Node parent, double distance)
 	{
 		this.state = current;
 		this.parent = parent;

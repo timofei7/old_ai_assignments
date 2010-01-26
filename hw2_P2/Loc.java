@@ -29,12 +29,7 @@ public class Loc implements Cloneable
 		this.x = r.x;
 		this.y = r.y;
 	}
-	
-	public Loc(TimeLoc r)
-	{
-		this.x = r.x;
-		this.y = r.y;
-	}
+
 	
 	@Override
 	public Loc clone()

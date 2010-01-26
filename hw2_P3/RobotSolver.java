@@ -1,10 +1,10 @@
-package hw2_P2;
+package hw2_P3;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-
+import hw2_P2.*;
 
 /**
  * this is an a* based cooperative multi robot motion solver
@@ -15,9 +15,12 @@ import java.util.Map;
  */
 public class RobotSolver
 {
+
+	public static enum ActionSet { NORTH, SOUTH, EAST, WEST};
+	
 	public MMap map; //the map object
 	
-	private ArrayList<Map<Loc,Double>> waveFronts;  //generated complete distance maps to use as true heuristic
+	private Map<Loc,Double> waveFront;  //generated complete distance map
 	
 	public ArrayList<LinkedList<Loc>> solutions; // the final cooperative paths for display
 	public LinkedList<MLoc> mSolutions; // the final cooperative paths for display
@@ -30,43 +33,47 @@ public class RobotSolver
 	{
 		map = m;
 		
-		waveFronts = new ArrayList<Map<Loc,Double>>();
+		waveFront = new HashMap<Loc,Double>();
 		solutions = new ArrayList<LinkedList<Loc>>();
 		mSolutions = new LinkedList<MLoc>();
 							
-		// build our wavefront plans!
-		for (int i = 0; i < map.numRobots; i++)
-		{
-			waveFronts.add(astar2d(map.starts[i], map.finishes[i]));
-			solutions.add(new LinkedList<Loc>()); //add empty lists
-		}
+		waveFront = astar2d(map.start, map.finish);
 		
-		astarMulti(map.starts, map.finishes);
+		//astarMulti(getInitBeliefs());
 		
-		// separate out the result states into separate robot moves
-		for (int i = 0; i < mSolutions.size(); i++)
-		{
-			for (int j = 0; j < map.numRobots; j++)
-			{
-				solutions.get(j).add(mSolutions.get(i).locs[j]);
-			}
-		}
+//		MLoc test = new MLoc(3);
+//		test.locs[0] = new Loc(3, 0);
+//		test.locs[1] =new Loc(3, 1);
+//		test.locs[2] =new Loc(3, 2);
+//		System.out.println(getMoves(test));
 		
-		//print em out
-		for (int i=0; i< map.numRobots; i++)
-		{
-			System.out.println("robot: " + i + " moves: " + solutions.get(i).toString());
-		}	
+		astarMulti(map.start, map.finish);
+		
+//		// separate out the result states into separate robot moves
+//		for (int i = 0; i < mSolutions.size(); i++)
+//		{
+//			for (int j = 0; j < map.numRobots; j++)
+//			{
+//				solutions.get(j).add(mSolutions.get(i).locs[j]);
+//			}
+//		}
+//		
+//		//print em out
+//		for (int i=0; i< map.numRobots; i++)
+//		{
+//			System.out.println("robot: " + i + " moves: " + solutions.get(i).toString());
+//		}	
 	}
 	
 
-	private void astarMulti(Loc[] fs, Loc[] ff)
+	private void astarMulti(Loc[] is)
 	{
-		MLoc s = new MLoc(fs);
-		MLoc f = new MLoc(ff);
 		
-		int turnKeeper = 0;
-		
+
+		MLoc s = new MLoc(is);
+		MLoc f = new MLoc(1);
+		f.locs[0] = map.finish;
+				
 		MPriorityHashQueue frontier = new MPriorityHashQueue(); //states to look at
 		Map<MLoc,Double> explored = new HashMap<MLoc,Double>();   //explored locations
 		
@@ -93,11 +100,11 @@ public class RobotSolver
 			
 			explored.put(current.state, current.distance);
 			
-			ArrayList<MLoc> possibles = getMoves(current.state, turnKeeper);
+			ArrayList<MLoc> possibles = getMoves(current.state);
 						
-			for (int i=0; i < possibles.size(); i++) // for all the children
+			for (int i=0; i < possibles.locs.length; i++) // for all the children
 			{
-				MLoc possib = possibles.get(i); 
+				MLoc possib = possibles.locs[i]; 
 								
 				// if we haven't explored it yet
 				// add it to frontier with a distance
@@ -119,7 +126,6 @@ public class RobotSolver
 					}
 				}
 			}
-			turnKeeper = (turnKeeper + 1) % map.numRobots; //next robot
 		}
 		if (solution.isEmpty())
 		{
@@ -178,6 +184,84 @@ public class RobotSolver
 	}
 	
 	
+	
+	private Loc[] getInitBeliefs()
+	{
+		ArrayList<Loc> l = new ArrayList<Loc>();
+		for (int i = 0; i < map.gridSize; i++)
+		{
+			for (int j = 0; j < map.gridSize; j++)
+			{
+				if (map.current_map[i].charAt(j) == '.')
+				{
+					l.add(new Loc(i,j));
+				}
+			}
+		}
+		Loc[] ll = new Loc[l.size()];
+		l.toArray(ll);
+		return ll;
+	}
+	
+	
+	/**
+	 * gets all the *possible* moves for a robot on the map
+	 * @param r
+	 * @return
+	 */
+	private ArrayList<MLoc> getMoves(MLoc r)
+	{
+		ArrayList<MLoc> msts = new ArrayList<MLoc>();
+
+		for (int dir = 0; dir < 4; dir++)
+		{
+			ArrayList<Loc> sts = new ArrayList<Loc>();
+
+			for (int i = 0; i < r.locs.length; i++)
+			{
+				Loc nd;
+				
+				switch (dir)
+				{
+					case 0:  //north
+						nd = new Loc(r.locs[i].x, r.locs[i].y - 1);
+						if (r.locs[i].y > 0  && !map.isCollision(nd))
+						{
+							sts.add(nd);
+						}
+						break;
+					case 1: //south
+						nd = new Loc(r.locs[i].x, r.locs[i].y + 1);
+						if (r.locs[i].y < map.gridSize -1 && !map.isCollision(nd))
+						{
+							sts.add(nd);
+						}
+						break;
+					case 2: //east
+						nd = new Loc(r.locs[i].x - 1, r.locs[i].y);
+						if (r.locs[i].x > 0 && !map.isCollision(nd))
+						{
+							sts.add(nd);
+						}
+						break;
+					case 3: //west
+						nd = new Loc(r.locs[i].x + 1, r.locs[i].y);
+						if (r.locs[i].x < map.gridSize -1  && !map.isCollision(nd))
+						{
+							sts.add(nd);
+						}
+						break;
+				}
+			}
+			MLoc t = new MLoc(sts.size());
+			sts.toArray(t.locs);
+			msts.add(t);
+		}		
+		return msts;
+	}
+	
+	
+	
 	/**
 	 * gets all the *possible* moves for a robot on the map
 	 * @param r
@@ -214,87 +298,14 @@ public class RobotSolver
 		return sts;		
 	}
 	
-	
-	/**
-	 * adds a pause state to the possible moves
-	 * @param r
-	 * @return
-	 */
-	private ArrayList<Loc> getMovesWithPause(Loc r)
-	{
-		ArrayList<Loc> sts = getMoves(r);
-		
-		sts.add(r); //include pause
-		
-		return sts;		
-	}
-	
-	
-	/**
-	 * get all the *possible* moves
-	 * available to populate the graph
-	 * this includes a pause action
-	 * @param r
-	 * @return
-	 */
-	public ArrayList<MLoc> getMoves(MLoc ml, int r)
-	{
-		ArrayList<Loc> ls = getMovesWithPause(ml.locs[r]);
-				
-		ArrayList<MLoc> mls = new ArrayList<MLoc>();
-		for (int i = 0; i < ls.size(); i++)
-		{
-			if (!colTest(ls.get(i), ml, r))
-			{
-				MLoc nml = ml.clone();
-				nml.locs[r] = ls.get(i);
-				mls.add(nml);
-			}
-		}
-		return mls;
-	}
-	
-	
-	//TODO:  make simultaneous moves
-	
 
-//	public ArrayList<MLoc> getAllMoves(MLoc ml)
-//	{
-//		ArrayList<ArrayList<Loc>> allNewMoves = new ArrayList<ArrayList<Loc>>();
-//		for (int i = 0; i < map.numRobots; i++)
-//		{
-//			allNewMoves.add(getMovesWithPause(ml.locs[i]));
-//		}
-//				
-//		
-//		for (int i = 0; i < map.numRobots; i++)
-//		{
-//			
-//		}
-//		ArrayList<MLoc> mls = new ArrayList<MLoc>();
-//		System.out.println("ls: " + ls);
-//		for (int j = 0; j < ls.size(); j++)
-//		{
-//			if (!colTest(ls.get(j), ml, r))
-//			{
-//				MLoc nml = ml.clone();
-//				nml.locs[r] = ls.get(j);
-//				mls.add(nml);
-//				System.out.println("built: " + mls);
-//			}
-//		}
-//		return mls;
-//		
-//	}
-	
-	
 	/**
-	 * checks collisions between a robot and its neighbors
+	 * checks collisions between a location and the belief state
 	 */
 	private boolean colTest(Loc l, MLoc ml, int r)
 	{
 		boolean b = true;
-		for (int i = 0; i < map.numRobots; i++)
+		for (int i = 0; i < ml.locs.length; i++)
 		{
 			if (r != i)
 			{
@@ -340,9 +351,9 @@ public class RobotSolver
 	private double heuristic(MLoc r)
 	{
 		double cost = 0;
-		for (int i =0; i< map.numRobots; i++)
+		for (int i =0; i< r.locs.length; i++)
 		{
-			cost = cost + waveFronts.get(i).get(r.locs[i]); //sum of distances from wavefront
+			cost = cost + waveFront.get(r.locs[i]); //sum of distances from wavefront
 		}
 		return cost;
 	}

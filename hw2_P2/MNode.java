@@ -6,9 +6,9 @@ package hw2_P2;
  */
 public class MNode implements Comparable<MNode> 
 {
-	MLoc state;
-	MNode parent;
-	double distance;
+	public MLoc state;
+	public MNode parent;
+	public double distance;
 	
 	/**
 	 * a node typically holds state, that states parent, and distance
@@ -16,7 +16,7 @@ public class MNode implements Comparable<MNode>
 	 * @param parent
 	 * @param distance
 	 */
-	MNode(MLoc current, MNode parent, double distance)
+	public MNode(MLoc current, MNode parent, double distance)
 	{
 		this.state = current;
 		this.parent = parent;
