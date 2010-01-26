@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.html.HTML;
@@ -14,7 +15,12 @@ import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.parser.ParserDelegator;
 
 
-
+/**
+ * parses pages to pull out links, does some cleanup
+ * @author tim tregubov
+ * cs44 w10 hw2 p1
+ *
+ */
 public class Parser
 {
 	
@@ -37,10 +43,10 @@ public class Parser
 	 * @param geturl
 	 * @return
 	 */
-	public ArrayList<String> getAnchorsInPage(String geturl)
+	public LinkedList<String> getAnchorsInPage(String geturl, String target)
 	{
 		list = new ArrayList<String>(); //clean out list
-		ArrayList<String> nlist = new ArrayList<String>(); //for modified urls
+		LinkedList<String> nlist = new LinkedList<String>(); //for modified urls
 		
 
 		try
@@ -77,18 +83,42 @@ public class Parser
 		//TODO: is this enough for qualifying  and cleaning out relative links?
 		for (String s : list)
 		{
+			//System.out.println("Looking at: " + s);
+			String temp = s;
+			boolean bad = false;
 			
-			if (s.matches(".*#.*") || s == geturl)
+			if (temp.matches("./|/"))
 			{
-				//do nothing, these just link us back to the same page
+				bad = true;
 			}
-			else if (! s.matches("^https?://.*")) //starts with http or https
+			
+			if (!bad && temp.startsWith("mailto:"))
 			{
-				nlist.add(geturl + "/" + s); //no relative urls
+				bad = true;
 			}
-			else
+			
+			if (!bad && temp.startsWith("/"))
 			{
-				nlist.add(s);  //ok as is
+				temp = getDomain(geturl) + temp;
+			}
+			
+			if (!bad && !temp.matches("^https?://.*")) //starts with http or https
+			{
+				temp = geturl + "/" + temp; //no relative urls
+			}
+			
+			String[] splits = temp.split("/");
+			
+			if (!bad && (splits.length > 1) && splits[splits.length - 1].matches(".*#.*"))
+			{
+				bad = true;
+			}
+			
+			//if (!bad) {System.out.println("after cleaning: " + temp);}
+			
+			if (!bad && temp != "")
+			{
+				nlist.addLast(temp);
 			}
 		}
 		return nlist;
@@ -99,7 +129,7 @@ public class Parser
 	/**
 	 * callback class to parse out all the href's on a page
 	 */
-	public class ParseTags extends HTMLEditorKit.ParserCallback
+	private class ParseTags extends HTMLEditorKit.ParserCallback
 	{
 
 		public void handleStartTag(HTML.Tag tag, MutableAttributeSet attr, int pos)
@@ -114,6 +144,32 @@ public class Parser
 			}
 
 		}
+	}
+	
+	
+	/**
+	 * gets domain name from a string if it exists
+	 * returns null otherwise
+	 * @param g
+	 * @return
+	 */
+	public String getDomain(String g)
+	{
+		String[] s = g.split("/");
+		String ns = null;
+		try
+		{
+			if (s[2] != null && s[2].matches(".*[.][a-zA-Z]{2,3}+")) //pull out domain name
+			{
+				ns = s[2];
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("\tmalformed domain in: " + g);
+		}
+		return ns;
+		
 	}
 
 }

@@ -8,7 +8,9 @@ public class MLoc implements Cloneable
 {
 	
 	public Loc[] locs;
-		
+	
+	public int id;
+			
     public MLoc(int c)
     {
         locs = new Loc[c];
@@ -41,10 +43,16 @@ public class MLoc implements Cloneable
     public boolean equals(MLoc r)
     {
         boolean t = true;
-
-        for (int i =0; i < locs.length; i++)
+        if (locs.length != r.locs.length)
         {
-            t = t && r.locs[i].equals(locs[i]);
+        	t = false;
+        }
+        else
+        {
+	        for (int i =0; i < locs.length; i++)
+	        {
+	            t = t && r.locs[i].equals(locs[i]);
+	        }
         }
         return t;
     }
@@ -67,7 +75,8 @@ public class MLoc implements Cloneable
             s = s + Integer.toString(locs[i].hashCode());
         }
         
-        return Integer.parseInt(s);
+        //return Integer.parseInt(s);
+        return s.hashCode(); //try using strings builtin hashcode
     }
     
     public String toString()

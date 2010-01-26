@@ -72,7 +72,7 @@ public class RobotSolver
 		
 		LinkedList<MLoc> solution = new LinkedList<MLoc>(); //the solutions
 		
-		frontier.add(new MNode(s, null, 0 + heuristic(s))); //add the first robot state
+		frontier.add(new MNode(s, null, 0, heuristic(s))); //add the first robot state
 		
 		//run the search
 		while (!frontier.isEmpty())
@@ -91,7 +91,7 @@ public class RobotSolver
 				return;
 			}
 			
-			explored.put(current.state, current.distance);
+			explored.put(current.state, current.distance());  //add current state and the F cost
 			
 			ArrayList<MLoc> possibles = getMoves(current.state, turnKeeper);
 						
@@ -103,19 +103,19 @@ public class RobotSolver
 				// add it to frontier with a distance
 				if (! explored.containsKey(possib))
 				{
-					frontier.add(new MNode(possib, current, current.distance + 1  + heuristic(current.state)));
+					frontier.add(new MNode(possib, current, current.G + 1, heuristic(current.state)));
 				}
 				else if (current.state.equals(possib)) //allow for a turn skip if we're stuck
 				{
-					frontier.add(new MNode(possib, current, current.distance + 1  + heuristic(current.state)));
+					frontier.add(new MNode(possib, current, current.G + 1, heuristic(current.state)));
 				}
 				// if we've explored it check that its not at a lower cost now
 				else
 				{
 					MNode n = frontier.get(current.state);
-					if (n != null && n.distance > current.distance)// + 1)
+					if (n != null && n.distance() > current.distance())//
 					{
-						frontier.update(current, new MNode(possib, current, current.distance + 1  + heuristic(current.state)));
+						frontier.update(current, new MNode(possib, current, current.G + 1, heuristic(current.state)));
 					}
 				}
 			}
@@ -246,6 +246,7 @@ public class RobotSolver
 		{
 			if (!colTest(ls.get(i), ml, r))
 			{
+				//System.out.println("checking: " + ls.get(i) + " in: " + ml + " with r: " + r + " = " + colTest(ls.get(i), ml, r));
 				MLoc nml = ml.clone();
 				nml.locs[r] = ls.get(i);
 				mls.add(nml);
@@ -293,14 +294,16 @@ public class RobotSolver
 	 */
 	private boolean colTest(Loc l, MLoc ml, int r)
 	{
-		boolean b = true;
+		boolean b = false;
 		for (int i = 0; i < map.numRobots; i++)
 		{
 			if (r != i)
 			{
-				b = b && l.equals(ml.locs[i]);
+				System.out.println("r: "+r+" i: "+i+ " comp: "+l+ " with: " + ml + " = " + (b && l.equals(ml.locs[i])));
+				b = b || l.equals(ml.locs[i]);
 			}
 		}
+		System.out.println("for r: " + r + " = " + b);
 		return b;
 	}
 	

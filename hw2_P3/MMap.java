@@ -4,7 +4,7 @@ import hw2_P2.*;
 
 public class MMap
 {
-	public static enum MapSet { MAP1, MAP2};
+	public static enum MapSet { MAP1, MAP2, MAP3};
 	
 	public Loc start;  //the robot starts indexed by robot
 	public Loc finish; //the finishes
@@ -32,6 +32,9 @@ public class MMap
 				break;
 			case MAP2:
 				buildMap2();
+				break;
+			case MAP3:
+				buildMap3();
 				break;
 			default:
 				buildMap1();
@@ -80,14 +83,13 @@ public class MMap
 		finish = new Loc(1,0);
 
 
-		gridSize = 5;
+		gridSize = 4;
 		
 		current_map = new String[gridSize];
-		current_map[0] = ".......";
-		current_map[1] = ".##....";
-		current_map[2] = "..##...";
-		current_map[3] = "....#..";
-		current_map[4] = "..##...";
+		current_map[0] = "....";
+		current_map[1] = ".##.";
+		current_map[2] = "..##";
+		current_map[3] = "....";
 	}
 	
 	/**
@@ -96,17 +98,35 @@ public class MMap
 	private void buildMap2()
 	{
 		
+		start = new Loc(0,0);
+		finish = new Loc(0,0);
+
+		
+		gridSize = 2;
+		
+		current_map = new String[gridSize];
+		current_map[0] = "..";
+		current_map[1] = ".#";
+
+	}	
+	
+	/**
+	 * build map 2
+	 */
+	private void buildMap3()
+	{
+		
 		start = new Loc(0,6);
 		finish = new Loc(3,2);
 
 		
-		gridSize = 4;
+		gridSize = 5;
 		
 		current_map = new String[gridSize];
-		current_map[0] = "....";
-		current_map[1] = "....";
-		current_map[2] = "....";
-		current_map[3] = "....";
-
-	}	
+		current_map[0] = ".....";
+		current_map[1] = ".##..";
+		current_map[2] = ".###.";
+		current_map[3] = "..##.";
+		current_map[4] = ".....";
+	}
 }

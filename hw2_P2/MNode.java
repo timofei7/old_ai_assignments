@@ -8,26 +8,41 @@ public class MNode implements Comparable<MNode>
 {
 	public MLoc state;
 	public MNode parent;
-	public double distance;
-	
+	public double G; //the exact cost in steps to get here
+	public double H; //the heuristic cost
+		
 	/**
 	 * a node typically holds state, that states parent, and distance
 	 * @param current
 	 * @param parent
 	 * @param distance
 	 */
-	public MNode(MLoc current, MNode parent, double distance)
+	public MNode(MLoc current, MNode parent, double G, double H)
 	{
 		this.state = current;
 		this.parent = parent;
-		this.distance = distance;
+		this.G = G;
+		this.H = H;
 	}
 	
 	
+	/**
+	 * g + h the estimated distance
+	 * @return
+	 */
+	public double distance()
+	{
+		return G + H;
+	}
+	
+	
+	/**
+	 * compare nodes based on F
+	 */
 	@Override
 	public int compareTo(MNode o)
 	{
-		return (int) Math.floor(distance - o.distance);
+		return (int) Math.floor(distance() - o.distance());
 	}
 	
 	public String toString()
@@ -35,7 +50,7 @@ public class MNode implements Comparable<MNode>
 		String s = state.toString();
 		try
 		{
-			s = "State: " + state.toString() + ", parent: " + parent.state.toString() + ", distance: " + distance;
+			s = "State: " + state.toString() + ", parent: " + parent.state.toString() + ", H: " + H + ", G: " + G;
 		}
 		catch (Exception e){}
 
