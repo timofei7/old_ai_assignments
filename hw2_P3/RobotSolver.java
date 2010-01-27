@@ -1,11 +1,14 @@
 package hw2_P3;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import hw2_P2.Loc;
+import hw2_P2.MLoc;
+import hw2_P2.MNode;
 
-import hw2_P2.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
+
 
 /**
  * this is an a* based cooperative multi robot motion solver
@@ -62,7 +65,7 @@ public class RobotSolver
 		int counter = 0;
 				
 		LinkedList<MNode> frontier = new LinkedList<MNode>(); //states to look at
-		Map<MLoc,Double> explored = new HashMap<MLoc,Double>();   //explored locations
+		Set<MLoc> explored = new HashSet<MLoc>();   //explored locations
 		
 		LinkedList<MLoc> solution = new LinkedList<MLoc>(); //the solutions
 		
@@ -85,12 +88,12 @@ public class RobotSolver
 				return;
 			}
 			
-			explored.put(current.state, current.G);
+			explored.add(current.state);
 			
-			if (counter % 5000 == 0){System.out.print("\n");};
-			if (counter % 50 == 0) {System.out.print(".");}; 
+			//if (counter % 5000 == 0){System.out.print("\n");};
+			//if (counter % 50 == 0) {System.out.print(".");}; 
 						
-			ArrayList<MLoc> possibles = getMoves(current.state);
+			ArrayList<MLoc> possibles =  getMovesCorrectlyPlease(current.state);
 
 			for (int i=0; i < possibles.size(); i++) // for all the children
 			{
@@ -99,7 +102,7 @@ public class RobotSolver
 								
 				// if we haven't explored it yet
 				// add it to frontier with a distance
-				if (! explored.containsKey(possib))
+				if (! explored.contains(possib))
 				{
 					frontier.addLast(new MNode(possib, current, current.G + 1, 0));
 				}
@@ -128,7 +131,7 @@ public class RobotSolver
 			{
 				if (map.current_map[i].charAt(j) == '.')
 				{
-					l.add(new Loc(i,j));
+					l.add(new Loc(j,i));
 				}
 			}
 		}
@@ -144,7 +147,7 @@ public class RobotSolver
 	 * @param r
 	 * @return
 	 */
-	private ArrayList<MLoc> getMoves(MLoc r)
+	public ArrayList<MLoc> getMovesCorrectlyPlease(MLoc r)
 	{
 		ArrayList<MLoc> msts = new ArrayList<MLoc>();
 
@@ -152,83 +155,128 @@ public class RobotSolver
 		{
 			ArrayList<Loc> sts = new ArrayList<Loc>();
 
-			for (int i = 0; i < r.locs.length; i++)
+			for (int i = 0; i < r.locs.size(); i++)
 			{
-				Loc nd;
+				int x = r.locs.get(i).x;
+				int y = r.locs.get(i).y;
 				
 				switch (dir)
-				{   // if we hit a collision in that direction don't change but add in original
-					case 0:  //north
-						nd = new Loc(r.locs[i].x, r.locs[i].y - 1);
-						if (r.locs[i].y > 0  && !map.isCollision(nd))
+				{   
+					// how do we trim states?
+					case 0:  //north	
+						if (y + 1 >= map.gridSize && !map.isCollision(x, y - 1))
 						{
-							sts.add(nd);
+							System.out.println("culling1 " + r.locs.get(i) + " for "+dir);
+						}
+						else if (map.isCollision(x, y + 1) && !(y - 1 < 0))
+						{
+							System.out.println("culling2 " + r.locs.get(i) + " for "+dir);
+						}
+						else if (y - 1 >= 0 && !map.isCollision(x, y + 1) && !map.isCollision(x, y - 1) && !r.locs.contains(new Loc(x, y - 1)))
+						{
+							Loc nl = new Loc(x, y - 1);
+							sts.add(nl);
+							System.out.println("adding " + nl + " for " + dir);
 						}
 						else
 						{
-							sts.add(r.locs[i]);
+							sts.add(new Loc(x, y));
 						}
 						break;
 					case 1: //south
-						nd = new Loc(r.locs[i].x, r.locs[i].y + 1);
-						if (r.locs[i].y < map.gridSize -1 && !map.isCollision(nd))
+						if (y - 1 < 0 && !map.isCollision(x, y + 1))
 						{
-							sts.add(nd);
+							System.out.println("culling1 " + r.locs.get(i) + " for "+dir);
+						}
+						else if (map.isCollision(x, y - 1) && !(y + 1 >= map.gridSize))
+						{
+							System.out.println("culling2 " + r.locs.get(i) + " for "+dir);
+						}
+						else if (y + 1 < map.gridSize && !map.isCollision(x, y - 1) && !map.isCollision(x, y + 1) && !r.locs.contains(new Loc(x, y + 1)))
+						{
+							Loc nl = new Loc(x, y + 1);
+							sts.add(nl);
+							System.out.println("adding " + nl + " for " + dir);
 						}
 						else
 						{
-							sts.add(r.locs[i]);
+							sts.add(new Loc(x, y));
 						}
 						break;
 					case 2: //west
-						nd = new Loc(r.locs[i].x - 1, r.locs[i].y);
-						if (r.locs[i].x > 0 && !map.isCollision(nd))
+						if (x + 1 >= map.gridSize && !map.isCollision(x - 1, y))
 						{
-							sts.add(nd);
+							System.out.println("culling1 " + r.locs.get(i) + " for "+dir);
+						}
+						else if (map.isCollision(x + 1, r.locs.get(i).y) && !(x - 1 < 0))
+						{
+							System.out.println("culling2 " + r.locs.get(i) + " for "+dir);
+						}
+						else if (x - 1 >= 0 && !map.isCollision(x + 1, y) && !map.isCollision(x - 1, y) && !r.locs.contains(new Loc(x -1, y)))
+						{
+							Loc nl = new Loc(x - 1,y);
+							sts.add(nl);
+							System.out.println("adding " + nl + " for " + dir);
 						}
 						else
 						{
-							sts.add(r.locs[i]);
+							sts.add(new Loc(x, y));
 						}
 						break;
 					case 3: //east
-						nd = new Loc(r.locs[i].x + 1, r.locs[i].y);
-						if (r.locs[i].x < map.gridSize -1  && !map.isCollision(nd))
+						if (x - 1 < 0 && !map.isCollision(x + 1, y))
 						{
-							sts.add(nd);
+							System.out.println("culling1 " + r.locs.get(i) + " for "+dir);
+						}
+						else if (map.isCollision(x - 1, y) && !(x + 1 >= map.gridSize))
+						{
+							System.out.println("culling2 " + r.locs.get(i) + " for "+dir);
+						}
+						else if (x + 1 < map.gridSize && !map.isCollision(x - 1, y) && !map.isCollision(x + 1, y) && !r.locs.contains(new Loc(x + 1, y)))
+						{
+							Loc nl = new Loc(x + 1, y);
+							sts.add(nl);
+							System.out.println("adding " + nl + " for " + dir);
 						}
 						else
+							
 						{
-							sts.add(r.locs[i]);
+							sts.add(new Loc(x, y));
 						}
 						break;
 				}
 			}
-			MLoc t = new MLoc(sts.size()); 
-			t.id = dir; //add direction for backtracking solution
-			sts.toArray(t.locs);
+			
+			MLoc t;
+			
+			if (sts.isEmpty())
+			{
+				t = r.clone();
+			}
+			else
+			{
+				t = new MLoc(sts.size()); 
+				t.locs = sts;
+			}
+			
+			t.id = dir; //add direction for tracking
+			System.out.println("dir: " + dir + " r: "+r+" new: " + t);
 			msts.add(t);
 		}		
 		return msts;
 	}
+
+	
 		
 		
 	/**
 	 * tests if we're at goal state
-	 * for this case we test each of the belief states against
-	 * the goal. So if (0,0) is our goal then the belief state should be
-	 * {(0,0), (0,0), ..}
 	 * @param r
 	 * @return
 	 */
 	private boolean goalTest(MLoc r, Loc g)
 	{
-		boolean b = true;
-		for (int i = 0; i < r.locs.length; i++)
-		{
-			b = b && r.locs[i].equals(g);
-		}
-		return b;
+		return (r.locs.size() ==1 && g.equals(r.locs.get(0)));
 	}
 	
 
@@ -250,6 +298,9 @@ public class RobotSolver
 				return "not a direction";
 		}
 	}
+	
+	
+
 
 
 }

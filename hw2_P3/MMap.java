@@ -1,12 +1,12 @@
 package hw2_P3;
 
-import hw2_P2.*;
+import hw2_P2.Loc;
+
 
 public class MMap
 {
-	public static enum MapSet { MAP1, MAP2, MAP3};
+	public static enum MapSet { MAP1, MAP2, MAP3, MAP4};
 	
-	public Loc start;  //the robot starts indexed by robot
 	public Loc finish; //the finishes
 	
 	public String[] current_map; //how we store maps
@@ -36,6 +36,9 @@ public class MMap
 			case MAP3:
 				buildMap3();
 				break;
+			case MAP4:
+				buildMap4();
+				break;
 			default:
 				buildMap1();
 				break;
@@ -63,6 +66,10 @@ public class MMap
 	 */
 	public boolean isCollision(int x, int y)
 	{
+		if (x >= gridSize || y >= gridSize || x < 0 || y < 0)
+		{
+			return false;
+		}
 		if (current_map[y].charAt(x) == '#')
 		{
 			return true;
@@ -79,7 +86,6 @@ public class MMap
 	private void buildMap1()
 	{
 				
-		start = new Loc(0,6);
 		finish = new Loc(1,0);
 
 
@@ -98,7 +104,6 @@ public class MMap
 	private void buildMap2()
 	{
 		
-		start = new Loc(0,0);
 		finish = new Loc(0,0);
 
 		
@@ -116,7 +121,6 @@ public class MMap
 	private void buildMap3()
 	{
 		
-		start = new Loc(0,6);
 		finish = new Loc(3,2);
 
 		
@@ -128,5 +132,23 @@ public class MMap
 		current_map[2] = ".###.";
 		current_map[3] = "..##.";
 		current_map[4] = ".....";
+	}
+	
+	/**
+	 * build map 2
+	 */
+	private void buildMap4()
+	{
+		
+		finish = new Loc(2,2);
+
+		
+		gridSize = 3;
+		
+		current_map = new String[gridSize];
+		current_map[0] = "...";
+		current_map[1] = "...";
+		current_map[2] = "...";
+
 	}
 }

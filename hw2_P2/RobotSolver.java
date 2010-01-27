@@ -48,7 +48,7 @@ public class RobotSolver
 		{
 			for (int j = 0; j < map.numRobots; j++)
 			{
-				solutions.get(j).add(mSolutions.get(i).locs[j]);
+				solutions.get(j).add(mSolutions.get(i).locs.get(j));
 			}
 		}
 		
@@ -248,7 +248,7 @@ public class RobotSolver
 	 */
 	public ArrayList<MLoc> getMoves(MLoc ml, int r)
 	{
-		ArrayList<Loc> ls = getMovesWithPause(ml.locs[r]);
+		ArrayList<Loc> ls = getMovesWithPause(ml.locs.get(r));
 				
 		ArrayList<MLoc> mls = new ArrayList<MLoc>();
 		for (int i = 0; i < ls.size(); i++)
@@ -256,7 +256,7 @@ public class RobotSolver
 			if (!colTest(ls.get(i), ml, r))
 			{
 				MLoc nml = ml.clone();
-				nml.locs[r] = ls.get(i);
+				nml.locs.set(r, ls.get(i));
 				mls.add(nml);
 			}
 		}
@@ -307,7 +307,7 @@ public class RobotSolver
 		{
 			if (r != i)
 			{
-				b = b || l.equals(ml.locs[i]);
+				b = b || l.equals(ml.locs.get(i));
 			}
 		}
 		return b;
@@ -351,7 +351,7 @@ public class RobotSolver
 		double cost = 0;
 		for (int i =0; i< map.numRobots; i++)
 		{
-			cost = cost + waveFronts.get(i).get(r.locs[i]); //sum of distances from wavefront
+			cost = cost + waveFronts.get(i).get(r.locs.get(i)); //sum of distances from wavefront
 		}
 		return cost;
 	}
