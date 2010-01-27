@@ -1,0 +1,21 @@
+CS44 W10  HW2 P1
+
+
+Example 1:
+13:08:11
+FOUND SOLUTION: [http://www.cs.dartmouth.edu/~tim, http://www.zingweb.com/tim, http://www.zingweb.com/tim/link.html]
+THE DISTANCE IS: 3
+13:08:21
+10 seconds.
+
+
+Example 2:
+13:09:20
+FOUND SOLUTION: [http://www.cs.dartmouth.edu, http://www.cs.dartmouth.edu/~robotics]
+THE DISTANCE IS: 2
+13:09:35
+15 seconds. 
+
+
+
+P1Main is the main program.

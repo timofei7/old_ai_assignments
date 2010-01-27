@@ -314,7 +314,7 @@ public class RobotSolver
 	 * manhattan distance heuristic in squares from the goal
 	 * 
      * It is optimistic because it is the shortest distance (it doesn't consider obstacles, non-diagonal moves, or other robots).
-     * Thus it is either exactly correct or the actual path was longer and so it is guaranteed to be optimistic.
+     * Thus it is either the shortest grid distance or the actual path was longer and so it is guaranteed to be optimistic.
 	 * @param r the robot position
 	 * @param t the target position (robot object holding coordinates)
 	 * @return

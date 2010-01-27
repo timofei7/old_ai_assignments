@@ -1,6 +1,8 @@
 package hw2_P1;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -51,6 +53,10 @@ public class Path
 	 */
 	public LinkedList<String> bfs(String initial, String finish)
 	{
+		Date time = new java.util.Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		System.out.println(sdf.format(time));
+		
 		LinkedList<Node> frontier = new LinkedList<Node>();
 		LinkedList<String> solution = new LinkedList<String>();
 		HashSet<String> visited;
@@ -70,6 +76,8 @@ public class Path
 				}
 				System.out.println("FOUND SOLUTION: " + solution.toString());
 				System.out.println("THE DISTANCE IS: " + solution.size());
+				time = new java.util.Date();
+				System.out.println(sdf.format(time));
 				return solution;  //yay!
 			}
 			
@@ -98,7 +106,7 @@ public class Path
 	private boolean goalTest(String current, String finish)
 	{
 
-		System.out.println("comparing: " + current + " to " + finish);
+		//System.out.println("comparing: " + current + " to " + finish);
 		if (current.equalsIgnoreCase(finish)){System.out.println("SCREAM AND SHOUT YAY!!!!!!!");}
 		return current.equalsIgnoreCase(finish);
 	}

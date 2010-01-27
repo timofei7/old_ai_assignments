@@ -8,7 +8,7 @@ package hw2_P2;
  */
 public class MMap
 {
-	public static enum MapSet { MAP1, MAP2, MAP3, MAP4, MAP5 };
+	public static enum MapSet { MAP1, MAP2, MAP3, MAP4, MAP5, MAP6};
 	
 	public Loc[] starts;  //the robot starts indexed by robot
 	public Loc[] finishes; //the finishes
@@ -47,6 +47,9 @@ public class MMap
 				break;
 			case MAP5:
 				buildMap5();
+				break;
+			case MAP6:
+				buildMap6();
 				break;
 			default:
 				buildMap1();
@@ -278,6 +281,53 @@ public class MMap
 		current_map[38] = ".########################################";
 		current_map[39] = ".........................................";
 		current_map[40] = "#########################################";
+
+	}
+	
+	/**
+	 * build map 6
+	 * attempt at 8-puzzle
+	 * I found an easy one online.
+	 * the solver pauses a lot for this one
+	 * and I would change the heuristic to make it better
+	 */
+	private void buildMap6()
+	{
+		numRobots = 8;
+		
+		starts = new Loc[numRobots];
+		finishes = new Loc[numRobots];
+		
+		starts[0] = new Loc(0,0);
+		finishes[0] = new Loc(0,0);
+		
+		starts[1] = new Loc(2,1);
+		finishes[1] = new Loc(1,0);
+		
+		starts[2] = new Loc(1,0);
+		finishes[2] = new Loc(2,0);
+		
+		starts[3] = new Loc(2,0);
+		finishes[3] = new Loc(2,1);
+		
+		starts[4] = new Loc(2,2);
+		finishes[4] = new Loc(2,2);
+		
+		starts[5] = new Loc(1,1);
+		finishes[5] = new Loc(1,2);
+		
+		starts[6] = new Loc(0,2);
+		finishes[6] = new Loc(0,2);
+		
+		starts[7] = new Loc(0,1);
+		finishes[7] = new Loc(0,1);
+		
+		gridSize = 3;
+		
+		current_map = new String[gridSize];
+		current_map[0] = "...";
+		current_map[1] = "...";
+		current_map[2] = "...";
 
 	}
 	

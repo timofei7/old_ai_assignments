@@ -1,0 +1,68 @@
+CS44 W10
+HW2 Problem 2
+
+
+a) If there are k robots, how would you represent the state of the system?
+
+a k-1 array or hash of tuples for locations.
+
+b) Give an upper bound on the number of states in the system, in terms of n, and k.
+
+n^2 choose k
+
+c) Give a rough estimate on how many of these states are "bad" if the number of wall squares is w, and n is much larger than k.
+
+(n^2 choose k) - (n^2 - w) choose k 
+
+d) If there are not many walls, n is large (say 100x100), and several robots (say 10), do you expect a straightforwards breadth-first search on the state space to be effective in all cases? Why or why not?
+
+It would not be effective.  This state space would be 100^2 choose 10, I would think this would be unfeasable. 
+
+e) Describe a useful, optimistic heuristic function for this search space. Show that your heuristic is optimistic.
+
+A useful optimistic heuristic would be manhattan distance. Simply the distance traveling on a grid from the goal to each robot.
+It is optimistic because it is the shortest distance (it doesn't consider obstacles or other robots).
+Thus it is either exactly the shortest grid distance or the actual path was longer and so it is guaranteed to be optimistic.
+
+f) Implement an A* search algorithm that takes as input a map, a start state, and a goal state,
+and plans an optimal or near-optimal collision-free path (for every robot!) from start to goal.
+Describe in words the assumptions you made, why you made them,
+and the effect on the types of plans that you get.
+
+Done!  I made the assumption that robots take turns moving. They can't swap. 
+I made a wavefront plan for each from start to finish. I then plan their movements with a* search on
+the state space of all the robots.  This is optimal *but* doesn't work for large mazes.  I attempted to
+implement a depth limited rotating turn a* with a time reservation list, but had some bugs and ended up
+ripping that code out. It would have been slightly suboptimal but would have been able to solve bigger mazes faster.
+
+P2Main is the main text only version
+P2Graphical  is the version that displays an animation window
+
+g) Test your program on mazes with between one and three robots,
+of sizes varying from 5x5 to 40x40. (You might want to randomly generate the 40x40 mazes.)
+I'll leave it up to you to devise some cool examples --
+but give me at least five and describe why they are interesting.
+(For example, what if the robots were in some sort of corridor, in the "wrong" order,
+and had to do something tricky to reverse their order?)
+
+Done!  Descriptions of the mazes are in MMap.java.
+
+h) Describe why the 8-puzzle in the book is a special case of this problem.
+Is the heuristic function you chose a good one for the 8-puzzle?
+
+The 8-puzzle is a special case because it is simply 8 robots on a 9 space grid. They don't have
+much room to move about but still have all the same options. Sum of Manhattan distances or wavefront distances
+from each pieces goal would be a decent heuristic, is there a better one? 
+
+i) The state space of the 8-puzzle is made of two disjoint sets.
+Describe how you would modify your program to prove this. (You do not have to implement this.) 
+
+Hmm. Well I started thinking about this too late and have now run out of time to answer this on my own. 
+I looked up the 8-puzzle on the interwebs. (http://www.8puzzle.com/8_puzzle_algorithm.html).
+The program could be modified to compute parity on the robots positions on the grid and then to count the number of swaps
+as it solves it.  Although I suppose it would just keep running for the wrongly matched solutions without solving it.
+Not sure how to prove it past that.  
+
+
+
+

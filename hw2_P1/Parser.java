@@ -17,6 +17,7 @@ import javax.swing.text.html.parser.ParserDelegator;
 
 /**
  * parses pages to pull out links, does some cleanup
+ * TODO: cleanup is faulty, doesn't work with wikipedia
  * @author tim tregubov
  * cs44 w10 hw2 p1
  *
@@ -81,6 +82,7 @@ public class Parser
 
 		
 		//TODO: I am not doing a very robust job of cleaning urls...
+		//TODO: this is partially broken and does a bad job with some links
 		for (String s : list)
 		{
 			//System.out.println("Looking at: " + s);
@@ -120,11 +122,6 @@ public class Parser
 				bad = true;
 			}
 			
-//			if (temp.matches(".*hikethewhites.*") )
-//			{	
-//				System.out.println("HIKE THE WHITES:" + temp + " bad? " + bad);
-//			}
-			//if (!bad) {System.out.println("after cleaning: " + temp);}
 			
 			if (!bad && temp != "")
 			{

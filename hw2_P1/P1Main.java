@@ -22,7 +22,7 @@ public class P1Main
 
 		while (true)
 		{
-			System.out.print("Choose some paths to find (1,2,3) or 0 to quit: ");
+			System.out.print("Choose some paths to find (1,2) or 0 to quit: ");
 			int which = input.nextInt();
 			
 			
@@ -33,9 +33,6 @@ public class P1Main
 					break;
 				case 2: 
 					p.findURLS("http://www.cs.dartmouth.edu", "http://www.cs.dartmouth.edu/~robotics");
-					break;
-				case 3:
-					p.findURLS("http://www.cs.dartmouth.edu", "http://www.tellemotion.com"); //takes a long while
 					break;
 				default:
 					System.out.println("bailing!");

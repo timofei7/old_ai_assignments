@@ -24,7 +24,7 @@ public class P2Main
 
 		while (true)
 		{
-			System.out.print("\nChoose some maps to find (1,2,3,4,5) or 0 to quit: ");
+			System.out.print("\nChoose some maps to find (1,2,3,4,5,6) or 0 to quit: ");
 			int which = input.nextInt();
 			
 			
@@ -44,6 +44,9 @@ public class P2Main
 					break;
 				case 5:
 					rs.Solve(MMap.MapSet.MAP5);
+					break;
+				case 6:
+					rs.Solve(MMap.MapSet.MAP6);
 					break;
 				default:
 					System.out.println("bailing!");

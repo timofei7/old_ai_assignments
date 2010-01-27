@@ -45,7 +45,7 @@ public class P2Graphical extends Applet implements ActionListener
 		 * CHOOSE YOUR MAP MAP1-MAP5
 		 */
 		rs = new RobotSolver();	
-		rs.Solve(MMap.MapSet.MAP1);
+		rs.Solve(MMap.MapSet.MAP6);
 		/**
 		 * RIGHT HERE COME AND GET SOME SOLVING
 		 */
@@ -63,7 +63,7 @@ public class P2Graphical extends Applet implements ActionListener
 		VERT_OFFSET = 20;
 		
 		//the other maps work with smaller values
-	    if (maze.currentMap == MMap.MapSet.MAP5)
+	    if (maze.currentMap == MMap.MapSet.MAP1)
 	    {
 	    	SQUARE_SIZE= 20;
 	    	FONT_SIZE=12;
