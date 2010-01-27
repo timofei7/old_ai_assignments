@@ -80,14 +80,20 @@ public class Parser
 		}
 
 		
-		//TODO: is this enough for qualifying  and cleaning out relative links?
+		//TODO: I am not doing a very robust job of cleaning urls...
 		for (String s : list)
 		{
 			//System.out.println("Looking at: " + s);
 			String temp = s;
 			boolean bad = false;
 			
-			if (temp.matches("./|/"))
+			
+			if (temp.endsWith("/"))
+			{
+				temp = temp.substring(0, temp.length() -1);
+			}
+			
+			if (temp.matches("./|/|"))
 			{
 				bad = true;
 			}
@@ -114,6 +120,10 @@ public class Parser
 				bad = true;
 			}
 			
+//			if (temp.matches(".*hikethewhites.*") )
+//			{	
+//				System.out.println("HIKE THE WHITES:" + temp + " bad? " + bad);
+//			}
 			//if (!bad) {System.out.println("after cleaning: " + temp);}
 			
 			if (!bad && temp != "")

@@ -1,6 +1,11 @@
 package hw2_P2;
 
-
+/**
+ * hardcoded maps object
+ * see below javadocs for description of maps
+ * @author tim
+ *
+ */
 public class MMap
 {
 	public static enum MapSet { MAP1, MAP2, MAP3, MAP4, MAP5 };
@@ -82,6 +87,7 @@ public class MMap
 	
 	/**
 	 * build map 1
+	 * the example map from the homework assignment
 	 */
 	private void buildMap1()
 	{
@@ -111,6 +117,7 @@ public class MMap
 	
 	/**
 	 * build map 2
+	 * map where 2 robots need to swap places but have lots of time to do so
 	 */
 	private void buildMap2()
 	{
@@ -138,6 +145,8 @@ public class MMap
 	
 	/**
 	 * build map 3
+	 * map where robots need to swap places, not so much opportunity
+	 * also larger map
 	 */
 	private void buildMap3()
 	{
@@ -180,6 +189,7 @@ public class MMap
 	
 	/**
 	 * build map 4
+	 * one robot needs to get out of the way of the other
 	 */
 	private void buildMap4()
 	{
@@ -207,6 +217,7 @@ public class MMap
 		
 	/**
 	 * build map 5
+	 * biggest map i can handle. it won't handle with more than 2 robots...
 	 */
 	private void buildMap5()
 	{

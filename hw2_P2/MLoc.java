@@ -81,8 +81,7 @@ public class MLoc implements Cloneable
             s = s + Integer.toString(locs.get(i).hashCode());
         }
         
-        //return Integer.parseInt(s);
-        return s.hashCode(); //try using strings builtin hashcode
+        return s.hashCode(); //use the strings builtin hash nice
     }
     
     public String toString()
@@ -95,8 +94,4 @@ public class MLoc implements Cloneable
     	return s;
     }
     
-    public boolean contains(Loc l)
-    {
-    	return locs.contains(l);
-    }
 }

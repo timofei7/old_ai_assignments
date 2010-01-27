@@ -1,55 +1,51 @@
 package hw2_P3;
 
+import java.util.HashSet;
 
-public class State
+/**
+ * holds state
+ * @author tim
+ *cs44 w10 hw2 p3
+ */
+public class State extends HashSet<Loc> implements Cloneable
 {
-	public int x;
-	public int y;
+	private static final long serialVersionUID = -5495262245602711531L;
 	
-	public State(int x, int y)
-	{
-		this.x = x;
-		this.y = y;
-	}
+	public int id;	
 	
-	public State(State r)
-	{
-		this.x = r.x;
-		this.y = r.y;
-	}
+	
+	/**
+	 * yes we can deep clone
+	 */
+    @Override
+    public State clone()
+    {
+    	State l = new State();
+    	
+    	Loc[] t = new Loc[super.size()];
+    	super.toArray(t);
+    	
+    	for (int i=0; i < super.size(); i++)
+    	{
+    		l.add(new Loc(t[i].x, t[i].y));
+    	}
+    	return l;
+    }
 
-	
-	@Override
-	public State clone()
-	{
-		State l = new State(x, y);
-		return l;
-	}
-	
-	public boolean equals(State r)
-	{
-		return r.x == this.x && r.y == this.y;
-	}
-	
+
+    
+    
+    public boolean equals(State s)
+    {
+    	return this.containsAll(s) && s.containsAll(this);
+    }
+    
+    
 	@Override
 	public boolean equals(Object o)
 	{
-		State r = (State) o;
-		return equals(r);
+		State s = (State) o;
+		return equals(s);
 	}
-	
-	/**
-	 * the hashcode is simply an int of the 2 states cat'd together
-	 */
-	@Override
-	public int hashCode()
-	{
-		return Integer.parseInt(Integer.toString(x) + Integer.toString(y));
-	}
-	
-	
-	public String toString()
-	{
-		return "("+x+","+y+")";
-	}
+
 }

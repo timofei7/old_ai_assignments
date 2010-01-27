@@ -1,10 +1,21 @@
 package hw2_P3;
 
-import java.util.HashSet;
-
-public class Node extends HashSet<State>
+/**
+ * very basic node
+ * @author tim
+ *
+ */
+public class Node
 {
-	private static final long serialVersionUID = -5495262245602711531L;
+	public State state;
+	public Node parent;
+	public double distance;
 	
-	
+	Node(State state, Node parent, double distance)
+	{
+		this.state = state;
+		this.parent = parent;
+		this.distance = distance;
+	}
+
 }

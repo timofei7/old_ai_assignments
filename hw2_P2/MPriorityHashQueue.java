@@ -12,9 +12,6 @@ import java.util.PriorityQueue;
 public class MPriorityHashQueue extends PriorityQueue<MNode>
 {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3830101596032534204L;
 
 	private HashMap<MLoc, MNode> hash;

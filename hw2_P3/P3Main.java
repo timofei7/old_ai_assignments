@@ -1,8 +1,6 @@
 package hw2_P3;
 
-import java.util.ArrayList;
-
-import hw2_P2.Loc;
+import java.util.Scanner;
 
 
 
@@ -15,34 +13,49 @@ public class P3Main
 	 */
 	public static void main(String[] args)
 	{
-		System.out.println("solving this map:");
-		RobotSolver rs = new RobotSolver(new MMap(MMap.MapSet.MAP1));
 		
-//		Loc[] l = new Loc[3];
-//		l[0] = new Loc(2,0);
-//		l[1] = new Loc(2,1);
-//		l[2] = new Loc(2,2);
-//		
-//		MLoc n = new MLoc(l);
-//		
-//		
-//		ArrayList<MLoc> r = rs.getMovesCorrectlyPlease(n);
-//		
-//		for (int i = 0; i < r.size(); i++)
-//		{
-//			System.out.println(r.get(i));
-//		}
-//		
-//		System.out.println(r.size());
-//		System.out.println(r.toString());
+		Scanner input = new Scanner(System.in);
 		
-		
-		
-		for (int i =0; i< rs.map.gridSize; i++)
+		while (true)
 		{
-			System.out.println(rs.map.current_map[i]);
+			System.out.print("Choose a map (1,2,3) or 0 to quit (4 at your own risk): ");
+			int which = input.nextInt();
+			
+			
+			MMap.MapSet map = MMap.MapSet.MAP1;
+			switch (which)
+			{
+				case 1:
+					map = MMap.MapSet.MAP1;
+					break;
+				case 2: 
+					map = MMap.MapSet.MAP2;
+					break;
+				case 3:
+					map = MMap.MapSet.MAP3;
+					break;
+				case 4:
+					map = MMap.MapSet.MAP4;
+					break;
+				default:
+					System.out.println("bailing!");
+					System.exit(1);
+					
+			}
+			
+			System.out.println("solving this map:");
+			
+			SenselessSolver rs = new SenselessSolver(new MMap(map));
+			
+			for (int i =0; i< rs.map.gridSize; i++)
+			{
+				System.out.println(rs.map.current_map[i]);
+			}
+			rs.Solve();
+			
 		}
-		rs.Solve();
+		
+		
 		
 	}
 

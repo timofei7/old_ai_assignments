@@ -3,6 +3,7 @@ package hw2_P2;
 
 /**
  * the node object for storing a state its parent and its distance
+ * this is for single locations
  */
 public class Node implements Comparable<Node> 
 {

@@ -5,6 +5,9 @@ package hw2_P2;
  * for CS44 W10 hw2 p2
  * @author tim tregubov
  * using some code I wrote for cs5 :-)
+ * 
+ * TO select a map to Display change
+ * rs = new RobotSolver(MMap.MapSet.MAP1);  to MAP1-MAP5
  */
 
 import java.applet.Applet;
@@ -25,7 +28,7 @@ public class P2Graphical extends Applet implements ActionListener
 	private int VERT_OFFSET = 20;
 	private int WIN_SIZE; // how big to make the
 	private int FONT_SIZE;
-															// window
+
 	private MMap maze;
 	private RobotSolver rs;
 	private Timer timer;
@@ -41,10 +44,14 @@ public class P2Graphical extends Applet implements ActionListener
 		/**
 		 * CHOOSE YOUR MAP MAP1-MAP5
 		 */
-		maze = new MMap(MMap.MapSet.MAP5);  //initialize our map of choice
+		rs = new RobotSolver();	
+		rs.Solve(MMap.MapSet.MAP1);
+		/**
+		 * RIGHT HERE COME AND GET SOME SOLVING
+		 */
 		
 		
-		rs = new RobotSolver(maze);			//initialize solver
+		maze = rs.map;  //initialize our map of choice
 		solutions = rs.solutions;    //TODO: only for testing
 	    timer = new Timer(500, this);    // lets have a timer for changinging animation frames
 	    timer.start();                    // start up the timer

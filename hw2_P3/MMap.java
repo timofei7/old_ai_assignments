@@ -1,8 +1,11 @@
 package hw2_P3;
 
-import hw2_P2.Loc;
 
-
+/**
+ * the maps for P4
+ * @author tim
+ *cs44 w10 hw2 p3
+ */
 public class MMap
 {
 	public static enum MapSet { MAP1, MAP2, MAP3, MAP4};
@@ -81,7 +84,7 @@ public class MMap
 	}
 	
 	/**
-	 * build map 1
+	 * build map 1 // 
 	 */
 	private void buildMap1()
 	{
@@ -99,7 +102,7 @@ public class MMap
 	}
 	
 	/**
-	 * build map 2
+	 * build map  // nice fast test case
 	 */
 	private void buildMap2()
 	{
@@ -116,39 +119,43 @@ public class MMap
 	}	
 	
 	/**
-	 * build map 2
+	 * build map 3  //this one is a bit more complex change it around some and it can sometimes
+	 * fail to solve even though the solution seems obvious. 
 	 */
 	private void buildMap3()
 	{
 		
-		finish = new Loc(3,2);
+		finish = new Loc(3,0);
 
 		
 		gridSize = 5;
 		
 		current_map = new String[gridSize];
 		current_map[0] = ".....";
-		current_map[1] = ".##..";
-		current_map[2] = ".###.";
-		current_map[3] = "..##.";
-		current_map[4] = ".....";
+		current_map[1] = ".###.";
+		current_map[2] = "..#..";
+		current_map[3] = ". #..";
+		current_map[4] = "..#..";
 	}
 	
 	/**
-	 * build map 2
+	 * build map 3  //this one is a bit more complex change it around some and it can sometimes
+	 * fail to solve even though the solution seems obvious. 
 	 */
 	private void buildMap4()
 	{
 		
-		finish = new Loc(2,2);
+		finish = new Loc(3,0);
 
 		
-		gridSize = 3;
+		gridSize = 5;
 		
 		current_map = new String[gridSize];
-		current_map[0] = "...";
-		current_map[1] = "...";
-		current_map[2] = "...";
-
+		current_map[0] = ".....";
+		current_map[1] = ".###.";
+		current_map[2] = "..#..";
+		current_map[3] = ". #..";
+		current_map[4] = ".....";
 	}
+
 }

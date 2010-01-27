@@ -24,12 +24,23 @@ public class RobotSolver
 
 		
 	/**
-	 * constructor, initializes the robots and some maps. 
+	 * basic constructor
 	 */
-	public RobotSolver(MMap m)
+	public RobotSolver()
+	{		
+		waveFronts = new ArrayList<Map<Loc,Double>>();
+		solutions = new ArrayList<LinkedList<Loc>>();
+		mSolutions = new LinkedList<MLoc>();
+	}
+	
+	/**
+	 * run the solver on some map
+	 * @param mapset
+	 */
+	public void Solve(MMap.MapSet mapset)
 	{
-		map = m;
-		
+		map = new MMap(mapset);
+	
 		waveFronts = new ArrayList<Map<Loc,Double>>();
 		solutions = new ArrayList<LinkedList<Loc>>();
 		mSolutions = new LinkedList<MLoc>();
@@ -59,7 +70,12 @@ public class RobotSolver
 		}	
 	}
 	
-
+	
+	/**
+	 * run astar over the state of all robots!
+	 * @param fs start states
+	 * @param ff finish states
+	 */
 	private void astarMulti(Loc[] fs, Loc[] ff)
 	{
 		MLoc s = new MLoc(fs);
@@ -265,37 +281,6 @@ public class RobotSolver
 	
 	
 	//TODO:  make simultaneous moves
-	
-
-//	public ArrayList<MLoc> getAllMoves(MLoc ml)
-//	{
-//		ArrayList<ArrayList<Loc>> allNewMoves = new ArrayList<ArrayList<Loc>>();
-//		for (int i = 0; i < map.numRobots; i++)
-//		{
-//			allNewMoves.add(getMovesWithPause(ml.locs[i]));
-//		}
-//				
-//		
-//		for (int i = 0; i < map.numRobots; i++)
-//		{
-//			
-//		}
-//		ArrayList<MLoc> mls = new ArrayList<MLoc>();
-//		System.out.println("ls: " + ls);
-//		for (int j = 0; j < ls.size(); j++)
-//		{
-//			if (!colTest(ls.get(j), ml, r))
-//			{
-//				MLoc nml = ml.clone();
-//				nml.locs[r] = ls.get(j);
-//				mls.add(nml);
-//				System.out.println("built: " + mls);
-//			}
-//		}
-//		return mls;
-//		
-//	}
-	
 	
 	/**
 	 * checks collisions between a robot and its neighbors
