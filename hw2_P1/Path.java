@@ -1,7 +1,6 @@
 package hw2_P1;
 
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -78,14 +77,7 @@ public class Path
 			
 			for(int i = 0; i < childs.size(); i++) {               // adding the resulting nodes to the frontier
 				if(! visited.contains(childs.get(i)) ) {     // don't add children if they are on the visited list
-					if (childs.get(i).matches(".*" + parser.getDomain(finish) + ".*")) //if we're on the right domain stay there
-					{
-						frontier.addLast(new Node(childs.get(i), current, current.distance) );
-					}
-					else
-					{
-						frontier.addLast(new Node(childs.get(i), current, current.distance + 1) );
-					}
+					frontier.addLast(new Node(childs.get(i), current, current.distance + 1) );
 					//System.out.println(childs.get(i).toString()); //to print order added to frontier
 					visited.add(childs.get(i)); // Add the node to the visited list
 				}

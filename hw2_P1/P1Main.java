@@ -17,7 +17,7 @@ public class P1Main
 		
 		
 		//p.findURLS("http://www.cs.dartmouth.edu/~tim", "http://www.zingweb.com/tim/link.html");
-		p.findURLS("http://www.cs.dartmouth.edu", "http://www.cs.dartmouth.edu/~robotics/");
+		p.findURLS("http://www.cs.dartmouth.edu", "http://www.cs.dartmouth.edu/~robotics");
 					    
 	}
 }

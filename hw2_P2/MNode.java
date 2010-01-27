@@ -38,6 +38,7 @@ public class MNode implements Comparable<MNode>
 	
 	/**
 	 * compare nodes based on F
+	 * break ties based on H only
 	 */
 	@Override
 	public int compareTo(MNode o)

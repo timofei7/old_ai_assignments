@@ -7,8 +7,9 @@ package hw2_P2;
 public class Node implements Comparable<Node> 
 {
 	public Loc state;
-	Node parent;
-	public double distance;
+	public Node parent;
+	public double G; //the exact cost in steps to get here
+	public double H; //the heuristic cost
 	
 	int rid; //not generally used
 
@@ -18,11 +19,14 @@ public class Node implements Comparable<Node>
 	 * @param parent
 	 * @param distance
 	 */
-	public Node(Loc current, Node parent, double distance)
+	public Node(Loc current, Node parent, double G, double H)
 	{
 		this.state = current;
 		this.parent = parent;
-		this.distance = distance;
+		this.G = G;
+		this.H = H;
+		this.rid = 0;
+
 	}
 	
 	/**
@@ -35,14 +39,25 @@ public class Node implements Comparable<Node>
 	{
 		this.state = null;
 		this.parent = null;
-		this.distance = distance;
+		this.G = distance;
+		this.H = 0;
 		this.rid = rid;
 	}
+	
+	/**
+	 * g + h the estimated distance
+	 * @return
+	 */
+	public double distance()
+	{
+		return G + H;
+	}
+	
 	
 	@Override
 	public int compareTo(Node o)
 	{
-		return (int) Math.floor(distance - o.distance);
+		return (int) Math.floor(distance() - o.distance());
 	}
 	
 	public String toString()
@@ -50,7 +65,7 @@ public class Node implements Comparable<Node>
 		String s = state.toString();
 		try
 		{
-			s = "State: " + state.toString() + ", parent: " + parent.state.toString() + ", distance: " + distance;
+			s = "State: " + state.toString() + ", parent: " + parent.state.toString() + ", distance: " + distance();
 		}
 		catch (Exception e){}
 

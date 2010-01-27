@@ -66,6 +66,7 @@ public class RobotSolver
 		MLoc f = new MLoc(ff);
 		
 		int turnKeeper = 0;
+		int counter = 0;
 		
 		MPriorityHashQueue frontier = new MPriorityHashQueue(); //states to look at
 		Map<MLoc,Double> explored = new HashMap<MLoc,Double>();   //explored locations
@@ -77,6 +78,11 @@ public class RobotSolver
 		//run the search
 		while (!frontier.isEmpty())
 		{
+
+			//progress printer
+			if (counter % 100 == 0){System.out.print("\n");}; //these can be adjusted
+			if (counter % 1 == 0) {System.out.print(".");}; 
+			
 			MNode current = frontier.poll(); //chooses the lowest cost node in frontier
 									
 			// build plan if goal and we've planned enough steps to cover longest running bot
@@ -120,6 +126,7 @@ public class RobotSolver
 				}
 			}
 			turnKeeper = (turnKeeper + 1) % map.numRobots; //next robot
+			counter++;
 		}
 		if (solution.isEmpty())
 		{
@@ -132,6 +139,9 @@ public class RobotSolver
 	 * build wavefront heuristic
 	 * instead of returning the solution here though, we return the explored graph
 	 * which is now going to be the best heuristic
+	 * if we had problems running this we could implement a continuable a* to
+	 * continue searching if we asked for a value not in expolored
+	 * but this is the least of our worries at this point
 	 * remember to goes backwards from finish to start
 	 * @param s is start
 	 * @param f is finish
@@ -143,7 +153,7 @@ public class RobotSolver
 		PriorityHashQueue frontier = new PriorityHashQueue();
 		Map<Loc,Double> explored = new HashMap<Loc,Double>();		
 		
-		frontier.add(new Node(f, null, 0 + manhattan(f, s))); //add the first robot state
+		frontier.add(new Node(f, null, 0, manhattan(f, s))); //add the first robot state
 		
 		while (!frontier.isEmpty())
 		{
@@ -154,7 +164,7 @@ public class RobotSolver
 			//NOTE instead we consider all options exhaustively
 			//NOTE to create a wavefront planned heuristic
 			
-			explored.put(current.state, current.distance);
+			explored.put(current.state, current.G);
 			
 			ArrayList<Loc> possibles = getMoves(current.state);
 			
@@ -162,21 +172,20 @@ public class RobotSolver
 			{
 				if (! explored.containsKey(possibles.get(i)))
 				{
-					frontier.add(new Node(possibles.get(i), current, current.distance + 1  + manhattan(current.state, s)));
+					frontier.add(new Node(possibles.get(i), current, current.G + 1, manhattan(current.state, s)));
 				}
 				else
 				{
 					Node n = frontier.get(current.state);
-					if (n != null && n.distance > current.distance + 1)
+					if (n != null && n.distance() > current.distance())
 					{
-						frontier.update(current, new Node(possibles.get(i), current, current.distance + 1  + manhattan(current.state, s)));
+						frontier.update(current, new Node(possibles.get(i), current, current.G + 1, manhattan(current.state, s)));
 					}
 				}
 			}
 		}
 		return explored;  
-	}
-	
+	}	
 	
 	/**
 	 * gets all the *possible* moves for a robot on the map
@@ -246,7 +255,6 @@ public class RobotSolver
 		{
 			if (!colTest(ls.get(i), ml, r))
 			{
-				//System.out.println("checking: " + ls.get(i) + " in: " + ml + " with r: " + r + " = " + colTest(ls.get(i), ml, r));
 				MLoc nml = ml.clone();
 				nml.locs[r] = ls.get(i);
 				mls.add(nml);
@@ -299,11 +307,9 @@ public class RobotSolver
 		{
 			if (r != i)
 			{
-				System.out.println("r: "+r+" i: "+i+ " comp: "+l+ " with: " + ml + " = " + (b && l.equals(ml.locs[i])));
 				b = b || l.equals(ml.locs[i]);
 			}
 		}
-		System.out.println("for r: " + r + " = " + b);
 		return b;
 	}
 	

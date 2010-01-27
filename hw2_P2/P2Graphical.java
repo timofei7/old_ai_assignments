@@ -20,10 +20,11 @@ public class P2Graphical extends Applet implements ActionListener
 	private static final long serialVersionUID = 4596161053061003374L;
 
 	private int GRID_SIZE; // how many cols/rows we want.
-	private final int SQUARE_SIZE = 30; // how big to make each square
-	private final int HORIZ_OFFSET = 10;
-	private final int VERT_OFFSET = 20;
+	private int SQUARE_SIZE; // how big to make each square
+	private int HORIZ_OFFSET = 10;
+	private int VERT_OFFSET = 20;
 	private int WIN_SIZE; // how big to make the
+	private int FONT_SIZE;
 															// window
 	private MMap maze;
 	private RobotSolver rs;
@@ -36,12 +37,33 @@ public class P2Graphical extends Applet implements ActionListener
 	 */
 	public void init()
 	{
+		
+		/**
+		 * CHOOSE YOUR MAP MAP1-MAP5
+		 */
 		maze = new MMap(MMap.MapSet.MAP5);  //initialize our map of choice
+		
+		
 		rs = new RobotSolver(maze);			//initialize solver
 		solutions = rs.solutions;    //TODO: only for testing
 	    timer = new Timer(500, this);    // lets have a timer for changinging animation frames
 	    timer.start();                    // start up the timer
 	    fm = new frameManager();          // lets manage the animation frames
+	    
+	    SQUARE_SIZE=30;
+	    FONT_SIZE=18;
+		HORIZ_OFFSET = 10;
+		VERT_OFFSET = 20;
+		
+		//the other maps work with smaller values
+	    if (maze.currentMap == MMap.MapSet.MAP5)
+	    {
+	    	SQUARE_SIZE= 20;
+	    	FONT_SIZE=12;
+			HORIZ_OFFSET = 5;
+			VERT_OFFSET = 10;
+	    }
+	    
 	    
 	    GRID_SIZE = maze.gridSize;
 	    WIN_SIZE = SQUARE_SIZE * GRID_SIZE;
@@ -81,7 +103,7 @@ public class P2Graphical extends Applet implements ActionListener
 						SQUARE_SIZE, SQUARE_SIZE); // draw our squares!
 				
 				page.setColor(Color.blue);
-				page.setFont(new Font("Arial", Font.BOLD, 18));
+				page.setFont(new Font("Arial", Font.BOLD, FONT_SIZE));
 				
 				for (int i = 0; i < maze.numRobots; i++)
 				{
