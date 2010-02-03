@@ -45,7 +45,7 @@ public class P2Graphical extends Applet implements ActionListener
 		 * CHOOSE YOUR MAP MAP1-MAP5
 		 */
 		rs = new RobotSolver();	
-		rs.Solve(MMap.MapSet.MAP6);
+		rs.Solve(MMap.MapSet.MAP3);
 		/**
 		 * RIGHT HERE COME AND GET SOME SOLVING
 		 */

@@ -79,6 +79,7 @@ public class SenselessSolver
 					solution.addFirst(node.state);  //add path nodes to solution
 				}
 				System.out.println("found goal!");
+				System.out.println("moves: " + solution.size());
 				mSolutions.addAll(solution);
 				return;
 			}
