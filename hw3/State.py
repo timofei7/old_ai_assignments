@@ -14,6 +14,7 @@ class State(object):
         """Constructor"""
         self._state = ["......."] * 6; # number of rows
         self._moves = 0 #number of moves so far in game
+        self._build_diagonal_set()
 
         
     def encode(self):
@@ -116,57 +117,132 @@ class State(object):
     
     def is_win(self):
         """returns tuple (bool, player) , true if current state is a win"""
-        columns = map(lambda *row: list(row), *self._state) #transpose to look in columns
-
-        def minicheck(s):
-            if s.find("XXXX") != -1:
+        list = self.build_segments()
+        
+        for s in list:
+            if s == "XXXX":
                 return (True, "X")
-            elif s.find("OOOO") != -1:
+            elif s == "OOOO":
                 return (True, "O")
-            else:
-                return (False, "better luck next time")
-        
-        #check horiz
-        for row in self._state:
-            (b,p) = minicheck(row)
-            if b: return (b,p)
-        
-        #check vert
-        for col in columns:
-            s = "".join(col)
-            (b,p) = minicheck(s)
-            if b: return (b,p)
             
-        #check diagonals
-        #build coords
-        xcoords = set([])
-        ocoords = set([])
-        for y, yv in enumerate(self._state):
-            for x, xv in enumerate(yv):
-                if xv == 'X':
-                    xcoords.add((x,y))
-                elif xv == 'O':
-                    ocoords.add((x,y))
-                    
-        for x,y in xcoords:
-            s = [frozenset([(x,y),(x-1,y-1),(x-2,y-2),(x-3,y-3)]),
-                 frozenset([(x,y),(x+1,y+1),(x+2,y+2),(x+3,y+3)]),
-                 frozenset([(x,y),(x+1,y-1),(x+2,y-2),(x+3,y-3)]),
-                 frozenset([(x,y),(x-1,y+1),(x-2,y+2),(x-3,y+3)])]
-            for d in s:
-                if d.issubset(xcoords):
-                    return (True, "X")
+        return (False, "better luck next time")
+        
+        
+    def eval(self):
+        """the evaluation function for minimax"""
+        
+    
+#    def is_win_old(self):
+#        """returns tuple (bool, player) , true if current state is a win"""
+#        columns = map(lambda *row: list(row), *self._state) #transpose to look in columns
+#
+#        def minicheck(s):
+#            if s.find("XXXX") != -1:
+#                return (True, "X")
+#            elif s.find("OOOO") != -1:
+#                return (True, "O")
+#            else:
+#                return (False, "better luck next time")
+#        
+#        #check horiz
+#        for row in self._state:
+#            (b,p) = minicheck(row)
+#            if b: return (b,p)
+#        
+#        #check vert
+#        for col in columns:
+#            s = "".join(col)
+#            (b,p) = minicheck(s)
+#            if b: return (b,p)
+#            
+#        #check diagonals
+#        #build coords
+#        xcoords = set([])
+#        ocoords = set([])
+#        for y, yv in enumerate(self._state):
+#            for x, xv in enumerate(yv):
+#                if xv == 'X':
+#                    xcoords.add((x,y))
+#                elif xv == 'O':
+#                    ocoords.add((x,y))
+#                    
+#        for x,y in xcoords:
+#            s = [frozenset([(x,y),(x-1,y-1),(x-2,y-2),(x-3,y-3)]),
+#                 frozenset([(x,y),(x+1,y+1),(x+2,y+2),(x+3,y+3)]),
+#                 frozenset([(x,y),(x+1,y-1),(x+2,y-2),(x+3,y-3)]),
+#                 frozenset([(x,y),(x-1,y+1),(x-2,y+2),(x-3,y+3)])]
+#            for d in s:
+#                if d.issubset(xcoords):
+#                    return (True, "X")
+#                
+#        for x,y in ocoords:
+#            s = [frozenset([(x,y),(x-1,y-1),(x-2,y-2),(x-3,y-3)]),
+#                 frozenset([(x,y),(x+1,y+1),(x+2,y+2),(x+3,y+3)]),
+#                 frozenset([(x,y),(x+1,y-1),(x+2,y-2),(x+3,y-3)]),
+#                 frozenset([(x,y),(x-1,y+1),(x-2,y+2),(x-3,y+3)])]
+#            for d in s:
+#                if d.issubset(ocoords):
+#                    return (True, "Y")
+#            
+#        return (False, ":-(")
+    
+    
+    
+    def _build_diagonal_set(self):
+        """builds a list of lists of all possible coordinates of diagonals"""
+        self.allsegs = []
+        for y in range(0, 6):
+            for x in range(0, 7):
+                # - - 
+                if x > 2 and y > 2:
+                    self.allsegs.append([(x,y),(x-1,y-1),(x-2,y-2),(x-3,y-3)])
+                # + + 
+                if x < 4 and y < 3:
+                    self.allsegs.append([(x,y),(x+1,y+1),(x+2,y+2),(x+3,y+3)])
+                # + -
+                if x < 4 and y > 2:
+                    self.allsegs.append([(x,y),(x+1,y-1),(x+2,y-2),(x+3,y-3)])
+                # - +
+                if x > 2 and y < 3:
+                    self.allsegs.append([(x,y),(x-1,y+1),(x-2,y+2),(x-3,y+3)])
+        
+        
+    def build_segments(self):
+        """builds a set of all size 4 segments on the board"""
+        
+        #all vertical segments
+        columns = map(lambda *row: list(row), *self._state) #transpose to look in columns
+        columns2 =["".join(s) for s in columns]
+        columns3 = []
+        for c in columns2:  #get lengths of 4 segments
+            for i in range(0,3):
+                columns3.append(c[0+i:4+i])
                 
-        for x,y in ocoords:
-            s = [frozenset([(x,y),(x-1,y-1),(x-2,y-2),(x-3,y-3)]),
-                 frozenset([(x,y),(x+1,y+1),(x+2,y+2),(x+3,y+3)]),
-                 frozenset([(x,y),(x+1,y-1),(x+2,y-2),(x+3,y-3)]),
-                 frozenset([(x,y),(x-1,y+1),(x-2,y+2),(x-3,y+3)])]
-            for d in s:
-                if d.issubset(ocoords):
-                    return (True, "Y")
+        #all horizontal segments
+        rows = []
+        for r in self._state:
+            for i in range(0,4):
+                rows.append(r[0+i:4+i])
             
-        return (False, ":-(")
+        #all diagonal segments
+        diags = [] 
+
+        #build diag strings
+        for seg in self.allsegs:
+            st = ""
+            for pos in seg:
+                (x,y) = pos
+                st = st + self._state[y][x]
+            diags.append(st)
+
+        #build up mega list of all possible segments
+        l = []
+        l.extend(rows)
+        l.extend(columns3)
+        l.extend(diags)
+        return l
+                
+                
         
         
                     
