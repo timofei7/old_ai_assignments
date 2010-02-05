@@ -12,25 +12,31 @@ class ComputerPlus(Computer):
     the computer player
     '''
         
-    def minimaxi(self, s):
+    def minimaxi(self, s, order):
         """i like to make decisions -- I am the first player"""
         movevalues = {}
         for move in s._legal_moves():
             self.statecounter = self.statecounter+1
             s.do_move(move)
-            movevalues[self.my_min(s, -sys.maxint -1, sys.maxint)] = move
+            if order == 1:
+                movevalues[self.my_min(s, -sys.maxint -1, sys.maxint)] = move
+            else:
+                movevalues[self.my_max(s, -sys.maxint -1, sys.maxint)] = move
             s.undo_move(move)
-        return movevalues[max(movevalues.keys())]
+        if order == 1:
+            return movevalues[max(movevalues.keys())]
+        else:
+            return movevalues[min(movevalues.keys())]
     
-    def maximini(self, s):
-        """i like to make decisions -- I am the second player"""
-        movevalues = {}
-        for move in s._legal_moves():
-            self.statecounter = self.statecounter+1
-            s.do_move(move)
-            movevalues[self.my_max(s, -sys.maxint -1, sys.maxint)] = move
-            s.undo_move(move)
-        return movevalues[min(movevalues.keys())]
+#    def maximini(self, s):
+#        """i like to make decisions -- I am the second player"""
+#        movevalues = {}
+#        for move in s._legal_moves():
+#            self.statecounter = self.statecounter+1
+#            s.do_move(move)
+#            movevalues[self.my_max(s, -sys.maxint -1, sys.maxint)] = move
+#            s.undo_move(move)
+#        return movevalues[min(movevalues.keys())]
         
     
     #player

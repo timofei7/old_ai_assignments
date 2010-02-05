@@ -7,7 +7,7 @@ for cs44 w10
 
 from State import State
 from Computer import Computer
-#from ComputerPlus import ComputerPlus
+from ComputerPlus import ComputerPlus
 import sys
 
 
@@ -43,10 +43,9 @@ def getPlayerMove():
             checkWin()
 
 
-def getComputerMove(o):
-    b = s.do_move(c.minimaxi(s, o))
+def getComputerMove(order):
+    s.do_move(c.minimaxi(s, order))
     checkWin()
-    return b
 
 
 def HvH():
@@ -109,9 +108,9 @@ def CvC():
         getComputerMove(1)
         print s.encode()
         print "Computer one moved"
-        if getComputerMove(2):
-            print s.encode()
-            print "Computer two moved"
+        getComputerMove(2)
+        print s.encode()
+        print "Computer two moved"
         
     print "No more moves! The Game is a TIE!"
 

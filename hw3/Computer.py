@@ -10,7 +10,7 @@ class Computer(object):
     '''
     the computer player
     '''
-    maxdepth = 3000
+    maxdepth = 1000
     maxstates = 100000
 
     def __init__(self, s):
@@ -30,6 +30,8 @@ class Computer(object):
     
     def minimaxi(self, s, order):
         """i like to make computer like decisions"""
+        self.counter = 0;      #reset the counters
+        self.statecounter =0;  #reset the counters
         movevalues = {}
         for move in s._legal_moves():
             self.statecounter = self.statecounter+1
@@ -43,7 +45,8 @@ class Computer(object):
             return movevalues[max(movevalues.keys())]
         else:
             return movevalues[min(movevalues.keys())]
-            
+        
+        
     
     #player
     def my_min(self, s,):
@@ -80,11 +83,11 @@ class Computer(object):
         
         val = 0
         
-        (b, np) = s.is_win()
+        (b, np) = s._is_win(segs)
         if b and p == "max":
-            val =  -sys.maxint-1
+            val =  sys.maxint#-sys.maxint-1
         elif b and p == "min":
-            val = sys.maxint
+            val = -sys.maxint -1#sys.maxint
         elif s.legal_moves() == "":
             val = 0
         else:
