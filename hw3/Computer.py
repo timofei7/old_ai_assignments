@@ -93,6 +93,7 @@ class Computer(object):
         else:
             val = self.evaluate(segs)
             #return random.randint(-(sys.maxint/2), (sys.maxint/2))
+        #print "win: " + str(b) + " for: " + str(np)+" while set: " + str(p) + " val = " + str(val)
         return val
             
             

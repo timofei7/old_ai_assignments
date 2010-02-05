@@ -23,5 +23,4 @@ if __name__ == '__main__':
     
     s.decode("".join(lines))
     
-    segs = s.build_segments()
-    print c.evaluate(segs)
+    print c.utility(s, "max")

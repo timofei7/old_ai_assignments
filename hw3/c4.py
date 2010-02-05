@@ -7,7 +7,7 @@ for cs44 w10
 
 from State import State
 from Computer import Computer
-from ComputerPlus import ComputerPlus
+#from ComputerPlus import ComputerPlus
 import sys
 
 
