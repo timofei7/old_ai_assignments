@@ -2,10 +2,12 @@
 Created on Feb 1, 2010
 
 @author: tim
+for cs44 w10
 '''
 
 from State import State
 from Computer import Computer
+#from ComputerPlus import ComputerPlus
 import sys
 
 
@@ -13,6 +15,7 @@ possible = frozenset(['1','2','3','4','5','6', '7'])
 
 s = State()
 c = Computer(s)
+#c = ComputerPlus(s)
 
 
 def checkWin():
@@ -40,9 +43,10 @@ def getPlayerMove():
             checkWin()
 
 
-def getComputerMove():
-    s.do_move(c.minimaxi(s))
+def getComputerMove(o):
+    b = s.do_move(c.minimaxi(s, o))
     checkWin()
+    return b
 
 
 def HvH():
@@ -80,25 +84,17 @@ def HvC():
     player_order = ""
     while (player_order.strip() != '1' and player_order.strip() != '2'):
         player_order = raw_input("go first or second? (enter 1 or 2): ")
-            
-    while s.legal_moves() != "":
-        print s.encode()
-        
-        
-        if player_order == "1":
-            getPlayerMove()
-            print "p1"
-        else:
-            getComputerMove()
-            print "c1"
-        
-        if player_order == "2":
-            getPlayerMove()
-            print "c2"
-        else:
-            getComputerMove()
-            print "p2"
                 
+    while s.legal_moves() != "":
+
+        if player_order == "1":
+            print s.encode()
+            getPlayerMove()
+            getComputerMove(2)
+        else:
+            getComputerMove(1)
+            print s.encode()
+            getPlayerMove()                
     
     print s.encode()
     print "No more moves! The Game is a TIE!"
@@ -107,10 +103,17 @@ def HvC():
 def CvC():
     print "Computer Versus Computer!"
     
+    print s.encode()
     while s.legal_moves() != "":
-        print s.encode()
         
-        getComputerMove()
+        getComputerMove(1)
+        print s.encode()
+        print "Computer one moved"
+        if getComputerMove(2):
+            print s.encode()
+            print "Computer two moved"
+        
+    print "No more moves! The Game is a TIE!"
 
     
 def Quit():

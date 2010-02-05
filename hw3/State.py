@@ -2,6 +2,7 @@
 Created on Feb 1, 2010
 
 @author: tim
+for cs44 w10
 
 X always goes first
 '''
@@ -17,12 +18,12 @@ class State(object):
         self._build_diagonal_set()
 
         
-    def encode(self):
+    def encode(self): #why did afra name this encode...
         """returns a string representation of the _state"""
-        s = "-1234567-\n"
+        s = "-1 2 3 4 5 6 7-\n"
         for row in self._state:
-            s = s + "|" + row + "|\n"
-        s = s + "-1234567-"
+            s = s + "|" + " ".join(row) + "|\n"
+        s = s + "-1 2 3 4 5 6 7-"
         return s
             
     def decode(self, str):
@@ -118,6 +119,11 @@ class State(object):
     def is_win(self):
         """returns tuple (bool, player) , true if current state is a win"""
         list = self.build_segments()
+        return self._is_win(list)
+    
+    
+    def _is_win(self, list):
+        """takes list returns tuple (bool, player) , true if current state is a win"""
         
         for s in list:
             if s == "XXXX":
@@ -126,67 +132,7 @@ class State(object):
                 return (True, "O")
             
         return (False, "better luck next time")
-        
-        
-    def eval(self):
-        """the evaluation function for minimax"""
-        
-    
-#    def is_win_old(self):
-#        """returns tuple (bool, player) , true if current state is a win"""
-#        columns = map(lambda *row: list(row), *self._state) #transpose to look in columns
-#
-#        def minicheck(s):
-#            if s.find("XXXX") != -1:
-#                return (True, "X")
-#            elif s.find("OOOO") != -1:
-#                return (True, "O")
-#            else:
-#                return (False, "better luck next time")
-#        
-#        #check horiz
-#        for row in self._state:
-#            (b,p) = minicheck(row)
-#            if b: return (b,p)
-#        
-#        #check vert
-#        for col in columns:
-#            s = "".join(col)
-#            (b,p) = minicheck(s)
-#            if b: return (b,p)
-#            
-#        #check diagonals
-#        #build coords
-#        xcoords = set([])
-#        ocoords = set([])
-#        for y, yv in enumerate(self._state):
-#            for x, xv in enumerate(yv):
-#                if xv == 'X':
-#                    xcoords.add((x,y))
-#                elif xv == 'O':
-#                    ocoords.add((x,y))
-#                    
-#        for x,y in xcoords:
-#            s = [frozenset([(x,y),(x-1,y-1),(x-2,y-2),(x-3,y-3)]),
-#                 frozenset([(x,y),(x+1,y+1),(x+2,y+2),(x+3,y+3)]),
-#                 frozenset([(x,y),(x+1,y-1),(x+2,y-2),(x+3,y-3)]),
-#                 frozenset([(x,y),(x-1,y+1),(x-2,y+2),(x-3,y+3)])]
-#            for d in s:
-#                if d.issubset(xcoords):
-#                    return (True, "X")
-#                
-#        for x,y in ocoords:
-#            s = [frozenset([(x,y),(x-1,y-1),(x-2,y-2),(x-3,y-3)]),
-#                 frozenset([(x,y),(x+1,y+1),(x+2,y+2),(x+3,y+3)]),
-#                 frozenset([(x,y),(x+1,y-1),(x+2,y-2),(x+3,y-3)]),
-#                 frozenset([(x,y),(x-1,y+1),(x-2,y+2),(x-3,y+3)])]
-#            for d in s:
-#                if d.issubset(ocoords):
-#                    return (True, "Y")
-#            
-#        return (False, ":-(")
-    
-    
+            
     
     def _build_diagonal_set(self):
         """builds a list of lists of all possible coordinates of diagonals"""
@@ -196,12 +142,6 @@ class State(object):
                 # - - 
                 if x > 2 and y > 2:
                     self.allsegs.append([(x,y),(x-1,y-1),(x-2,y-2),(x-3,y-3)])
-                # + + 
-                if x < 4 and y < 3:
-                    self.allsegs.append([(x,y),(x+1,y+1),(x+2,y+2),(x+3,y+3)])
-                # + -
-                if x < 4 and y > 2:
-                    self.allsegs.append([(x,y),(x+1,y-1),(x+2,y-2),(x+3,y-3)])
                 # - +
                 if x > 2 and y < 3:
                     self.allsegs.append([(x,y),(x-1,y+1),(x-2,y+2),(x-3,y+3)])
@@ -217,7 +157,7 @@ class State(object):
         for c in columns2:  #get lengths of 4 segments
             for i in range(0,3):
                 columns3.append(c[0+i:4+i])
-                
+        
         #all horizontal segments
         rows = []
         for r in self._state:
@@ -234,6 +174,7 @@ class State(object):
                 (x,y) = pos
                 st = st + self._state[y][x]
             diags.append(st)
+            
 
         #build up mega list of all possible segments
         l = []
@@ -241,38 +182,5 @@ class State(object):
         l.extend(columns3)
         l.extend(diags)
         return l
-                
-                
-        
-        
-                    
-    def _test(self):
-        """tests some stuff"""
-        s = """
--1234567-
-|.......|
-|.......|
-|.......|
-|.......|
-|..O....|
-|.OXXXO.|
--1234567-"""
-        print self.encode()
-        self.decode(s)
-        print self.legal_moves()
-        self.do_move(3)
-        print self.encode()
-        self.undo_move(3)
-        print self.encode()
-        self.undo_move(3)
-        print self.encode()
-        self.undo_move(3)
-        print self.encode()
-        self.undo_move(3)
-        print self.encode()
-            
-            
-            
-            
-        
+                                
         

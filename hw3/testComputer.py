@@ -2,6 +2,7 @@
 Created on Feb 3, 2010
 
 @author: tim
+for cs44 w10
 '''
 from Computer import Computer
 from State import State
@@ -24,8 +25,5 @@ if __name__ == '__main__':
     
     c = Computer(s)
     print s.allsegs
-    s.eval("X")
-    #print s.allsegs
-    #print len(s.allsegs)
-    #print c.minimaxi(s)
+    c.minimax(s)
     
