@@ -175,7 +175,6 @@ class State(object):
                 st = st + self._state[y][x]
             diags.append(st)
             
-
         #build up mega list of all possible segments
         l = []
         l.extend(rows)

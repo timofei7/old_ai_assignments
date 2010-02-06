@@ -3,6 +3,8 @@ Created on Feb 4, 2010
 
 @author: tim
 for cs44 w10
+
+this takes two arguments who is going next and a file with state info
 '''
 
 from State import State
@@ -11,11 +13,10 @@ import sys
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
-        file = sys.argv[1]
-        try: ev = sys.argv[2] #optional to check strings individually
-        except: pass
+        who = sys.argv[1]
+        file = sys.argv[2]
     else:
-        print "usage: eval-c4 filenamewithstate"
+        print "usage: move-c4 whosmove filenamewithstate"
         sys.exit(0)
     
     lines = open(file).readlines()
@@ -25,7 +26,5 @@ if __name__ == '__main__':
     
     s.decode("".join(lines))
     
-    print c.utility(s)
-    
-    try: print c.evaluate([ev])
-    except: pass
+    print "utility: " + str(c.utility(s))
+    print "move chosen " + str(c.minimaxi(s, who))

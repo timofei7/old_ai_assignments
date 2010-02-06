@@ -10,90 +10,98 @@ class Computer(object):
     '''
     the computer player
     '''
-    maxdepth = 1000
-    maxstates = 100000
+    maxdepth = 100
+    maxstates = 10000
 
     def __init__(self, s):
         """Constructor"""
         self.state = s  #the initial state
-        self.counter = 0 #the depth searched
         self.statecounter = 0 #states examined
+        self.depthcount = 0
         
-    def cutoff_test(self, s):
+    def cutoff_test(self, s, depth):
         """ returns true if we should stop"""        
 #        1. We have reached a terminal state (a win or a draw) 
 #        2. We have reached the specified maximum depth. 
 #        3. We have visited the specified maximum number of states.
         (b, p) = s.is_win()
-        return b or s.legal_moves() == "" or self.counter >= self.maxdepth or self.statecounter >= self.maxstates
+        return b or s.legal_moves() == "" or self.depthcount >= depth or self.statecounter >= self.maxstates
             
-    
-    def minimaxi(self, s, order):
-        """i like to make computer like decisions"""
-        self.counter = 0;      #reset the counters
-        self.statecounter =0;  #reset the counters
+        
+    def minimaxi(self, s, who):
+        """i like to make computer decisions"""
+        self.statecounter = 0;  #reset the counter
         movevalues = {}
-        for move in s._legal_moves():
-            self.statecounter = self.statecounter+1
-            s.do_move(move)
-            if order == 1: #if i go first i'm maxi
-                movevalues[self.my_min(s)] = move
-            else: #if i go second i'm mini
-                movevalues[self.my_max(s)] = move
-            s.undo_move(move)
-        if order == 1:
+        depth = 0
+        finding = True
+        while (finding):  # iterative deepening
+            self.depthcount = 0 #reset the depthcounter
+            #print "who " + who + " c: " + str(len(movevalues)) + " " +str(movevalues) + " depth: " + str(depth) + " states: " + str(self.statecounter)
+            for move in s._legal_moves():
+                self.statecounter = self.statecounter+1
+                s.do_move(move)
+                if who == "X": #if i go first i'm maxi
+                    movevalues[self.my_min(s,depth, move)] = move
+                else: #if i go second i'm mini
+                    movevalues[self.my_max(s,depth, move)] = move
+                s.undo_move(move)
+            if depth >= self.maxdepth:
+                finding = False  #stop and return result if we've found a win... TODO: correct?
+            else:
+                depth = depth +1
+        if who == "X":
+            print str(max(movevalues.keys())) + " for X"
+            print "out of: " + str(movevalues)
+            print "state count: " + str(self.statecounter) + " depth: " + str(depth)
             return movevalues[max(movevalues.keys())]
         else:
+            print str(min(movevalues.keys())) + " for O"
+            print "out of: " + str(movevalues)
+            print "state count: " + str(self.statecounter) + " depth: " + str(depth)
             return movevalues[min(movevalues.keys())]
         
         
-    
-    #player
-    def my_min(self, s,):
+    def my_min(self, s,depth, orig):
         """i like to minimize"""
-        if self.cutoff_test(s):
-            return self.utility(s, "min")
-        self.counter = self.counter+1
-        v = sys.maxint
+        #print "i orig from: " + str(orig)
+        if self.cutoff_test(s, depth):
+            return self.utility(s)
+        v = sys.maxint - 1
+        self.depthcount = self.depthcount + 1
         for move in s._legal_moves():
             self.statecounter = self.statecounter+1
             s.do_move(move) #do the move
-            v = min(v, self.my_max(s)) #recurse
+            v = min(v, self.my_max(s,depth, orig)) #recurse
             s.undo_move(move) #undo the move when we return from the above
+        self.depthcount = self.depthcount - 1
         return v
 
-    #computer
-    def my_max(self, s):
+
+    def my_max(self, s,depth, orig):
         """i like to maximize!"""
-        if self.cutoff_test(s):
-            return self.utility(s, "max")
-        self.counter = self.counter+1
+        #print "i orig from: " + str(orig)
+        if self.cutoff_test(s, depth):
+            return self.utility(s)
         v = -sys.maxint - 1
+        self.depthcount = self.depthcount + 1
         for move in s._legal_moves():
             self.statecounter = self.statecounter+1
             s.do_move(move) #do the move
-            v = max(v, self.my_min(s)) #recurse
+            v = max(v, self.my_min(s, depth, orig)) #recurse
             s.undo_move(move) #undo the move when we return from the above
+        self.depthcount = self.depthcount - 1
         return v
         
-    def utility(self, s, p):
+        
+    def utility(self, s):
         """the utility function"""
-        
-        segs = s.build_segments()
-        
         val = 0
         
-        (b, np) = s._is_win(segs)
-        if b and p == "max":
-            val =  sys.maxint#-sys.maxint-1
-        elif b and p == "min":
-            val = -sys.maxint -1#sys.maxint
-        elif s.legal_moves() == "":
+        if s.legal_moves() == "":  #end of game
             val = 0
         else:
-            val = self.evaluate(segs)
+            val = self.evaluate(s.build_segments())
             #return random.randint(-(sys.maxint/2), (sys.maxint/2))
-        #print "win: " + str(b) + " for: " + str(np)+" while set: " + str(p) + " val = " + str(val)
         return val
             
             
@@ -113,17 +121,18 @@ class Computer(object):
                 return 10
             elif seg.count(pos) == 3 and seg.count(".") == 1:
                 return 100
-            elif seg.count(".") == 4:
+            elif seg.count(pos) == 4:  #win
+                return sys.maxint -1
+            elif seg.count(".") == 4:  #empty
                 return 0
-            else:
+            else:  #any other mixed group
                 return 0
     
         val = 0
-        
         for seg in segs:
             val = val + e(seg, "X")
             val = val - e(seg, "O")
-            
+        
         return val    
         
         

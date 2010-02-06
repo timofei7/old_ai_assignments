@@ -7,7 +7,7 @@ for cs44 w10
 
 from State import State
 from Computer import Computer
-#from ComputerPlus import ComputerPlus
+from ComputerPlus import ComputerPlus
 import sys
 
 
@@ -15,8 +15,8 @@ possible = frozenset(['1','2','3','4','5','6', '7'])
 
 s = State()
 c = Computer(s)
-#c = ComputerPlus(s)
-
+cp = ComputerPlus(s)
+    
 
 def checkWin():
     win, player = s.is_win() #check for win
@@ -24,8 +24,6 @@ def checkWin():
         print s.encode()
         print player + " is the WINNER!!!"
         sys.exit(0)
-
-
 
 def getPlayerMove():
 
@@ -43,8 +41,8 @@ def getPlayerMove():
             checkWin()
 
 
-def getComputerMove(order):
-    s.do_move(c.minimaxi(s, order))
+def getComputerMove(who):
+    s.do_move(c.minimaxi(s, who))
     checkWin()
 
 
@@ -79,6 +77,13 @@ def HvH():
 def HvC():
     print "Human Versus Computer!"
     
+    ai = ""
+    while (ai.strip() != '1' and ai.strip() != '2'):
+        ai = raw_input("Computer is minimix or with alpha-beta? (enter 1 or 2): ")
+    
+    if ai == "2":
+        c = cp #for HvC
+    
     #get player order
     player_order = ""
     while (player_order.strip() != '1' and player_order.strip() != '2'):
@@ -89,9 +94,10 @@ def HvC():
         if player_order == "1":
             print s.encode()
             getPlayerMove()
-            getComputerMove(2)
+            getComputerMove("O")
         else:
-            getComputerMove(1)
+            print s.encode()
+            getComputerMove("X")
             print s.encode()
             getPlayerMove()                
     
@@ -101,14 +107,16 @@ def HvC():
     
 def CvC():
     print "Computer Versus Computer!"
-    
+            
     print s.encode()
     while s.legal_moves() != "":
         
-        getComputerMove(1)
+        s.do_move(cp.minimaxi(s, "X"))
+        checkWin()
         print s.encode()
         print "Computer one moved"
-        getComputerMove(2)
+        s.do_move(cp.minimaxi(s, "O"))
+        checkWin()
         print s.encode()
         print "Computer two moved"
         
