@@ -41,7 +41,7 @@ def getPlayerMove():
             checkWin()
 
 
-def getComputerMove(who):
+def getComputerMove(c, who):
     s.do_move(c.minimaxi(s, who))
     checkWin()
 
@@ -82,7 +82,7 @@ def HvC():
         ai = raw_input("Computer is minimix or with alpha-beta? (enter 1 or 2): ")
     
     if ai == "2":
-        c = cp #for HvC
+        nc = ComputerPlus(s) #for HvC
     
     #get player order
     player_order = ""
@@ -94,10 +94,11 @@ def HvC():
         if player_order == "1":
             print s.encode()
             getPlayerMove()
-            getComputerMove("O")
+            print s.encode()
+            getComputerMove(nc, "O")
         else:
             print s.encode()
-            getComputerMove("X")
+            getComputerMove(nc, "X")
             print s.encode()
             getPlayerMove()                
     
@@ -111,11 +112,11 @@ def CvC():
     print s.encode()
     while s.legal_moves() != "":
         
-        s.do_move(cp.minimaxi(s, "X"))
+        s.do_move(c.minimaxi(s, "X"))
         checkWin()
         print s.encode()
         print "Computer one moved"
-        s.do_move(cp.minimaxi(s, "O"))
+        s.do_move(c.minimaxi(s, "O"))
         checkWin()
         print s.encode()
         print "Computer two moved"

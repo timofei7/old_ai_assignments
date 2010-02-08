@@ -11,11 +11,11 @@ class ComputerPlus(Computer):
     '''
     the computer player but with alpha-beta pruning
     '''
-    maxdepth = 200
-    maxstates = 15000        
-        
+    
     def minimaxi(self, s, who):
         """i like to make computer like decisions"""
+        self.maxdepth = 150
+        self.maxstates = 15000
         self.statecounter =0;  #reset the counter
         movevalues = {}
         depth = 0
@@ -34,15 +34,12 @@ class ComputerPlus(Computer):
                 finding = False  #stop and return result if we've found a win... TODO: correct?
             else:
                 depth = depth +1
+        print "ab    state count: " + str(self.statecounter) + " depth: " + str(depth)
         if who == "X":
-            print str(max(movevalues.keys())) + " for X"
-            print "out of: " + str(movevalues)
-            print "state count: " + str(self.statecounter) + " depth: " + str(depth)
+            print "    eval move: " + str(max(movevalues.keys()))
             return movevalues[max(movevalues.keys())]
         else:
-            print str(min(movevalues.keys())) + " for O"
-            print "out of: " + str(movevalues)
-            print "state count: " + str(self.statecounter) + " depth: " + str(depth)
+            print "    eval move: " + str(min(movevalues.keys()))
             return movevalues[min(movevalues.keys())]
                 
     

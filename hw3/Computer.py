@@ -36,7 +36,6 @@ class Computer(object):
         finding = True
         while (finding):  # iterative deepening
             self.depthcount = 0 #reset the depthcounter
-            #print "who " + who + " c: " + str(len(movevalues)) + " " +str(movevalues) + " depth: " + str(depth) + " states: " + str(self.statecounter)
             for move in s._legal_moves():
                 self.statecounter = self.statecounter+1
                 s.do_move(move)
@@ -49,21 +48,17 @@ class Computer(object):
                 finding = False  #stop and return result if we've found a win... TODO: correct?
             else:
                 depth = depth +1
+        print "mnnx    state count: " + str(self.statecounter) + " depth: " + str(depth)
         if who == "X":
-            print str(max(movevalues.keys())) + " for X"
-            #print "out of: " + str(movevalues)
-            print "    state count: " + str(self.statecounter) + " depth: " + str(depth)
+            print "    eval move: " + str(max(movevalues.keys()))
             return movevalues[max(movevalues.keys())]
         else:
-            print str(min(movevalues.keys())) + " for O"
-            #print "out of: " + str(movevalues)
-            print "    state count: " + str(self.statecounter) + " depth: " + str(depth)
+            print "    eval move: " + str(min(movevalues.keys()))
             return movevalues[min(movevalues.keys())]
         
         
     def my_min(self, s,depth, orig):
         """i like to minimize"""
-        #print "i orig from: " + str(orig)
         if self.cutoff_test(s, depth):
             return self.utility(s)
         v = sys.maxint - 1
@@ -79,7 +74,6 @@ class Computer(object):
 
     def my_max(self, s,depth, orig):
         """i like to maximize!"""
-        #print "i orig from: " + str(orig)
         if self.cutoff_test(s, depth):
             return self.utility(s)
         v = -sys.maxint - 1
@@ -107,6 +101,9 @@ class Computer(object):
             
     def evaluate(self, segs):
         """the evaluation function for minimax"""
+        # I decided to evaluate each board state separately rather than keeping track
+        # this may be expensive as I have to do a bit of data shuffling around
+        # when I create the segments. but heck its just a constant right?
         
         def e(seg, pos):
             """0 if s contains no disks or disks from both players,
