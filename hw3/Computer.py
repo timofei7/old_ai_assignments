@@ -51,13 +51,13 @@ class Computer(object):
                 depth = depth +1
         if who == "X":
             print str(max(movevalues.keys())) + " for X"
-            print "out of: " + str(movevalues)
-            print "state count: " + str(self.statecounter) + " depth: " + str(depth)
+            #print "out of: " + str(movevalues)
+            print "    state count: " + str(self.statecounter) + " depth: " + str(depth)
             return movevalues[max(movevalues.keys())]
         else:
             print str(min(movevalues.keys())) + " for O"
-            print "out of: " + str(movevalues)
-            print "state count: " + str(self.statecounter) + " depth: " + str(depth)
+            #print "out of: " + str(movevalues)
+            print "    state count: " + str(self.statecounter) + " depth: " + str(depth)
             return movevalues[min(movevalues.keys())]
         
         

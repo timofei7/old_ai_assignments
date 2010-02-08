@@ -15,7 +15,7 @@ class State(object):
         """Constructor"""
         self._state = ["......."] * 6; # number of rows
         self._moves = 0 #number of moves so far in game
-        self._build_diagonal_set()
+        self._build_diagonal_set() #builds a list of diagonal locations to be used later
 
         
     def encode(self): #why did afra name this encode...
@@ -42,7 +42,7 @@ class State(object):
     
     
     def _legal_moves(self):
-        """returns a list of legal moves there are from this _state"""
+        """returns a list of legal moves there are from this _state as ints"""
         l = []
         for index, column in enumerate(self._state[0]): #grab the topmost column
             if column == ".":
@@ -89,7 +89,7 @@ class State(object):
 
     
     def _next_move(self):
-        """figures out who would make the next move"""
+        """figures out who would make the next move, x always starts"""
         if self._moves % 2 == 0:
             return 'X'
         else:
@@ -123,7 +123,7 @@ class State(object):
     
     
     def _is_win(self, list):
-        """takes list returns tuple (bool, player) , true if current state is a win"""
+        """takes list of segments returns tuple (bool, player) , true if current state is a win"""
         
         for s in list:
             if s == "XXXX":

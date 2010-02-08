@@ -9,7 +9,7 @@ from Computer import Computer
 
 class ComputerPlus(Computer):
     '''
-    the computer player
+    the computer player but with alpha-beta pruning
     '''
     maxdepth = 200
     maxstates = 15000        
@@ -22,7 +22,6 @@ class ComputerPlus(Computer):
         finding = True
         while (finding):  # iterative deepening
             self.depthcount = 0 #reset the depthcounter
-            #print "who " + who + " c: " + str(len(movevalues)) + " " +str(movevalues) + " depth: " + str(depth) + " states: " + str(self.statecounter)
             for move in s._legal_moves():
                 self.statecounter = self.statecounter+1
                 s.do_move(move)
@@ -49,7 +48,6 @@ class ComputerPlus(Computer):
     
     def my_min(self, s,depth, orig, alpha, beta):
         """i like to minimize"""
-        #print "i orig from: " + str(orig)
         if self.cutoff_test(s, depth):
             return self.utility(s)
         v = sys.maxint - 1
@@ -59,7 +57,7 @@ class ComputerPlus(Computer):
             s.do_move(move) #do the move
             v = min(v, self.my_max(s,depth, orig, alpha, beta)) #recurse
             s.undo_move(move) #undo the move when we return from the above
-            if v <= alpha:
+            if v <= alpha:#   
                 self.depthcount = self.depthcount - 1
                 return v
             else:
@@ -69,7 +67,6 @@ class ComputerPlus(Computer):
 
     def my_max(self, s,depth, orig, alpha, beta):
         """i like to maximize!"""
-        #print "i orig from: " + str(orig)
         if self.cutoff_test(s, depth):
             return self.utility(s)
         v = -sys.maxint - 1
