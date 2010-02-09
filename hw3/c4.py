@@ -83,6 +83,8 @@ def HvC():
     
     if ai == "2":
         nc = ComputerPlus(s) #for HvC
+    else:
+        nc = Computer(s)
     
     #get player order
     player_order = ""
