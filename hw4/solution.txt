@@ -1,0 +1,46 @@
+    *  Describe the domain of a variable corresponding to a component of width w and height h, 
+    >  on a circuit board of width n and height m. Make sure the component fits completely on the board! 
+    
+    The domain is:  {(x,y) | x in 0:m-w, y in 0:n-h } That is all x,y coordinates (for the upper left starting corner)
+    that are for x between 0 and m-w and for y between 0 and n-h.  This is on a grid that has 0,0 in upper left.
+
+    * Consider component a and b above, on a 10x3 board.
+    > Write the constraint that enforces the fact that the two components may not overlap. 
+    > Write out legal pairs of locations explicitly. 
+     
+     
+     I make the assumption below that there are no legal pairs when either of the two pieces cannot fit on the board.
+     If the constraint were to ignore that there would be more pairs in the middle where -- is, but one of the pieces would
+     be off the side of the board, thus they are hereby ignored.
+     Additionally for shorthand the pairs are written with A first multiplied by the positions of B second. 
+     So 00(20,21) is shorthand for: {((0,0),(2,0)), ((0,0),(2,1))
+     
+     C = { (A,B), {00(30,40,50,31,41,51),10(40,50,41,51),20(50,51)  --   50(00,01),60(00,01,10,11),70(00,01,10,11,20,21),
+     			   01(30,40,50,31,41,51),11(40,50,41,51),21(50,51)  --   51(00,01),61(00,01,10,11),71(00,01,10,11,20,21)}}
+
+    * Write a java program, to solve the example problem with a, b, c, d, given as above. 
+    > Modify my backtrackingSearch to terminate when the first goal is found. 
+
+
+
+    * Write a new search method in CSP.java, backtrackingMRV, 
+    > that uses the MRV heuristic to find a solution more quickly. 
+
+
+
+    * Write another method with additional heuristics. 
+    > Don't just modify your code, since you'll want to run each method to compare the effectiveness! 
+    > (And write about it in your writeup!) 
+    
+
+
+    * Write a method in CSP.java that returns a list of propositional logic rules
+    > in CNF form that could be used to solve any CSP. Apply it to the mapcoloring problem and
+    > to a simple circuit-board example. It seems to me the easiest way to do this would be to have
+    > each propositional symbol correspond to a bit of one of the variables in the CSP. Describe and
+    > discuss your results in the writeup. 
+    
+    
+
+    * EXTRA CREDIT: use SAT4J to solve the propositional logic problem you output.
+    > How well did it work? What size problems were you able to solve, relative to the MRV backtracking approach? 
