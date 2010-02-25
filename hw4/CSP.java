@@ -56,6 +56,8 @@ public class CSP {
 	
 	// the domain list ordered by variable order
 	private DomainList domainlist; 
+	
+	private boolean solutionFound;
     
 	
 	/**
@@ -80,6 +82,8 @@ public class CSP {
 		// add the special character ? to the value hash, used in partial assignments
 		valueHash.put("?", -1);
 		valueNames.put(-1, "?");
+		
+		solutionFound = false;
 	}
 	
 	/**
@@ -106,6 +110,8 @@ public class CSP {
 		// add the special character ? to the value hash, used in partial assignments
 		valueHash.put("?", -1);
 		valueNames.put(-1, "?");
+		
+		solutionFound = false;
 	}
 	
 	/**
@@ -192,10 +198,12 @@ public class CSP {
 
 	
 	/**
-	 * PartialAssignment pa = new PartialAssignment();
+	 * does a backTrackingSearch
 	 * @param assign
 	 */
 	public void backtrackingSearch(final PartialAssignment assign) {
+		
+		if (solutionFound == true) return;
 		
 		// Clone the assignment, since we don't want to clobber the values already assigned
 		PartialAssignment pa = (PartialAssignment) assign.clone();
@@ -207,12 +215,58 @@ public class CSP {
 				// solution found!
 				System.out.println("Solution!  ");
 				pa.prettyPrint(variableNames, valueNames);
+				solutionFound = true;
 			} else{
 				return;
 			}
 		} else {
 			// for now just choose the first unassigned variable
 			int variable = unassignedVars.get(0);
+			// for now just choose the values in order
+			for(int value = 0; value < numValues; value++ ) {
+				pa.set(variable, value);
+				backtrackingSearch(pa);
+			}
+			return;
+		}
+	}
+	
+	
+	/**
+	 *  does a backTrackingSearch
+	 *  Idea: choose the variable with the fewest remaining values.
+	 *  If you can force a failure, you can prune that section of the search tree. 
+	 * @param assign
+	 */
+	public void backtrackingSearchMRV(final PartialAssignment assign) {
+		
+		if (solutionFound == true) return;
+		
+		// Clone the assignment, since we don't want to clobber the values already assigned
+		PartialAssignment pa = (PartialAssignment) assign.clone();
+		
+		ArrayList<Integer> unassignedVars = pa.getUnassignedVariables();
+		// If the assignment is complete, test it
+		if(unassignedVars.size() == 0) {
+			if(checkAssignment(pa) ) {
+				// solution found!
+				System.out.println("Solution!  ");
+				pa.prettyPrint(variableNames, valueNames);
+				solutionFound = true;
+			} else{
+				return;
+			}
+		} else {
+			// for now just choose the minimum variable 
+			int variable = unassignedVars.get(0);
+			for (Integer v : unassignedVars)
+			{
+				for (int i =0;i<numValues;i++)
+				{
+					System.out.println(v);
+				}
+			}
+			//int variable = unassignedVars.get(0);
 			// for now just choose the values in order
 			for(int value = 0; value < numValues; value++ ) {
 				pa.set(variable, value);

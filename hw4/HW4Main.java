@@ -145,7 +145,7 @@ public class HW4Main
 				
 		PartialAssignment pa = new PartialAssignment(cp.size);
 		
-		csp.backtrackingSearch(pa);
+		csp.backtrackingSearchMRV(pa);
 		return false;
 	}
 	

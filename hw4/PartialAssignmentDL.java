@@ -9,7 +9,7 @@ import java.util.Hashtable;
  * a partial assignment gives a value to each variable, and the value -1 to each unassigned variable
  * @author tim modified from dlb
  */
-public class PartialAssignment implements Cloneable {
+public class PartialAssignmentDL implements Cloneable {
 		
 		private int assignment[];
 		
@@ -18,7 +18,7 @@ public class PartialAssignment implements Cloneable {
 		 *  create a new empty partial assignment
 		 * @param numVars
 		 */
-		public PartialAssignment(int numVars) {
+		public PartialAssignmentDL(int numVars) {
 			assignment = new int[numVars];
 			Arrays.fill(assignment, -1);
 		}
@@ -91,9 +91,9 @@ public class PartialAssignment implements Cloneable {
 		 * deep clone
 		 */
 		public Object clone() {
-			PartialAssignment copy;
+			PartialAssignmentDL copy;
 			try {
-				copy = (PartialAssignment) super.clone();
+				copy = (PartialAssignmentDL) super.clone();
 			}
 			catch( CloneNotSupportedException e )
 			{
@@ -108,4 +108,3 @@ public class PartialAssignment implements Cloneable {
 		} 
 	
 	}
-	
