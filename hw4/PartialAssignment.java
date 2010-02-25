@@ -5,13 +5,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 
-
+/**
+ * a partial assignment gives a value to each variable, and the value -1 to each unassigned variable
+ * @author tim modified from dlb
+ */
 public class PartialAssignment implements Cloneable {
-		// a partial assignment gives a value to each variable, and the value -1 to each unassigned variable
 		
 		private int assignment[];
 		
-		// create a new empty partial assignment
+		/**
+		 *  create a new empty partial assignment
+		 * @param numVars
+		 */
 		public PartialAssignment(int numVars) {
 			assignment = new int[numVars];
 			Arrays.fill(assignment, -1);
@@ -27,6 +32,7 @@ public class PartialAssignment implements Cloneable {
 			}
 						
 		}
+		
 		public int get(int index) {
 			return assignment[index];
 			
@@ -45,8 +51,12 @@ public class PartialAssignment implements Cloneable {
 			System.out.println(s);
 		}
 		
-		// create an arraylist with a list of the indices of variables that have not yet been assigned.
-		//  these indices give the candidate variables to assign in the next step of a backtracking search
+		/**
+		 * 
+		 * create an arraylist with a list of the indices of variables that have not yet been assigned.
+		 * these indices give the candidate variables to assign in the next step of a backtracking search
+		 * @return
+		 */
 		public ArrayList<Integer> getUnassignedVariables() {
 			ArrayList<Integer> uav = new ArrayList<Integer>();
 			for(int i = 0; i < assignment.length; i++) {
@@ -57,6 +67,7 @@ public class PartialAssignment implements Cloneable {
 			
 			return uav;
 		}
+		
 		
 		public Object clone() {
 			PartialAssignment copy;

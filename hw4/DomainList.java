@@ -1,7 +1,9 @@
 package hw4;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Each variable has a domain.  Unary constraints are enforced by shrinking domains, and in a forward-checking
@@ -15,14 +17,14 @@ import java.util.LinkedHashSet;
  */
 public class DomainList implements Cloneable{
 
-	private ArrayList<LinkedHashSet<Integer>> domains;
-	private int numVariables;
+	public ArrayList<LinkedHashSet<Integer>> domains;
+	public int numVariables;
 	
 	
 	/**
 	 * domainlist constructor
 	 * @param n number of variables
-	 * @param maxValue 
+	 * @param maxValue max number of values
 	 */
 	public DomainList(int n, int maxValue) {
 		numVariables = n; 
@@ -31,9 +33,10 @@ public class DomainList implements Cloneable{
 		for(int i = 0; i < n; i++ ) {
 			LinkedHashSet<Integer> dom = new LinkedHashSet<Integer>();
 			
-			for(int j = 0; j < maxValue; j++) {
-				dom.add(j);
-			}
+//			just make it empty, not sure why were filling it with stuff before
+//			for(int j = 0; j < maxValue; j++) { //TODO: why was this necessary?
+//				dom.add(j);
+//			}
 			
 			domains.add(dom);
 		}
@@ -45,12 +48,35 @@ public class DomainList implements Cloneable{
 	 * @param variable
 	 * @param value
 	 */
-	public void deleteValue(int variable, int value) {
+	public void deleteValue(int variable, int value)
+	{
 		LinkedHashSet<Integer> dom = domains.get(variable);
 		dom.remove(value);
-		
 	}
 	
+	
+	/**
+	 * add a value into a domain given a variable
+	 * @param variable
+	 * @param value
+	 */
+	public void addValue(int variable, int value)
+	{
+		LinkedHashSet<Integer> dom = domains.get(variable);
+		dom.add(value);
+	}
+	
+	
+	/**
+	 * get the domain values for a variable
+	 * @param variable
+	 * @param value
+	 */
+	@SuppressWarnings("unchecked")
+	public Set<Integer> getValues(int variable)
+	{
+		return (LinkedHashSet<Integer>)(domains.get(variable).clone());
+	}
 	
 	/**
 	 * print out the domainlist
@@ -63,10 +89,41 @@ public class DomainList implements Cloneable{
 		
 		return s;
 	}
+	
+	
+	
+	/**
+	 * uses the provided method to convert properly to a string
+	 * an exercise in java reflection mainly 
+	 * @param f the component object
+	 * @param c the converter method
+	 * @param aug a supplementary field for the converter if necessary
+	 * @return
+	 */
+	public String toString(Object f, Method c, int aug) {
+		String s = "";
+		for(int i = 0; i < numVariables; i++) {
+			try
+			{
+				for (Integer g : domains.get(i))
+				{
+					s = s + c.invoke(f, new Object[] { g, aug });
+				}
+				s = s + "\n";
+			} catch (Exception e)
+			{
+				System.out.println("error while converting: " + e);
+			}
+		}
+		
+		return s;
+	}
+	
 
 	/**
 	 * clone deep clone
 	 */
+	@SuppressWarnings("unchecked")
 	public Object clone() {
 		DomainList copy;
 		try {

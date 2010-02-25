@@ -3,7 +3,6 @@ package hw4;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 
 
 /**
@@ -27,7 +26,7 @@ import java.util.List;
  * 
  * @author tim (with code from djb, January 2010)
  */
-public class CSP {
+public class DCSP {
 		
 	private int n;  // the number of variables
 
@@ -39,11 +38,11 @@ public class CSP {
 	private Hashtable<String, Integer> variableHash;
 	private Hashtable<String, Integer> valueHash;
 	 
-	//  the "inverse" of the variableHash table.  Given an integer index i, or a value for a variable,
+	//  the "inverse" of the variableHash and valueHash tables.  Given an integer index i, or a value for a variable,
 	//  these give the strings corresponding to the names of the variables.  Used only for printing and display;
 	//  all of the constraint satisfaction solving is done using just the integer values
-	public Hashtable<Integer, String> variableNames;
-	public Hashtable<Integer, String> valueNames;
+	private Hashtable<Integer, String> variableNames;
+	private Hashtable<Integer, String> valueNames;
 	
 	//  The set of constraints, hashed by the set of variables that involve the constraint.  
 	//  For example, a constraint between variable X_4 and X_6 would be indexed in the constraint table
@@ -53,42 +52,15 @@ public class CSP {
 	//  But to check partial assignments, we'll need to iterate over the constraints.  So we'll
 	//  also keep a list of the variables that share a constraint
 	private ArrayList<IntegerPair> constrainedVariablesList;
-	
-	// the domain list ordered by variable order
-	private DomainList domainlist; 
     
 	
 	/**
 	 * construct a CSP
 	 * @param variables the variables
+	 * @param values default values
 	 */
-	public CSP(String variables, DomainList dl, String values) {
+	public DCSP(String variables, String values) {
 	
-		variableHash = new Hashtable<String, Integer>();
-		valueHash = new Hashtable<String, Integer>();
-		variableNames = new Hashtable<Integer, String>();
-		valueNames = new Hashtable<Integer, String>();
-		
-		hashPSV(variables, variableHash, variableNames);
-		hashPSV(values, valueHash, valueNames);
-		n = variableHash.size();
-		numValues = valueHash.size();
-		
-		constraintTable= new Hashtable<IntegerPair, Constraint>();
-		constrainedVariablesList = new ArrayList<IntegerPair>();
-		
-		// add the special character ? to the value hash, used in partial assignments
-		valueHash.put("?", -1);
-		valueNames.put(-1, "?");
-	}
-	
-	/**
-	 * if all value domains are equal
-	 * @param variables
-	 * @param values
-	 */
-	public CSP(String variables, String values) {
-		
 		variableHash = new Hashtable<String, Integer>();
 		valueHash = new Hashtable<String, Integer>();
 		variableNames = new Hashtable<Integer, String>();
@@ -107,6 +79,8 @@ public class CSP {
 		valueHash.put("?", -1);
 		valueNames.put(-1, "?");
 	}
+	
+
 	
 	/**
 	 * add a constraint to the CSP
@@ -156,9 +130,9 @@ public class CSP {
 
 				// empty constraint automatically satisfied
 				if(c!= null && !c.satisfied(value1, value2)) {
-				    //System.out.print("Constraint violated:  ");
-					//System.out.print(variableNames.get(variables.first) + "=" + valueNames.get(value1) );
-					//System.out.println(", " + variableNames.get(variables.second) + "=" + valueNames.get(value2) );		
+				//  System.out.print("Constraint violated:  ");
+				//	System.out.print(variableNames.get(variables.first) + "=" + valueNames.get(value1) );
+				//	System.out.println(", " + variableNames.get(variables.second) + "=" + valueNames.get(value2) );		
 					return false;
 				}
 
@@ -168,10 +142,11 @@ public class CSP {
 
 	}
 	
-
+	
 	/**
 	 *  take a period-separated list of strings and create from it hashtables that can be used to map from 
 	 *  strings in the list to an index in the list, and vice-versa. 
+	 *  TODO: clean this to use arrays rather than strings from start to finish
 	 */
 	private static void hashPSV(String psv, Hashtable<String, Integer> stringToInt, Hashtable<Integer, String> intToString) {
 		
@@ -189,7 +164,6 @@ public class CSP {
 		}
 	}
 	
-
 	
 	/**
 	 * PartialAssignment pa = new PartialAssignment();
@@ -201,15 +175,19 @@ public class CSP {
 		PartialAssignment pa = (PartialAssignment) assign.clone();
 		
 		ArrayList<Integer> unassignedVars = pa.getUnassignedVariables();
+		
 		// If the assignment is complete, test it
 		if(unassignedVars.size() == 0) {
+	
 			if(checkAssignment(pa) ) {
 				// solution found!
 				System.out.println("Solution!  ");
 				pa.prettyPrint(variableNames, valueNames);
+				
 			} else{
 				return;
 			}
+			
 		} else {
 			// for now just choose the first unassigned variable
 			int variable = unassignedVars.get(0);
@@ -217,9 +195,13 @@ public class CSP {
 			for(int value = 0; value < numValues; value++ ) {
 				pa.set(variable, value);
 				backtrackingSearch(pa);
+			
 			}
 			return;
+				
+			
 		}
+		
 	}
 	
 	

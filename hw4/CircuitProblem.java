@@ -11,7 +11,6 @@ public class CircuitProblem
 	//board dimensions
 	public int height;
 	public int width; 
-	
 	//number of components
 	public int size; 
 	
@@ -100,6 +99,7 @@ public class CircuitProblem
 			
 			cp.height = n;
 			cp.width = m;
+			cp.size = numComponents;
 			
 			problemList.add(cp);
 		}
