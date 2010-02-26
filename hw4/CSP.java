@@ -66,6 +66,8 @@ public class CSP {
 	 */
 	public CSP(String variables, DomainList dl, String values) {
 	
+		domainlist = dl;
+		
 		variableHash = new Hashtable<String, Integer>();
 		valueHash = new Hashtable<String, Integer>();
 		variableNames = new Hashtable<Integer, String>();
@@ -239,7 +241,7 @@ public class CSP {
 	 * @param assign
 	 */
 	public void backtrackingSearchMRV(final PartialAssignment assign) {
-		
+				
 		if (solutionFound == true) return;
 		
 		// Clone the assignment, since we don't want to clobber the values already assigned
@@ -257,20 +259,21 @@ public class CSP {
 				return;
 			}
 		} else {
-			// for now just choose the minimum variable 
+			// choose the first temporarily
 			int variable = unassignedVars.get(0);
+			int size = Integer.MAX_VALUE;
 			for (Integer v : unassignedVars)
 			{
-				for (int i =0;i<numValues;i++)
+				if (domainlist.getValues(v).size() < size) //choose the one with the smallest domain
 				{
-					System.out.println(v);
+					size = domainlist.getValues(v).size();
+					variable = v;
 				}
 			}
-			//int variable = unassignedVars.get(0);
 			// for now just choose the values in order
 			for(int value = 0; value < numValues; value++ ) {
 				pa.set(variable, value);
-				backtrackingSearch(pa);
+				backtrackingSearchMRV(pa);
 			}
 			return;
 		}

@@ -24,16 +24,16 @@ public class PartialAssignment implements Cloneable {
 		}
 		
 		//TODO: figure out what this was for
-//		public PartialAssignment(String assignString, Hashtable<String, Integer> valueHash) 
-//		{
-//			String[] valueString = assignString.split("\\.");
-//			int n = valueString.length;
-//			assignment = new int[n];
-//			for(int i = 0; i < n; i++) {
-//				assignment[i] = valueHash.get(valueString[i]);
-//			}
-//						
-//		}
+		public PartialAssignment(String assignString, Hashtable<String, Integer> valueHash) 
+		{
+			String[] valueString = assignString.split("\\.");
+			int n = valueString.length;
+			assignment = new int[n];
+			for(int i = 0; i < n; i++) {
+				assignment[i] = valueHash.get(valueString[i]);
+			}
+						
+		}
 		
 		/**
 		 * get assignment at index
