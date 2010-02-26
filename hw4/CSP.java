@@ -1,9 +1,8 @@
 package hw4;
 
-
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
+import java.util.PriorityQueue;
 
 
 /**
@@ -149,9 +148,11 @@ public class CSP {
 	 * @param pa
 	 * @return
 	 */
-	public boolean checkAssignment(PartialAssignment pa){		
+	public boolean checkAssignment(PartialAssignment pa)
+	{		
 		
-		for(IntegerPair variables:constrainedVariablesList) {
+		for(IntegerPair variables:constrainedVariablesList)
+		{
 			int value1 = pa.get(variables.first);
 			int value2 = pa.get(variables.second);
 
@@ -163,7 +164,8 @@ public class CSP {
 
 
 				// empty constraint automatically satisfied
-				if(c!= null && !c.satisfied(value1, value2)) {
+				if(c!= null && !c.satisfied(value1, value2))
+				{
 				    //System.out.print("Constraint violated:  ");
 					//System.out.print(variableNames.get(variables.first) + "=" + valueNames.get(value1) );
 					//System.out.println(", " + variableNames.get(variables.second) + "=" + valueNames.get(value2) );		
@@ -190,7 +192,8 @@ public class CSP {
 		
 		String stringArray[] = psv.split("\\.");
 	
-		for(int i = 0; i < stringArray.length; i++) {
+		for(int i = 0; i < stringArray.length; i++)
+		{
 			String s = stringArray[i].trim();
 			stringToInt.put(s, i);
 			intToString.put(i, s);
@@ -203,7 +206,9 @@ public class CSP {
 	 * does a backTrackingSearch
 	 * @param assign
 	 */
-	public void backtrackingSearch(final PartialAssignment assign) {
+	public void backtrackingSearch(final PartialAssignment assign, int count) {
+		
+		count = count + 1;
 		
 		if (solutionFound == true) return;
 		
@@ -212,22 +217,27 @@ public class CSP {
 		
 		ArrayList<Integer> unassignedVars = pa.getUnassignedVariables();
 		// If the assignment is complete, test it
-		if(unassignedVars.size() == 0) {
-			if(checkAssignment(pa) ) {
+		if(unassignedVars.size() == 0)
+		{
+			if(checkAssignment(pa) )
+			{
 				// solution found!
 				System.out.println("Solution!  ");
 				pa.prettyPrint(variableNames, valueNames);
 				solutionFound = true;
-			} else{
+			}
+			else
+			{
 				return;
 			}
 		} else {
 			// for now just choose the first unassigned variable
 			int variable = unassignedVars.get(0);
 			// for now just choose the values in order
-			for(int value = 0; value < numValues; value++ ) {
+			for(int value = 0; value < numValues; value++ ) 
+			{
 				pa.set(variable, value);
-				backtrackingSearch(pa);
+				backtrackingSearch(pa, count);
 			}
 			return;
 		}
@@ -240,8 +250,62 @@ public class CSP {
 	 *  If you can force a failure, you can prune that section of the search tree. 
 	 * @param assign
 	 */
-	public void backtrackingSearchMRV(final PartialAssignment assign) {
-				
+	public void backtrackingSearchMRV(final PartialAssignment assign, int count) {
+		
+		count = count + 1;
+		
+		if (solutionFound == true) return;
+		
+		// Clone the assignment, since we don't want to clobber the values already assigned
+		PartialAssignment pa = (PartialAssignment) assign.clone();
+		
+		ArrayList<Integer> unassignedVars = pa.getUnassignedVariables();
+		// If the assignment is complete, test it
+		if(unassignedVars.size() == 0) 
+		{
+			if(checkAssignment(pa) ) 
+			{
+				// solution found!
+				System.out.println("Solution!  ");
+				pa.prettyPrint(variableNames, valueNames);
+				solutionFound = true;
+			}
+			else 
+			{
+				return;
+			}
+		} else {
+			// choose the first temporarily
+			int variable = unassignedVars.get(0);
+			int size = Integer.MAX_VALUE;
+			for (Integer v : unassignedVars)
+			{
+				if (domainlist.getValues(v).size() < size) //choose the one with the smallest domain
+				{
+					size = domainlist.getValues(v).size();
+					variable = v;
+				}
+			}
+			// for now just choose the values in order
+			for(Integer value : domainlist.getValues(variable)) 
+			{
+				pa.set(variable, value);
+				backtrackingSearchMRV(pa, count);
+			}
+			return;
+		}
+	}
+	
+	/**
+	 *  does a backTrackingSearch
+	 *  Idea: choose the variable with the fewest remaining values.
+	 *  If you can force a failure, you can prune that section of the search tree. 
+	 * @param assign
+	 */
+	public void backtrackingSearchMRVLCV(final PartialAssignment assign, int count) {
+
+		count = count + 1;
+		
 		if (solutionFound == true) return;
 		
 		// Clone the assignment, since we don't want to clobber the values already assigned
@@ -270,14 +334,72 @@ public class CSP {
 					variable = v;
 				}
 			}
+			PriorityQueue<priorInt> order = new PriorityQueue<priorInt>();
 			// for now just choose the values in order
-			for(int value = 0; value < numValues; value++ ) {
-				pa.set(variable, value);
-				backtrackingSearchMRV(pa);
+			int o = 0;
+			for(Integer value : domainlist.getValues(variable))
+			{
+				PartialAssignment ta = (PartialAssignment) assign.clone();
+				ta.set(variable, value);
+				order.add(new priorInt(value,ta.getUnassignedVariables().size()));
+				o++;
+			}
+			//ordered by least constraining value
+			for(int i=1; i < domainlist.getValues(variable).size(); i++)
+			{
+				pa.set(variable, order.poll().value);
+				backtrackingSearchMRVLCV(pa, count);
 			}
 			return;
 		}
 	}
+		
+	
+	/**
+	 * converts to conjunctive normal form
+	 * based on creating new symbols
+	 * (A,B),{((0,0),(3,3)),((0,0),(5,5))} = A00B33 v A00B55 
+	 * anded with (A,C),{((0,0),(3,3)),((0,0),(5,5))} = A00C33 v A00C55
+	 * 
+	 */
+	public void outputCNF()
+	{
+		System.out.println("CNF: ");
+		for (IntegerPair ip: constrainedVariablesList)
+		{
+			Constraint c = constraintTable.get(ip);
+			for ()
+		}
+		
+	}
 	
 	
+	
+	/**
+	 * an int with a priority
+	 * @author tim
+	 */
+	private class priorInt implements Comparable<priorInt>
+	{
+		public int priority;
+		public int value;
+		
+		priorInt(int value, int priority)
+		{
+			this.value = value;
+			this.priority = priority;
+		}
+		
+		@Override
+		public int compareTo(priorInt o)
+		{
+			return (int) Math.floor(priority - o.priority);
+		}
+		
+		public String toString()
+		{
+			return "v: " + value + " p: " + priority;
+		}
+		
+	}
 }

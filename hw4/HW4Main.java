@@ -1,11 +1,11 @@
 package hw4;
 
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 
@@ -16,6 +16,7 @@ import java.util.Set;
 public class HW4Main
 {
 	private static final String names = "ABCDEFGHIJKLMNOPQRSTUVXYZ";
+	private static int algo;
 
 	/**
 	 * @param args
@@ -23,23 +24,35 @@ public class HW4Main
 	public static void main(String[] args)
 	{
 		
-		//test();
-		//System.out.println(coordSet(22, 10, new Rect(2,2)));
-		
-		ArrayList <CircuitProblem> problems = CircuitProblem.loadCircuitProblems("example.txt");
+		Scanner input = new Scanner(System.in);
+
+		while (true)
+		{
+			System.out.print("Choose reg/mrv/lcv/print CNF (1,2,3,4) or 0 to quit: ");
+			algo = input.nextInt();
+			
+			if (algo == 0)
+			{
+				System.out.println("bailing!");
+					System.exit(1);
+			}
+			
+			ArrayList <CircuitProblem> problems = CircuitProblem.loadCircuitProblems("example.txt");
+			
+			System.out.println("here's what we read in: ");
+			for(CircuitProblem cp:problems)
+			{
+				System.out.println(cp);
+			}
+			
+			System.out.println("answers:");
+			int i = 1;
+			for(CircuitProblem cp:problems)
+			{
+				System.out.println("Problem " + i++ + ": "+solve(cp));	
+			}			
+		}
 				
-		System.out.println("here's what we read in: ");
-		for(CircuitProblem cp:problems)
-		{
-			System.out.println(cp);
-		}
-		
-		System.out.println("answers:");
-		int i = 1;
-		for(CircuitProblem cp:problems)
-		{
-			System.out.println("Problem " + i++ + ": "+solve(cp));	
-		}
 		
 	}
 	
@@ -65,7 +78,7 @@ public class HW4Main
 		{
 			for (int j=0; j<cp.height; j++)
 			{
-				if (values=="") values = "" + Rect.getInt(i, j, cp.width);//  Integer.toString(i) + Integer.toString(j);
+				if (values=="") values = "" + Rect.getInt(i, j, cp.width);
 				else values = values + "." + Rect.getInt(i, j, cp.width);
 			}
 		}
@@ -101,6 +114,7 @@ public class HW4Main
 		CSP csp = new CSP(variables, dl, values);
 
 		// build the constraints
+		// ebohfgarff vf sbe chffvrf
 		int ai = 0;
 		HashSet<Integer> seen = new HashSet<Integer>();
 		for (Rect a : cp.compList) //this is the first component of the binary constraint
@@ -142,11 +156,39 @@ public class HW4Main
 			ai++;
 		}
 		
-				
+		
+		if (algo == 4)
+		{
+			csp.outputCNF();
+			return true;
+		}
+		
 		PartialAssignment pa = new PartialAssignment(cp.size);
 		
-		csp.backtrackingSearchMRV(pa);
-		return false;
+		long start = System.currentTimeMillis();
+		
+		int count =0;
+		switch (algo)
+		{
+			case 1:
+				System.out.println("running with no heuristics..");
+				csp.backtrackingSearch(pa,count);
+				break;
+			case 2:
+				System.out.println("running minimum remaining variable..");
+				csp.backtrackingSearchMRV(pa,count);
+				break;
+			case 3:
+				System.out.println("running minimum remaining variable with least constrainting value..");
+				csp.backtrackingSearchMRVLCV(pa,count);
+				break;
+			default:
+				csp.backtrackingSearchMRV(pa,count);
+				break;
+		}
+		long elapsed = System.currentTimeMillis() - start;
+		System.out.println("took: " + elapsed + " milliseconds to run search");
+		return true;
 	}
 	
 	
@@ -173,7 +215,8 @@ public class HW4Main
 		
 		PartialAssignment pa = new PartialAssignment(6);
 		
-		mapcolor.backtrackingSearch(pa);
+		int count = 0;
+		mapcolor.backtrackingSearch(pa, count);
 	}
 	
 	

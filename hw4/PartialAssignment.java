@@ -29,7 +29,8 @@ public class PartialAssignment implements Cloneable {
 			String[] valueString = assignString.split("\\.");
 			int n = valueString.length;
 			assignment = new int[n];
-			for(int i = 0; i < n; i++) {
+			for(int i = 0; i < n; i++) 
+			{
 				assignment[i] = valueHash.get(valueString[i]);
 			}
 						
@@ -40,7 +41,8 @@ public class PartialAssignment implements Cloneable {
 		 * @param index the index 
 		 * @return int value 
 		 */
-		public int get(int index) {
+		public int get(int index) 
+		{
 			return assignment[index];
 			
 		}
@@ -50,7 +52,8 @@ public class PartialAssignment implements Cloneable {
 		 * @param index
 		 * @param value
 		 */
-		public void set(int index, int value) {
+		public void set(int index, int value) 
+		{
 			assignment[index] = value;
 		}
 
@@ -62,7 +65,8 @@ public class PartialAssignment implements Cloneable {
 		 */
 		public void prettyPrint(Hashtable<Integer, String> variableNames, Hashtable<Integer, String> valueNames) {
 			String s = "";
-			for(int var = 0; var < assignment.length; var++) {
+			for(int var = 0; var < assignment.length; var++) 
+			{
 				s = s + variableNames.get(var) + "=" 
 					+ valueNames.get(assignment[var]) + "  " ;
 			}
@@ -77,8 +81,10 @@ public class PartialAssignment implements Cloneable {
 		 */
 		public ArrayList<Integer> getUnassignedVariables() {
 			ArrayList<Integer> uav = new ArrayList<Integer>();
-			for(int i = 0; i < assignment.length; i++) {
-				if(assignment[i] == -1){
+			for(int i = 0; i < assignment.length; i++) 
+			{
+				if(assignment[i] == -1)
+				{
 					uav.add(i);
 				}
 			}

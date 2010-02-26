@@ -12,10 +12,12 @@ public class Constraint {
 
 	HashSet<IntegerPair> allowedPairs = new HashSet<IntegerPair>();
 
-	public Constraint(String valuePairList, Hashtable<String, Integer> valueHash) {
+	public Constraint(String valuePairList, Hashtable<String, Integer> valueHash) 
+	{
 	
 		String []vpl = valuePairList.split(":");
-		for(int i = 0; i < vpl.length; i++) {
+		for(int i = 0; i < vpl.length; i++) 
+		{
 			String cpair = vpl[i].trim();
 			String [] valuePairString = cpair.split("\\.");
 			
@@ -28,9 +30,15 @@ public class Constraint {
 		
 	}
 	
-	boolean satisfied(int value1, int value2) {
+	boolean satisfied(int value1, int value2) 
+	{
 		IntegerPair pair = new IntegerPair(value1, value2);
 		return allowedPairs.contains(pair);
+	}
+	
+	public String toString()
+	{
+		return allowedPairs.toString();
 	}
 		
 }

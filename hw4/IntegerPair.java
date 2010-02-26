@@ -29,7 +29,7 @@ public class IntegerPair {
 
 	
 	public String toString() {
-		String s = "" + first + ", " + second;
+		String s = "(" + first + ", " + second + ")";
 		return s;
 	}
 	

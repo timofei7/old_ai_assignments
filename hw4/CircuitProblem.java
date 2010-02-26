@@ -6,6 +6,11 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * reads in circuit problem from file and stores it
+ * @author tim modified from dlb and jiawei
+ *
+ */
 public class CircuitProblem
 {
 	//board dimensions
@@ -89,10 +94,12 @@ public class CircuitProblem
 				assert (sc.hasNext());
 				s = sc.next();
 				w = Integer.parseInt(s);
+				if (w > m) { System.out.println("piece is bigger than board! " + j); System.exit(0);}
 
 				assert (sc.hasNext());
 				s = sc.next();
 				h = Integer.parseInt(s);
+				if (h > n) { System.out.println("piece is bigger than board! " + j); System.exit(0);}
 
 				cp.add(new Rect(w, h));
 			}
