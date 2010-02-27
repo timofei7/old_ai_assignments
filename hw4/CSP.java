@@ -3,7 +3,11 @@ package hw4;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.PriorityQueue;
-
+import org.sat4j.*;
+import org.sat4j.core.VecInt;
+import org.sat4j.minisat.SolverFactory;
+import org.sat4j.specs.IProblem;
+import org.sat4j.specs.ISolver;
 
 /**
  * CSP class
@@ -52,48 +56,16 @@ public class CSP {
 	//  But to check partial assignments, we'll need to iterate over the constraints.  So we'll
 	//  also keep a list of the variables that share a constraint
 	private ArrayList<IntegerPair> constrainedVariablesList;
-	
-	// the domain list ordered by variable order
-	private DomainList domainlist; 
-	
-	private boolean solutionFound;
+			
+	public int count;
     
 	
 	/**
 	 * construct a CSP
 	 * @param variables the variables
 	 */
-	public CSP(String variables, DomainList dl, String values) {
-	
-		domainlist = dl;
-		
-		variableHash = new Hashtable<String, Integer>();
-		valueHash = new Hashtable<String, Integer>();
-		variableNames = new Hashtable<Integer, String>();
-		valueNames = new Hashtable<Integer, String>();
-		
-		hashPSV(variables, variableHash, variableNames);
-		hashPSV(values, valueHash, valueNames);
-		n = variableHash.size();
-		numValues = valueHash.size();
-		
-		constraintTable= new Hashtable<IntegerPair, Constraint>();
-		constrainedVariablesList = new ArrayList<IntegerPair>();
-		
-		// add the special character ? to the value hash, used in partial assignments
-		valueHash.put("?", -1);
-		valueNames.put(-1, "?");
-		
-		solutionFound = false;
-	}
-	
-	/**
-	 * if all value domains are equal
-	 * @param variables
-	 * @param values
-	 */
 	public CSP(String variables, String values) {
-		
+			
 		variableHash = new Hashtable<String, Integer>();
 		valueHash = new Hashtable<String, Integer>();
 		variableNames = new Hashtable<Integer, String>();
@@ -104,16 +76,16 @@ public class CSP {
 		n = variableHash.size();
 		numValues = valueHash.size();
 		
-		
 		constraintTable= new Hashtable<IntegerPair, Constraint>();
 		constrainedVariablesList = new ArrayList<IntegerPair>();
 		
 		// add the special character ? to the value hash, used in partial assignments
 		valueHash.put("?", -1);
 		valueNames.put(-1, "?");
-		
-		solutionFound = false;
+
+		count = 0;
 	}
+	
 	
 	/**
 	 * add a constraint to the CSP
@@ -136,8 +108,9 @@ public class CSP {
 		// to be careful, add the symmetric constraint.  This is somewhat wasteful of memory,
 		// but only in the problem specification.
 		
-		variables = new IntegerPair(v2, v1);
-		constraintTable.put(variables, c);
+		//this doesn't work
+//		variables = new IntegerPair(v2, v1);
+//		constraintTable.put(variables, c);
 		
 		// System.out.println(c.satisfied(0, 1));
 		
@@ -206,12 +179,9 @@ public class CSP {
 	 * does a backTrackingSearch
 	 * @param assign
 	 */
-	public void backtrackingSearch(final PartialAssignment assign, int count) {
-		
+	public boolean backtrackingSearch(final PartialAssignment assign) {
 		count = count + 1;
-		
-		if (solutionFound == true) return;
-		
+				
 		// Clone the assignment, since we don't want to clobber the values already assigned
 		PartialAssignment pa = (PartialAssignment) assign.clone();
 		
@@ -222,24 +192,28 @@ public class CSP {
 			if(checkAssignment(pa) )
 			{
 				// solution found!
-				System.out.println("Solution!  ");
+				System.out.println("SOLUTION:");
 				pa.prettyPrint(variableNames, valueNames);
-				solutionFound = true;
+				return true;
 			}
 			else
 			{
-				return;
+				return false;
 			}
 		} else {
+			boolean solutionFound = false;
 			// for now just choose the first unassigned variable
 			int variable = unassignedVars.get(0);
 			// for now just choose the values in order
 			for(int value = 0; value < numValues; value++ ) 
 			{
-				pa.set(variable, value);
-				backtrackingSearch(pa, count);
+				if (!solutionFound)
+				{
+					pa.set(variable, value);
+					solutionFound = backtrackingSearch(pa);
+				}
 			}
-			return;
+			return solutionFound;
 		}
 	}
 	
@@ -250,12 +224,10 @@ public class CSP {
 	 *  If you can force a failure, you can prune that section of the search tree. 
 	 * @param assign
 	 */
-	public void backtrackingSearchMRV(final PartialAssignment assign, int count) {
+	public boolean backtrackingSearchMRV(final PartialAssignment assign, final DomainList domainlist) {
 		
 		count = count + 1;
-		
-		if (solutionFound == true) return;
-		
+				
 		// Clone the assignment, since we don't want to clobber the values already assigned
 		PartialAssignment pa = (PartialAssignment) assign.clone();
 		
@@ -266,15 +238,16 @@ public class CSP {
 			if(checkAssignment(pa) ) 
 			{
 				// solution found!
-				System.out.println("Solution!  ");
+				System.out.println("SOLUTION:");
 				pa.prettyPrint(variableNames, valueNames);
-				solutionFound = true;
+				return true;
 			}
 			else 
 			{
-				return;
+				return false;
 			}
 		} else {
+			boolean solutionFound = false;
 			// choose the first temporarily
 			int variable = unassignedVars.get(0);
 			int size = Integer.MAX_VALUE;
@@ -289,25 +262,28 @@ public class CSP {
 			// for now just choose the values in order
 			for(Integer value : domainlist.getValues(variable)) 
 			{
-				pa.set(variable, value);
-				backtrackingSearchMRV(pa, count);
+				if (!solutionFound)
+				{
+					pa.set(variable, value);
+					DomainList newdomainlist = forwardCheck(variable, value, pa, domainlist);
+					solutionFound = backtrackingSearchMRV(pa, newdomainlist);
+				}
 			}
-			return;
+			return solutionFound;
 		}
 	}
 	
 	/**
 	 *  does a backTrackingSearch
 	 *  Idea: choose the variable with the fewest remaining values.
-	 *  If you can force a failure, you can prune that section of the search tree. 
+	 *  If you can force a failure, you can prune that section of the search tree.
+	 *  THIS DOES NOT DO FORWARDCHECKING 
 	 * @param assign
 	 */
-	public void backtrackingSearchMRVLCV(final PartialAssignment assign, int count) {
+	public boolean backtrackingSearchMRVLCV(final PartialAssignment assign, final DomainList domainlist) {
 
 		count = count + 1;
-		
-		if (solutionFound == true) return;
-		
+				
 		// Clone the assignment, since we don't want to clobber the values already assigned
 		PartialAssignment pa = (PartialAssignment) assign.clone();
 		
@@ -316,13 +292,14 @@ public class CSP {
 		if(unassignedVars.size() == 0) {
 			if(checkAssignment(pa) ) {
 				// solution found!
-				System.out.println("Solution!  ");
+				System.out.println("SOLUTION:");
 				pa.prettyPrint(variableNames, valueNames);
-				solutionFound = true;
+				return true;
 			} else{
-				return;
+				return false;
 			}
 		} else {
+			boolean solutionFound = false;
 			// choose the first temporarily
 			int variable = unassignedVars.get(0);
 			int size = Integer.MAX_VALUE;
@@ -335,7 +312,7 @@ public class CSP {
 				}
 			}
 			PriorityQueue<priorInt> order = new PriorityQueue<priorInt>();
-			// for now just choose the values in order
+			
 			int o = 0;
 			for(Integer value : domainlist.getValues(variable))
 			{
@@ -347,30 +324,113 @@ public class CSP {
 			//ordered by least constraining value
 			for(int i=1; i < domainlist.getValues(variable).size(); i++)
 			{
-				pa.set(variable, order.poll().value);
-				backtrackingSearchMRVLCV(pa, count);
+				if (!solutionFound)
+				{
+					Integer value = order.poll().value;
+					pa.set(variable, value);
+					//DomainList newdomainlist = forwardCheck(variable, value, pa, domainlist);
+					solutionFound = backtrackingSearchMRVLCV(pa, domainlist);
+				}
 			}
-			return;
+			return solutionFound;
 		}
 	}
 		
+	/**
+	 * whenever a variable x is assigned, establish arc-consistency:
+	 * for each unassigned variable y that is connected to x by a constraint
+	 * delete from y's domain any value that is inconsistent with the value chosen for X
+	 * @param curr_variable
+	 * @param pa
+	 * @param dl
+	 * @return
+	 */
+	public DomainList forwardCheck(Integer x, Integer chosenValue, final PartialAssignment pa, final DomainList dl)
+	{
+		DomainList ndl = (DomainList) dl.clone();
+		for (Integer y : pa.getUnassignedVariables()) //for each unassigned variable y
+		{
+			IntegerPair xy = new IntegerPair(x,y);
+			if (y != x && constrainedVariablesList.contains(xy)) //that is connected to x by a constraint and isn't x itself
+			{
+				for (Integer value : dl.getValues(y)) //go over all values in y's domain
+				{
+					if (!constraintTable.get(xy).satisfied(chosenValue, value)) //if value is inconsistent with the one chosen for x
+					{
+						//System.out.println("chosenValue: " +chosenValue + " value:" + value);
+						//System.out.println(constraintTable.get(xy).toString());
+						//System.out.println("deleting: " +value +" from: " + variableNames.get(y));
+						ndl.deleteValue(y, value); //delete value from y's domain
+						//System.out.println(ndl.getValues(y).toString());
+					}
+				}
+			}
+		}
+		
+		return ndl;
+	}
+	
 	
 	/**
 	 * converts to conjunctive normal form
 	 * based on creating new symbols
-	 * (A,B),{((0,0),(3,3)),((0,0),(5,5))} = A00B33 v A00B55 
-	 * anded with (A,C),{((0,0),(3,3)),((0,0),(5,5))} = A00C33 v A00C55
-	 * 
+	 * (A,B),{((0,0),(3,3)),((0,0),(5,5))} = A00_B33 v A00_B55 
+	 * anded with (A,C),{((0,0),(3,3)),((0,0),(5,5))} = A00_C33 v A00_C55
+	 * in this case i've generalized it so they appear as their internal id number rather than the string values
 	 */
 	public void outputCNF()
 	{
-		System.out.println("CNF: ");
+		System.out.println("CNF: (well I lied...right now actually in DNF...)");
 		for (IntegerPair ip: constrainedVariablesList)
 		{
 			Constraint c = constraintTable.get(ip);
-			for ()
+			String or = "";
+			for (IntegerPair p : c.allowedPairs)
+			{   
+				if (or == "") or = "("+variableNames.get(ip.first)+p.first+" ^ "+variableNames.get(ip.second)+p.second+")";
+				else or = or + " v " + "("+variableNames.get(ip.first)+p.first+" ^ "+variableNames.get(ip.second)+p.second+")";
+			}
+			System.out.println(or);
 		}
 		
+	}
+	
+	public void runSat4J()
+	{
+		final int MAXVAR = 1000000;
+		final int NBCLAUSES = 500000;
+
+		ISolver solver = SolverFactory.newDefault();
+
+		// prepare the solver to accept MAXVAR variables. MANDATORY
+		solver.newVar(MAXVAR);
+		// not mandatory for SAT solving. MANDATORY for MAXSAT solving
+		//solver.setExpectedNumberOfClauses(NBCLAUSES);
+		// Feed the solver using Dimacs format, using arrays of int
+		// (best option to avoid dependencies on SAT4J IVecInt)
+		for (int i=0;i<NBCLAUSES;i++) {
+		  int [] clause = {1,2,3}; // get the clause from somewhere
+		  // the clause should not contain a 0, only integer (positive or negative)
+		  // with absolute values less or equal to MAXVAR
+		  // e.g. int [] clause = {1, -3, 7}; is fine
+		  // while int [] clause = {1, -3, 7, 0}; is not fine 
+		  try
+		  {
+			  solver.addClause(new VecInt(clause)); // adapt Array to IVecInt
+		  }catch(Exception e){}
+		}
+
+		// we are done. Working now on the IProblem interface
+		IProblem problem = solver;
+		boolean isSat = false;
+		try
+		{
+			isSat = problem.isSatisfiable();
+		}catch(Exception e){}
+		if (isSat) {
+			System.out.println("is satisfiable");
+		} else {
+		}
 	}
 	
 	
@@ -402,4 +462,5 @@ public class CSP {
 		}
 		
 	}
+	
 }

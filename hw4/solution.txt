@@ -21,12 +21,13 @@
     * Write a java program, to solve the example problem with a, b, c, d, given as above. 
     > Modify my backtrackingSearch to terminate when the first goal is found. 
 
-
+	Done. 
 
     * Write a new search method in CSP.java, backtrackingMRV, 
     > that uses the MRV heuristic to find a solution more quickly. 
 
-
+	For the example problem I found that even finding all the solutions was extremely fast, so much so that timing was dependent
+	more on what my computer was doing.  
 
     * Write another method with additional heuristics. 
     > Don't just modify your code, since you'll want to run each method to compare the effectiveness! 

@@ -45,7 +45,7 @@ public class HW4Main
 				System.out.println(cp);
 			}
 			
-			System.out.println("answers:");
+			System.out.println("now lets do some calculations...");
 			int i = 1;
 			for(CircuitProblem cp:problems)
 			{
@@ -65,6 +65,7 @@ public class HW4Main
 	{
 		String variables = "";
 		String values = "";
+		boolean found = false;
 		
 		//build variables string
 		for (int i = 0; i < cp.size; i++)
@@ -107,27 +108,24 @@ public class HW4Main
 		}
 		
 		
-		printDL(dl,cp);
+		//printDL(dl,cp);
 
-		System.out.println("variables: " + variables);
-		System.out.println("values: " + values);
-		CSP csp = new CSP(variables, dl, values);
+		CSP csp = new CSP(variables, values);
 
 		// build the constraints
-		// ebohfgarff vf sbe chffvrf
+		// ehaavat wbxr ng 41 jrfg jurrybpx: ebohfgarff vf sbe chffvrf
+		// TODO: make this simpler if not considering non-rectangular shapes
 		int ai = 0;
 		HashSet<Integer> seen = new HashSet<Integer>();
 		for (Rect a : cp.compList) //this is the first component of the binary constraint
 		{
 			Set<Integer> ad = dl.getValues(ai); //get the legal values domain for a
-			//System.out.println("a: " + a + " ai:" + ai);
 			int bi=0;
 			for (Rect b : cp.compList) //we run the first component paired against every other component
 			{
-				//System.out.println("b: " + b + " bi:" + bi);
 				String constraint = "";//we'll put the constraint string in here
-				if (ai != bi && !seen.contains(bi)) //ignore if the same index indicating the same component or if we've already looked at this pair in reverse
-				{		
+				if (ai != bi) // && !seen.contains(bi)) //ignore if the same index indicating the same component or if we've already looked at this pair in reverse
+				{			  // actually we do want symmetric constraints.
 					for (Integer i : ad)
 					{
 						Set<Integer> bd = dl.getValues(bi); //get a copy of the legal values domain for b
@@ -140,7 +138,6 @@ public class HW4Main
 							{//are any of the b coords in a's spots? if not great add the constraint!
 								if (constraint =="") constraint = i+"."+c;
 								else constraint = constraint + ":" + i+"."+c;
-								//System.out.println("a: " + Rect.intToString(i, cp.width)+ " b: " + Rect.intToString(c, cp.width));
 							}
 						}
 					}
@@ -148,7 +145,7 @@ public class HW4Main
 				if (constraint!="")
 				{
 					csp.addConstraint(""+names.charAt(ai), ""+names.charAt(bi), constraint);
-					System.out.println("constraint: (" + names.charAt(ai)+","+ names.charAt(bi) + ", {"+constraint+"}");
+					//System.out.println("constraint: (" + names.charAt(ai)+","+ names.charAt(bi) + ", {"+constraint+"}");
 				}
 				bi++;
 			}
@@ -156,39 +153,40 @@ public class HW4Main
 			ai++;
 		}
 		
-		
+		//if just outputing cnf do that here and quit
 		if (algo == 4)
 		{
 			csp.outputCNF();
 			return true;
 		}
 		
+		//make first partial assignment
 		PartialAssignment pa = new PartialAssignment(cp.size);
 		
 		long start = System.currentTimeMillis();
 		
-		int count =0;
 		switch (algo)
 		{
 			case 1:
 				System.out.println("running with no heuristics..");
-				csp.backtrackingSearch(pa,count);
+				found = csp.backtrackingSearch(pa);
 				break;
 			case 2:
 				System.out.println("running minimum remaining variable..");
-				csp.backtrackingSearchMRV(pa,count);
+				found = csp.backtrackingSearchMRV(pa, dl);
 				break;
 			case 3:
 				System.out.println("running minimum remaining variable with least constrainting value..");
-				csp.backtrackingSearchMRVLCV(pa,count);
+				found = csp.backtrackingSearchMRVLCV(pa, dl);
 				break;
 			default:
-				csp.backtrackingSearchMRV(pa,count);
+				System.out.println("invalid choice try again...");
 				break;
 		}
+		System.out.println("BACKTRACK COUNT: " + csp.count);
 		long elapsed = System.currentTimeMillis() - start;
-		System.out.println("took: " + elapsed + " milliseconds to run search");
-		return true;
+		System.out.println("ELAPSED TIME: " + elapsed + " milliseconds to run search");
+		return found;
 	}
 	
 	
@@ -215,8 +213,7 @@ public class HW4Main
 		
 		PartialAssignment pa = new PartialAssignment(6);
 		
-		int count = 0;
-		mapcolor.backtrackingSearch(pa, count);
+		mapcolor.backtrackingSearch(pa);
 	}
 	
 	

@@ -10,7 +10,7 @@ import java.util.Hashtable;
  */
 public class Constraint {
 
-	HashSet<IntegerPair> allowedPairs = new HashSet<IntegerPair>();
+	public HashSet<IntegerPair> allowedPairs = new HashSet<IntegerPair>();
 
 	public Constraint(String valuePairList, Hashtable<String, Integer> valueHash) 
 	{
