@@ -1,3 +1,7 @@
+HW4 CS44 W10
+Tim Tregubov
+
+  
     *  Describe the domain of a variable corresponding to a component of width w and height h, 
     >  on a circuit board of width n and height m. Make sure the component fits completely on the board! 
     
@@ -26,14 +30,16 @@
     * Write a new search method in CSP.java, backtrackingMRV, 
     > that uses the MRV heuristic to find a solution more quickly. 
 
-	For the example problem I found that even finding all the solutions was extremely fast, so much so that timing was dependent
-	more on what my computer was doing.  
+	For the example problem I found that even finding all the solutions was extremely fast. However I
+	started counting the number of backtracking stack frames and no heuristic = 9130, mrv+forwardchecking = 7!
+	That is an intense speedup.  When I tried it without forwardchecking it was around 2500.  So just the ordering helped a ton.
 
     * Write another method with additional heuristics. 
     > Don't just modify your code, since you'll want to run each method to compare the effectiveness! 
     > (And write about it in your writeup!) 
     
-
+    I chose LVC with MRV but withough forwardchecking.  Ended up with 314 backtrack stack frames.  Not bad!
+    However for some reason I couldn't add forwardchecking to this when I did it would stop finding a solution. Must be a bug. 
 
     * Write a method in CSP.java that returns a list of propositional logic rules
     > in CNF form that could be used to solve any CSP. Apply it to the mapcoloring problem and
@@ -41,7 +47,6 @@
     > each propositional symbol correspond to a bit of one of the variables in the CSP. Describe and
     > discuss your results in the writeup. 
     
-    
-
-    * EXTRA CREDIT: use SAT4J to solve the propositional logic problem you output.
-    > How well did it work? What size problems were you able to solve, relative to the MRV backtracking approach? 
+    I started writing this but got confused and am taking a break from it and will finish tomorrow.
+    Currently I return it in DNF format instead as the whole distributing ands over ors looked like it would be
+    super hairy. 

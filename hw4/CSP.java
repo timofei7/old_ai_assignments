@@ -1,8 +1,12 @@
 package hw4;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
+import java.util.Set;
+
 import org.sat4j.*;
 import org.sat4j.core.VecInt;
 import org.sat4j.minisat.SolverFactory;
@@ -373,10 +377,8 @@ public class CSP {
 	
 	/**
 	 * converts to conjunctive normal form
-	 * based on creating new symbols
-	 * (A,B),{((0,0),(3,3)),((0,0),(5,5))} = A00_B33 v A00_B55 
-	 * anded with (A,C),{((0,0),(3,3)),((0,0),(5,5))} = A00_C33 v A00_C55
 	 * in this case i've generalized it so they appear as their internal id number rather than the string values
+	 * TODO: this doesn't really work, prints DNF for now as it is waaay shorter
 	 */
 	public void outputCNF()
 	{
@@ -385,52 +387,77 @@ public class CSP {
 		{
 			Constraint c = constraintTable.get(ip);
 			String or = "";
+			//LinkedList<String[]> temp = new LinkedList<String[]>();
 			for (IntegerPair p : c.allowedPairs)
 			{   
+				//temp.add(new String[] {variableNames.get(ip.first)+p.first, variableNames.get(ip.second)+p.second});
 				if (or == "") or = "("+variableNames.get(ip.first)+p.first+" ^ "+variableNames.get(ip.second)+p.second+")";
 				else or = or + " v " + "("+variableNames.get(ip.first)+p.first+" ^ "+variableNames.get(ip.second)+p.second+")";
 			}
 			System.out.println(or);
+			//System.out.println(temp.size());
+			//System.out.println(distributeAndOverOr(null, temp));
 		}
+//		LinkedList<String[]> temp = new LinkedList<String[]>();
+//		temp.add(new String[] {"A1", "B1"});
+//		temp.add(new String[] {"A2", "B2"});
+//		temp.add(new String[] {"A3", "B3"});
+//		temp.add(new String[] {"A4", "B4"});
+//		ArrayList<ArrayList<String>> foo = distributeAndOverOr(null, temp);
+//		System.out.println(foo.size());
 		
 	}
 	
-	public void runSat4J()
+
+	/**
+	 * THis would distribute and of or -- it works for small cases but this operation is 2^n
+	 * and so blows up real fast!
+	 * @param work
+	 * @param dnfs
+	 * @return
+	 */
+	private ArrayList<ArrayList<String>> distributeAndOverOr(ArrayList<ArrayList<String>> work,  LinkedList<String[]> dnfs)
 	{
-		final int MAXVAR = 1000000;
-		final int NBCLAUSES = 500000;
-
-		ISolver solver = SolverFactory.newDefault();
-
-		// prepare the solver to accept MAXVAR variables. MANDATORY
-		solver.newVar(MAXVAR);
-		// not mandatory for SAT solving. MANDATORY for MAXSAT solving
-		//solver.setExpectedNumberOfClauses(NBCLAUSES);
-		// Feed the solver using Dimacs format, using arrays of int
-		// (best option to avoid dependencies on SAT4J IVecInt)
-		for (int i=0;i<NBCLAUSES;i++) {
-		  int [] clause = {1,2,3}; // get the clause from somewhere
-		  // the clause should not contain a 0, only integer (positive or negative)
-		  // with absolute values less or equal to MAXVAR
-		  // e.g. int [] clause = {1, -3, 7}; is fine
-		  // while int [] clause = {1, -3, 7, 0}; is not fine 
-		  try
-		  {
-			  solver.addClause(new VecInt(clause)); // adapt Array to IVecInt
-		  }catch(Exception e){}
-		}
-
-		// we are done. Working now on the IProblem interface
-		IProblem problem = solver;
-		boolean isSat = false;
-		try
+		
+		if (work == null)
 		{
-			isSat = problem.isSatisfiable();
-		}catch(Exception e){}
-		if (isSat) {
-			System.out.println("is satisfiable");
-		} else {
+			ArrayList<ArrayList<String>> nwork = new ArrayList<ArrayList<String>>();
+			for (String sa : dnfs.get(0))
+			{
+				for (String sb : dnfs.get(1))
+				{
+					ArrayList<String> n = new ArrayList<String>();
+					n.add(sa);
+					n.add(sb);
+					nwork.add(n);
+				}
+			}
+			dnfs.removeFirst();
+			dnfs.removeFirst();
+			work = distributeAndOverOr(nwork, dnfs);
 		}
+		
+		if (dnfs.size() > 0)
+		{
+			ArrayList<ArrayList<String>> nwork = new ArrayList<ArrayList<String>>();
+			for (String sa : dnfs.get(0))
+			{
+				for (ArrayList<String> sb : work)
+				{
+					ArrayList<String> n = new ArrayList<String>();
+					for (String s : sb)
+					{
+						n.add(s);
+					}
+					n.add(sa);
+					nwork.add(n);
+				}
+			}
+			dnfs.removeFirst();
+			work = distributeAndOverOr(nwork,dnfs);
+		}
+		
+		return work;
 	}
 	
 	
