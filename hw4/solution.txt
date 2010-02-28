@@ -25,7 +25,13 @@ Tim Tregubov
     * Write a java program, to solve the example problem with a, b, c, d, given as above. 
     > Modify my backtrackingSearch to terminate when the first goal is found. 
 
-	Done. 
+	Done.  I took longer than I should have trying to work on the cnf thing and didn't end up working on
+	good test cases.  I have two, one which works and one which fails.
+	
+	The biggest problem with my code is the part that generates the constraints, I had hoped to work on solving
+	non-rectangular pieces so I wrote that code checking every position of every position of every rectangle. 
+	At big sizes of the problem this gets extremely slow. Since I ended up not doing that extra credit I 
+	should rewrite this to just do much simpler h/v number comparisons instead. Oh well. 
 
     * Write a new search method in CSP.java, backtrackingMRV, 
     > that uses the MRV heuristic to find a solution more quickly. 
