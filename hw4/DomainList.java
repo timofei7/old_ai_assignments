@@ -33,8 +33,8 @@ public class DomainList implements Cloneable{
 		for(int i = 0; i < n; i++ ) {
 			LinkedHashSet<Integer> dom = new LinkedHashSet<Integer>();
 			
-//			just make it empty, not sure why were filling it with stuff before
-//			for(int j = 0; j < maxValue; j++) { //TODO: why was this necessary?
+//			just make it empty fill in later
+//			for(int j = 0; j < maxValue; j++) { 
 //				dom.add(j);
 //			}
 			

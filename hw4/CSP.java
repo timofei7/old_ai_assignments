@@ -1,17 +1,11 @@
 package hw4;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Set;
-
-import org.sat4j.*;
-import org.sat4j.core.VecInt;
-import org.sat4j.minisat.SolverFactory;
-import org.sat4j.specs.IProblem;
-import org.sat4j.specs.ISolver;
 
 /**
  * CSP class
@@ -40,7 +34,7 @@ public class CSP {
 
     private int numValues;  // the maximum size of the domain over all variables
 	
-    // Hashtables used to convert from string descriptions of variables and values to 
+    // HashTables used to convert from string descriptions of variables and values to 
     // integer values.  For example, in a map-coloring problem, we might have 
     // r=0, g=1, b=2.  Internally, this CSP solver only works with integers.
 	private Hashtable<String, Integer> variableHash;
@@ -398,13 +392,21 @@ public class CSP {
 			//System.out.println(temp.size());
 			//System.out.println(distributeAndOverOr(null, temp));
 		}
-//		LinkedList<String[]> temp = new LinkedList<String[]>();
-//		temp.add(new String[] {"A1", "B1"});
-//		temp.add(new String[] {"A2", "B2"});
-//		temp.add(new String[] {"A3", "B3"});
-//		temp.add(new String[] {"A4", "B4"});
-//		ArrayList<ArrayList<String>> foo = distributeAndOverOr(null, temp);
-//		System.out.println(foo.size());
+		System.out.println("I can convert tiny examples into CNF, though.  For instance here's one: ");
+		LinkedList<List<String>> temp = new LinkedList<List<String>>();
+		temp.add(Arrays.asList(new String[] {"A1", "B1"}));
+		temp.add(Arrays.asList(new String[] {"A2", "B2"}));
+		temp.add(Arrays.asList(new String[] {"A3", "B3"}));
+		temp.add(Arrays.asList(new String[] {"A1", "B4"}));
+		temp.add(Arrays.asList(new String[] {"A5", "B1"}));
+		temp.add(Arrays.asList(new String[] {"A6", "B1"}));
+		temp.add(Arrays.asList(new String[] {"A7", "B2"}));
+		temp.add(Arrays.asList(new String[] {"A8", "B5"}));
+		temp.add(Arrays.asList(new String[] {"A8", "B6"}));
+		temp.add(Arrays.asList(new String[] {"A8", "B7"}));
+		System.out.println("converting this constraint in DNF: " + temp);
+		ArrayList<ArrayList<String>> foo = distributeAndOverOr(null, temp);
+		System.out.println("to this in naive CNF:" + foo);
 		
 	}
 	
@@ -416,7 +418,7 @@ public class CSP {
 	 * @param dnfs
 	 * @return
 	 */
-	private ArrayList<ArrayList<String>> distributeAndOverOr(ArrayList<ArrayList<String>> work,  LinkedList<String[]> dnfs)
+	private ArrayList<ArrayList<String>> distributeAndOverOr(ArrayList<ArrayList<String>> work,  LinkedList<List<String>> dnfs)
 	{
 		
 		if (work == null)
@@ -462,9 +464,9 @@ public class CSP {
 	
 	
 	
+	
 	/**
 	 * an int with a priority
-	 * @author tim
 	 */
 	private class priorInt implements Comparable<priorInt>
 	{
