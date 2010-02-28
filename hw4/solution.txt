@@ -38,7 +38,7 @@ Tim Tregubov
     > Don't just modify your code, since you'll want to run each method to compare the effectiveness! 
     > (And write about it in your writeup!) 
     
-    I chose LVC with MRV but withough forwardchecking.  Ended up with 314 backtrack stack frames.  Not bad!
+    I chose LVC with MRV but without forwardchecking.  Ended up with 314 backtrack stack frames.  Not bad!
     However for some reason I couldn't add forwardchecking to this when I did it would stop finding a solution. Must be a bug. 
 
     * Write a method in CSP.java that returns a list of propositional logic rules
@@ -47,6 +47,16 @@ Tim Tregubov
     > each propositional symbol correspond to a bit of one of the variables in the CSP. Describe and
     > discuss your results in the writeup. 
     
-    I started writing this but got confused and am taking a break from it and will finish tomorrow.
-    Currently I return it in DNF format instead as the whole distributing ands over ors looked like it would be
-    super hairy. 
+    So I attempted to do the distributing 'and' over 'or' bit and if I understand it correctly it
+    should explode with 2^n clauses... I ignored that warning and went ahead and coded it up anyway as
+    I understood and it runs out of memory since for the sample 10x3 area with 4 blocks one of the
+    constraints generated is 84 pairs long. 
+
+	I have left that code in and it does some naive conversion for very small constraints. 
+	
+	I attempted to look into Tseitin transformation but did not get very far. 
+	
+	
+	
+	
+    
