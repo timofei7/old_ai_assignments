@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 
 /**
@@ -177,7 +178,7 @@ public class CSP {
 	 * does a backTrackingSearch
 	 * @param assign
 	 */
-	public boolean backtrackingSearch(final PartialAssignment assign) {
+	public Solution backtrackingSearch(final PartialAssignment assign) {
 		count = count + 1;
 				
 		// Clone the assignment, since we don't want to clobber the values already assigned
@@ -191,21 +192,21 @@ public class CSP {
 			{
 				// solution found!
 				System.out.println("SOLUTION:");
-				pa.prettyPrint(variableNames, valueNames);
-				return true;
+				Map<String, String> result = pa.prettyPrint(variableNames, valueNames);
+				return new Solution(true, result);
 			}
 			else
 			{
-				return false;
+				return new Solution(false, null);
 			}
 		} else {
-			boolean solutionFound = false;
+			Solution solutionFound = new Solution(false, null);
 			// for now just choose the first unassigned variable
 			int variable = unassignedVars.get(0);
 			// for now just choose the values in order
 			for(int value = 0; value < numValues; value++ ) 
 			{
-				if (!solutionFound)
+				if (!solutionFound.value)
 				{
 					pa.set(variable, value);
 					solutionFound = backtrackingSearch(pa);
@@ -222,7 +223,7 @@ public class CSP {
 	 *  If you can force a failure, you can prune that section of the search tree. 
 	 * @param assign
 	 */
-	public boolean backtrackingSearchMRV(final PartialAssignment assign, final DomainList domainlist) {
+	public Solution backtrackingSearchMRV(final PartialAssignment assign, final DomainList domainlist) {
 		
 		count = count + 1;
 				
@@ -237,15 +238,15 @@ public class CSP {
 			{
 				// solution found!
 				System.out.println("SOLUTION:");
-				pa.prettyPrint(variableNames, valueNames);
-				return true;
+				Map<String,String> result = pa.prettyPrint(variableNames, valueNames);
+				return new Solution(true, result);
 			}
 			else 
 			{
-				return false;
+				return new Solution(false, null);
 			}
 		} else {
-			boolean solutionFound = false;
+			Solution solutionFound = new Solution(false, null);
 			// choose the first temporarily
 			int variable = unassignedVars.get(0);
 			int size = Integer.MAX_VALUE;
@@ -260,7 +261,7 @@ public class CSP {
 			// for now just choose the values in order
 			for(Integer value : domainlist.getValues(variable)) 
 			{
-				if (!solutionFound)
+				if (!solutionFound.value)
 				{
 					pa.set(variable, value);
 					DomainList newdomainlist = forwardCheck(variable, value, pa, domainlist);
@@ -278,7 +279,7 @@ public class CSP {
 	 *  THIS DOES NOT DO FORWARDCHECKING 
 	 * @param assign
 	 */
-	public boolean backtrackingSearchMRVLCV(final PartialAssignment assign, final DomainList domainlist) {
+	public Solution backtrackingSearchMRVLCV(final PartialAssignment assign, final DomainList domainlist) {
 
 		count = count + 1;
 				
@@ -291,13 +292,13 @@ public class CSP {
 			if(checkAssignment(pa) ) {
 				// solution found!
 				System.out.println("SOLUTION:");
-				pa.prettyPrint(variableNames, valueNames);
-				return true;
+				Map<String,String> result = pa.prettyPrint(variableNames, valueNames);
+				return new Solution(true, result);
 			} else{
-				return false;
+				return new Solution(false, null);
 			}
 		} else {
-			boolean solutionFound = false;
+			Solution solutionFound = new Solution(false,null);
 			// choose the first temporarily
 			int variable = unassignedVars.get(0);
 			int size = Integer.MAX_VALUE;
@@ -322,7 +323,7 @@ public class CSP {
 			//ordered by least constraining value
 			for(int i=1; i < domainlist.getValues(variable).size(); i++)
 			{
-				if (!solutionFound)
+				if (!solutionFound.value)
 				{
 					Integer value = order.poll().value;
 					pa.set(variable, value);

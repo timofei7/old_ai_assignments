@@ -20,6 +20,11 @@ public class P1
 	public int bigramTotal;
 	public int trigramTotal;
 	
+	
+	/**
+	 * constructor 
+	 * @param training a string of the file for training
+	 */
 	public P1(String training)
 	{
 		bigrams = new HashMap<String, Integer>();
@@ -57,7 +62,7 @@ public class P1
 				break; //we're done here. 
 			}
 			
-			if (count % 2 == 0 && temp2.size() >=2)
+			if (count % 2 == 0 && temp2.size() >=2) //bigrams
 			{
 				bigramTotal++;
 				String two = temp2.get(0) + " " + temp2.get(1);
@@ -74,7 +79,7 @@ public class P1
 				temp2.removeFirst();
 			}
 			
-			if (count % 3 == 0 && temp3.size() >=3)
+			if (count % 3 == 0 && temp3.size() >=3) //trigrams
 			{
 				trigramTotal++;
 				String three = temp3.get(0) + " " + temp3.get(1) + " " + temp3.get(2);
@@ -100,9 +105,14 @@ public class P1
 	}
 	
 	
+	/**
+	 * get probability of triplet
+	 * @param s
+	 * @return
+	 */
 	public double getProb(String s)
 	{
-		return 0;
+		return trigrams.get(s) / trigramTotal;
 	}
 	
 	

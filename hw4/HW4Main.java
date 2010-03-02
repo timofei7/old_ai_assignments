@@ -4,7 +4,9 @@ package hw4;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -65,7 +67,7 @@ public class HW4Main
 	{
 		String variables = "";
 		String values = "";
-		boolean found = false;
+		Solution found = new Solution(false, null);
 		
 		//build variables string
 		for (int i = 0; i < cp.size; i++)
@@ -170,14 +172,17 @@ public class HW4Main
 			case 1:
 				System.out.println("running with no heuristics..");
 				found = csp.backtrackingSearch(pa);
+				printSolution(found.assignment, cp);
 				break;
 			case 2:
 				System.out.println("running minimum remaining variable..");
 				found = csp.backtrackingSearchMRV(pa, dl);
+				printSolution(found.assignment, cp);
 				break;
 			case 3:
 				System.out.println("running minimum remaining variable with least constrainting value..");
 				found = csp.backtrackingSearchMRVLCV(pa, dl);
+				printSolution(found.assignment, cp);
 				break;
 			default:
 				System.out.println("invalid choice try again...");
@@ -186,7 +191,7 @@ public class HW4Main
 		System.out.println("BACKTRACK COUNT: " + csp.count);
 		long elapsed = System.currentTimeMillis() - start;
 		System.out.println("ELAPSED TIME: " + elapsed + " milliseconds to run search");
-		return found;
+		return found.value;
 	}
 	
 	
@@ -261,6 +266,48 @@ public class HW4Main
 			}
 		}
 		return s;
+	}
+	
+	/**
+	 * prints out the solution on a grid
+	 * @param m
+	 * @param cp
+	 */
+	public static void printSolution(Map<String, String> m, CircuitProblem cp)
+	{
+		if (m ==null) {return;}
+		
+		ArrayList<Set<Integer>> all = new ArrayList<Set<Integer>>();
+		Map<String, String> r = new HashMap<String, String>();
+		for (String k : m.keySet())
+		{
+			r.put(m.get(k), k);
+		}
+		
+		for (String loc : m.values())
+		{
+			int l = Integer.parseInt(loc);
+			Rect i = cp.compList.get(names.indexOf(r.get(loc)));
+			all.add(coordSet(l, cp.width, i));
+		}
+		
+		System.out.println();
+		for (int y = 0; y < cp.height; y++)
+		{
+			for (int x = 0; x < cp.width; x++)
+			{
+				for (int var = 0; var < all.size(); var ++)
+				{
+					if (all.get(var).contains(new Rect(x, y).toInt(cp.width)))
+					{
+						System.out.print(names.charAt(var));
+					}
+				}
+			}
+			System.out.println();
+		}
+		System.out.println();
+
 	}
 
 }

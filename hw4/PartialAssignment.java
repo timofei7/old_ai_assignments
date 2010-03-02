@@ -3,7 +3,9 @@ package hw4;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * a partial assignment gives a value to each variable, and the value -1 to each unassigned variable
@@ -24,17 +26,17 @@ public class PartialAssignment implements Cloneable {
 		}
 		
 		//TODO: figure out what this was for
-		public PartialAssignment(String assignString, Hashtable<String, Integer> valueHash) 
-		{
-			String[] valueString = assignString.split("\\.");
-			int n = valueString.length;
-			assignment = new int[n];
-			for(int i = 0; i < n; i++) 
-			{
-				assignment[i] = valueHash.get(valueString[i]);
-			}
-						
-		}
+//		public PartialAssignment(String assignString, Hashtable<String, Integer> valueHash) 
+//		{
+//			String[] valueString = assignString.split("\\.");
+//			int n = valueString.length;
+//			assignment = new int[n];
+//			for(int i = 0; i < n; i++) 
+//			{
+//				assignment[i] = valueHash.get(valueString[i]);
+//			}
+//						
+//		}
 		
 		/**
 		 * get assignment at index
@@ -63,14 +65,17 @@ public class PartialAssignment implements Cloneable {
 		 * @param variableNames
 		 * @param valueNames
 		 */
-		public void prettyPrint(Hashtable<Integer, String> variableNames, Hashtable<Integer, String> valueNames) {
+		public Map<String,String> prettyPrint(Hashtable<Integer, String> variableNames, Hashtable<Integer, String> valueNames) {
 			String s = "";
+			Map<String, String> a = new HashMap<String, String>();
 			for(int var = 0; var < assignment.length; var++) 
 			{
+				a.put(variableNames.get(var), valueNames.get(assignment[var]));
 				s = s + variableNames.get(var) + "=" 
 					+ valueNames.get(assignment[var]) + "  " ;
 			}
 			System.out.println(s);
+			return a;
 		}
 		
 		/**
