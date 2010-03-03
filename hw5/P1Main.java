@@ -2,13 +2,12 @@ package hw5;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class P1Main
 {
 
-	//private static final String trainingFile = "huckleberryfin.txt";
+	//private static final String trainingFile = "hw5/hfclean.txt";
 	private static final String trainingFile = "hw5/hw5test.txt";
 
 	
@@ -30,7 +29,7 @@ public class P1Main
 		String input = "";
 		while (sc.hasNextLine())
 		{
-			input = input + sc.nextLine();
+			input = input+" "+sc.nextLine();
 		}
 				
 		P1 p = new P1(input);
