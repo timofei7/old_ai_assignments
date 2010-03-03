@@ -41,17 +41,15 @@ public class HW4Main
 			
 			ArrayList <CircuitProblem> problems = CircuitProblem.loadCircuitProblems("example.txt");
 			
-			System.out.println("here's what we read in: ");
-			for(CircuitProblem cp:problems)
-			{
-				System.out.println(cp);
-			}
+//			for(CircuitProblem cp:problems)
+//			{
+//				System.out.println(cp);
+//			}
 			
-			System.out.println("now lets do some calculations...");
 			int i = 1;
 			for(CircuitProblem cp:problems)
 			{
-				System.out.println("Problem " + i++ + ": "+solve(cp));	
+				System.out.println("Problem " + i++ + ": "+solve(cp));
 			}			
 		}
 				
@@ -190,7 +188,7 @@ public class HW4Main
 		}
 		System.out.println("BACKTRACK COUNT: " + csp.count);
 		long elapsed = System.currentTimeMillis() - start;
-		System.out.println("ELAPSED TIME: " + elapsed + " milliseconds to run search");
+		//System.out.println("ELAPSED TIME: " + elapsed + " milliseconds to run search");
 		return found.value;
 	}
 	
@@ -277,8 +275,9 @@ public class HW4Main
 	{
 		if (m ==null) {return;}
 		
-		ArrayList<Set<Integer>> all = new ArrayList<Set<Integer>>();
+		Map<String,Set<Integer>> all = new HashMap<String,Set<Integer>>();
 		Map<String, String> r = new HashMap<String, String>();
+		
 		for (String k : m.keySet())
 		{
 			r.put(m.get(k), k);
@@ -288,21 +287,26 @@ public class HW4Main
 		{
 			int l = Integer.parseInt(loc);
 			Rect i = cp.compList.get(names.indexOf(r.get(loc)));
-			all.add(coordSet(l, cp.width, i));
+			all.put(r.get(loc), coordSet(l, cp.width, i));
 		}
 		
 		System.out.println();
+		boolean print = false;
 		for (int y = 0; y < cp.height; y++)
 		{
 			for (int x = 0; x < cp.width; x++)
 			{
-				for (int var = 0; var < all.size(); var ++)
+				for (String var : all.keySet())
 				{
 					if (all.get(var).contains(new Rect(x, y).toInt(cp.width)))
 					{
-						System.out.print(names.charAt(var));
+						System.out.print(var);
+						print = true;
 					}
 				}
+				if (print == false)
+					System.out.print(".");
+				print = false;
 			}
 			System.out.println();
 		}
