@@ -39,7 +39,7 @@ public class HW4Main
 					System.exit(1);
 			}
 			
-			ArrayList <CircuitProblem> problems = CircuitProblem.loadCircuitProblems("example.txt");
+			ArrayList <CircuitProblem> problems = CircuitProblem.loadCircuitProblems("hw4/example.txt");
 			
 //			for(CircuitProblem cp:problems)
 //			{
