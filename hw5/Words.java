@@ -1,8 +1,10 @@
 package hw5;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Random;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
@@ -14,7 +16,7 @@ import java.util.TreeSet;
  * @author tim
  *
  */
-public class P1
+public class Words
 {	
 	public Map<String, Integer> bigrams;
 	public Map<String, Integer> trigrams;
@@ -29,7 +31,7 @@ public class P1
 	 * constructor 
 	 * @param training a string of the file for training
 	 */
-	public P1(String training)
+	public Words(String training)
 	{
 		bigrams = new HashMap<String, Integer>();
 		trigrams = new HashMap<String, Integer>();
@@ -107,10 +109,63 @@ public class P1
 		} 
 		
 		sortDict(dict); //sort the dictionary
+		//System.out.println(sortedDict);
+		//System.out.println(trigrams);
+		//System.out.println(bigrams);
 		
-		System.out.println(bigramTotal);
-		System.out.println(trigramTotal);
-		System.out.println(sortedDict);
+	}
+	
+	/**
+	 * given the first two words of a sentence
+	 * randomly selects the next word from a distribution
+	 * that is consistent with the probablistic model.
+	 * @param bigram
+	 * @return
+	 */
+	public String nextWord(String bigram)
+	{
+		Random rand = new Random();
+		double dart = 0;
+		while (dart < .2)
+			dart = rand.nextDouble();
+		
+		double accum = 0;
+		//System.out.println("dart " + dart);
+		for (sortString s : sortedDict)
+		{
+			accum = accum + bigramCondProb(s.string, bigram);
+			//System.out.println("accum: " + accum + " s: " + s.string);
+			if (accum >= dart)
+			{
+				//System.out.println(bigramCondProb(s.string, bigram));
+				return s.string;
+			}
+		}
+		
+		return "";
+	}
+	
+	
+	/**
+	 * builds a 15 word sentence
+	 * @param bigram
+	 * @return
+	 */
+	public String buildSentence(String bigram)
+	{
+		String out = "";
+		String s  = bigram.split(" ")[1];
+		String ss = nextWord(bigram);
+		out = bigram;
+		for (int i = 0; i< 13; i++)
+		{
+			String t = "";
+			out = out + " " + ss;
+			t = nextWord(s + " " +ss);
+			s = ss;
+			ss = t;
+		}
+		return out;
 	}
 	
 	
@@ -119,12 +174,42 @@ public class P1
 	 * @param s
 	 * @return
 	 */
-	public double getSimpleProb(String s)
+	public double sP(String s)
 	{
+		double ret = 0d;
+		//System.out.println(s);
 		if (s.split(" ").length == 2)
-			return bigrams.get(s) / bigramTotal;
+		{
+			//System.out.println(bigrams.get(s).doubleValue() + " / " + (double)bigramTotal);
+			try{ ret = bigrams.get(s).doubleValue() / (double)bigramTotal;}
+			catch(Exception e){ret = 0d;}
+		}
+		else if (s.split(" ").length == 3)
+		{
+			//System.out.println(trigrams.get(s).doubleValue() + " / " + (double)trigramTotal);
+			try{ ret = trigrams.get(s).doubleValue() / (double)trigramTotal;}
+			catch(Exception e){ret = 0d;}
+		}
+
+		return ret;
+	}
+	
+	/**
+	 * p(A | B C) = P (B C A) / P (B C).
+	 * compute P( B C A) and P( B C) 
+	 * frequency count for BCA and for BC, from the hashtables, and a count
+	 * for the total number of bigrams and trigrams.
+	 * P(B C A) should be frequence (B C A) / number of trigrams.
+	 * @return p(A | B C) = P (B C A) / P (B C)
+	 */
+	public double bigramCondProb(String A, String BC)
+	{
+		double bca = sP(BC+" "+A);
+		double bc = sP(BC);
+		if (bc==0)
+			return 0;
 		else
-			return trigrams.get(s) / trigramTotal;
+			return bca / bc;
 	}
 	
 	
@@ -160,9 +245,7 @@ public class P1
 	}
 	
 	/**
-	 * stupid
-	 * @author tim
-	 *
+	 *class to allow sorting of strings according to the count
 	 */
 	private class sortString implements Comparable<sortString>
 	{

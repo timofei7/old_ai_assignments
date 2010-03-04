@@ -1,0 +1,30 @@
+CS44 W10 hw5
+Tim Tregubov
+
+
+P1. method sP() gives a simple probability, bigramCondProb() takes a bigram
+	and a third word and gives that conditional probability (p(A | B C) = p(B C A) / p(B C))
+P1b.buildSentence() takes a bigram to start a sentence with and builds a 15 word sentence.
+	This part is sooo cool. Make some pretty funny sentences! I trained it on Mark Twain, Gullivers Travels.
+	It ran out of memory processing war and peace though. These would be better if it could be forced to
+	end with word + period.
+
+Some of my favorite senteces (using different things as training data):
+what if it could be when she got done this husky up and went to
+what if it just happens so that stirred up she comes next morning or else
+what if it just worked noble when jim bit into nothing but bread and float
+when i found that rotten old smelly dishcloth that got lost behind the tree he
+i will now give a shriek at the figure here annexed i told his majesty
+i will be linked to the scabbard i was invited by several contrivances that shall
+i will make you tear your own flesh and bones birds beasts and fishes to
+you will gratefully and humbly submit to incur the censure of pride singularity affectation ignorance
+you will support the project gutenberg license included with this agreement you must cease using
+i am able to forbear groaning and shedding tears and turning my head into his
+i am not altogether so robust and that some of them breaking into the sea
+
+
+P2. 
+
+
+
+

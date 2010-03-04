@@ -11,7 +11,7 @@ Title Adventures of Huckleberry Finn Complete
 
 Author Mark Twain Samuel Clemens
 
-Release Date August 20 2006 EBook 76
+Release Date August   EBook 
 
 Language English
 
@@ -5112,7 +5112,7 @@ for it
 
 Then he showed us another little job hed printed and hadnt charged for
 because it was for us  It had a picture of a runaway nigger with a
-bundle on a stick over his shoulder and 200 reward under it  The
+bundle on a stick over his shoulder and  reward under it  The
 reading was all about Jim and just described him to a dot  It said he
 run away from St Jacques plantation forty mile below New Orleans last
 winter and likely went north and whoever would catch him and send him
@@ -5276,9 +5276,9 @@ Richard IIIMr Garrick
 RichmondMr Kean
 
 Also by special request Hamlets Immortal Soliloquy  
-By The Illustrious Kean Done by him 300 consecutive nights in Paris
+By The Illustrious Kean Done by him  consecutive nights in Paris
 For One Night Only On account of imperative European engagements
-Admission 25 cents children and servants 10 cents
+Admission  cents children and servants  cents
 
 Then we went loafing around town  The stores and houses was most all
 old shackly dried up frame concerns that hadnt ever been painted they
@@ -5689,7 +5689,7 @@ reckoned  He said he could size their style  So next morning he got
 some big sheets of wrapping paper and some black paint and drawed off
 some handbills and stuck them up all over the village  The bills said
 
-AT THE COURT HOUSE FOR 3 NIGHTS ONLY
+AT THE COURT HOUSE FOR  NIGHTS ONLY
 The WorldRenowned Tragedians
 DAVID GARRICK THE YOUNGER
 AND EDMUND KEAN THE ELDER
@@ -5698,7 +5698,7 @@ Continental Theatres
 In their Thrilling Tragedy of
 THE KINGS CAMELEOPARD
 OR THE ROYAL NONESUCH   
-Admission 50 cents
+Admission  cents
 
 Then at the bottom was the biggest line of all which said
 
@@ -10049,10 +10049,10 @@ finish up the rest of that part of the work which was to plan out a
 mournful inscriptionsaid Jim got to have one like they all done  He
 made up a lot and wrote them out on a paper and read them off so
 
-1  Here a captive heart busted 2  Here a poor prisoner forsook by the
-world and friends fretted his sorrowful life 3  Here a lonely heart
+  Here a captive heart busted   Here a poor prisoner forsook by the
+world and friends fretted his sorrowful life   Here a lonely heart
 broke and a worn spirit went to its rest after thirtyseven years of
-solitary captivity 4  Here homeless and friendless after thirtyseven
+solitary captivity   Here homeless and friendless after thirtyseven
 years of bitter captivity perished a noble stranger natural son of
 Louis XIV
 
@@ -11359,9 +11359,9 @@ Complete by Mark Twain Samuel Clemens
 
  END OF THIS PROJECT GUTENBERG EBOOK HUCKLEBERRY FINN 
 
- This file should be named 76txt or 76zip 
+ This file should be named txt or zip 
 This and all associated files of various formats will be found in
-        httpwwwgutenbergnet776
+        httpwwwgutenbergnet
 
 Produced by David Widger Previous editions produced by Ron Burkey
 and Internet Wiretap
@@ -11402,10 +11402,10 @@ Gutenbergtm License available with this file or online at
 httpgutenbergnetlicense
 
 
-Section 1  General Terms of Use and Redistributing Project Gutenbergtm
+Section   General Terms of Use and Redistributing Project Gutenbergtm
 electronic works
 
-1A  By reading or using any part of this Project Gutenbergtm
+A  By reading or using any part of this Project Gutenbergtm
 electronic work you indicate that you have read understand agree to
 and accept all the terms of this license and intellectual property
 trademarkcopyright agreement  If you do not agree to abide by all
@@ -11414,19 +11414,19 @@ all copies of Project Gutenbergtm electronic works in your possession
 If you paid a fee for obtaining a copy of or access to a Project
 Gutenbergtm electronic work and you do not agree to be bound by the
 terms of this agreement you may obtain a refund from the person or
-entity to whom you paid the fee as set forth in paragraph 1E8
+entity to whom you paid the fee as set forth in paragraph E
 
-1B  Project Gutenberg is a registered trademark  It may only be
+B  Project Gutenberg is a registered trademark  It may only be
 used on or associated in any way with an electronic work by people who
 agree to be bound by the terms of this agreement  There are a few
 things that you can do with most Project Gutenbergtm electronic works
 even without complying with the full terms of this agreement  See
-paragraph 1C below  There are a lot of things you can do with Project
+paragraph C below  There are a lot of things you can do with Project
 Gutenbergtm electronic works if you follow the terms of this agreement
 and help preserve free future access to Project Gutenbergtm electronic
-works  See paragraph 1E below
+works  See paragraph E below
 
-1C  The Project Gutenberg Literary Archive Foundation the Foundation
+C  The Project Gutenberg Literary Archive Foundation the Foundation
 or PGLAF owns a compilation copyright in the collection of Project
 Gutenbergtm electronic works  Nearly all the individual works in the
 collection are in the public domain in the United States  If an
@@ -11442,7 +11442,7 @@ the work  You can easily comply with the terms of this agreement by
 keeping this work in the same format with its attached full Project
 Gutenbergtm License when you share it without charge with others
 
-1D  The copyright laws of the place where you are located also govern
+D  The copyright laws of the place where you are located also govern
 what you can do with this work  Copyright laws in most countries are in
 a constant state of change  If you are outside the United States check
 the laws of your country in addition to the terms of this agreement
@@ -11452,9 +11452,9 @@ Gutenbergtm work  The Foundation makes no representations concerning
 the copyright status of any work in any country outside the United
 States
 
-1E  Unless you have removed all references to Project Gutenberg
+E  Unless you have removed all references to Project Gutenberg
 
-1E1  The following sentence with active links to or other immediate
+E  The following sentence with active links to or other immediate
 access to the full Project Gutenbergtm License must appear prominently
 whenever any copy of a Project Gutenbergtm work any work on which the
 phrase Project Gutenberg appears or with which the phrase Project
@@ -11466,35 +11466,35 @@ almost no restrictions whatsoever  You may copy it give it away or
 reuse it under the terms of the Project Gutenberg License included
 with this eBook or online at wwwgutenbergnet
 
-1E2  If an individual Project Gutenbergtm electronic work is derived
+E  If an individual Project Gutenbergtm electronic work is derived
 from the public domain does not contain a notice indicating that it is
 posted with permission of the copyright holder the work can be copied
 and distributed to anyone in the United States without paying any fees
 or charges  If you are redistributing or providing access to a work
 with the phrase Project Gutenberg associated with or appearing on the
-work you must comply either with the requirements of paragraphs 1E1
-through 1E7 or obtain permission for the use of the work and the
-Project Gutenbergtm trademark as set forth in paragraphs 1E8 or
-1E9
+work you must comply either with the requirements of paragraphs E
+through E or obtain permission for the use of the work and the
+Project Gutenbergtm trademark as set forth in paragraphs E or
+E
 
-1E3  If an individual Project Gutenbergtm electronic work is posted
+E  If an individual Project Gutenbergtm electronic work is posted
 with the permission of the copyright holder your use and distribution
-must comply with both paragraphs 1E1 through 1E7 and any additional
+must comply with both paragraphs E through E and any additional
 terms imposed by the copyright holder  Additional terms will be linked
 to the Project Gutenbergtm License for all works posted with the
 permission of the copyright holder found at the beginning of this work
 
-1E4  Do not unlink or detach or remove the full Project Gutenbergtm
+E  Do not unlink or detach or remove the full Project Gutenbergtm
 License terms from this work or any files containing a part of this
 work or any other work associated with Project Gutenbergtm
 
-1E5  Do not copy display perform distribute or redistribute this
+E  Do not copy display perform distribute or redistribute this
 electronic work or any part of this electronic work without
-prominently displaying the sentence set forth in paragraph 1E1 with
+prominently displaying the sentence set forth in paragraph E with
 active links or immediate access to the full terms of the Project
 Gutenbergtm License
 
-1E6  You may convert to and distribute this work in any binary
+E  You may convert to and distribute this work in any binary
 compressed marked up nonproprietary or proprietary form including any
 word processing or hypertext form  However if you provide access to or
 distribute copies of a Project Gutenbergtm work in a format other than
@@ -11504,55 +11504,55 @@ you must at no additional cost fee or expense to the user provide a
 copy a means of exporting a copy or a means of obtaining a copy upon
 request of the work in its original Plain Vanilla ASCII or other
 form  Any alternate format must include the full Project Gutenbergtm
-License as specified in paragraph 1E1
+License as specified in paragraph E
 
-1E7  Do not charge a fee for access to viewing displaying
+E  Do not charge a fee for access to viewing displaying
 performing copying or distributing any Project Gutenbergtm works
-unless you comply with paragraph 1E8 or 1E9
+unless you comply with paragraph E or E
 
-1E8  You may charge a reasonable fee for copies of or providing
+E  You may charge a reasonable fee for copies of or providing
 access to or distributing Project Gutenbergtm electronic works provided
 that
 
- You pay a royalty fee of 20 of the gross profits you derive from
+ You pay a royalty fee of  of the gross profits you derive from
      the use of Project Gutenbergtm works calculated using the method
      you already use to calculate your applicable taxes  The fee is
      owed to the owner of the Project Gutenbergtm trademark but he
      has agreed to donate royalties under this paragraph to the
      Project Gutenberg Literary Archive Foundation  Royalty payments
-     must be paid within 60 days following each date on which you
+     must be paid within  days following each date on which you
      prepare or are legally required to prepare your periodic tax
      returns  Royalty payments should be clearly marked as such and
      sent to the Project Gutenberg Literary Archive Foundation at the
-     address specified in Section 4 Information about donations to
+     address specified in Section  Information about donations to
      the Project Gutenberg Literary Archive Foundation
 
  You provide a full refund of any money paid by a user who notifies
-     you in writing or by email within 30 days of receipt that she
+     you in writing or by email within  days of receipt that she
      does not agree to the terms of the full Project Gutenbergtm
      License  You must require such a user to return or
      destroy all copies of the works possessed in a physical medium
      and discontinue all use of and all access to other copies of
      Project Gutenbergtm works
 
- You provide in accordance with paragraph 1F3 a full refund of any
+ You provide in accordance with paragraph F a full refund of any
      money paid for a work or a replacement copy if a defect in the
-     electronic work is discovered and reported to you within 90 days
+     electronic work is discovered and reported to you within  days
      of receipt of the work
 
  You comply with all other terms of this agreement for free
      distribution of Project Gutenbergtm works
 
-1E9  If you wish to charge a fee or distribute a Project Gutenbergtm
+E  If you wish to charge a fee or distribute a Project Gutenbergtm
 electronic work or group of works on different terms than are set
 forth in this agreement you must obtain permission in writing from
 both the Project Gutenberg Literary Archive Foundation and Michael
 Hart the owner of the Project Gutenbergtm trademark  Contact the
-Foundation as set forth in Section 3 below
+Foundation as set forth in Section  below
 
-1F
+F
 
-1F1  Project Gutenberg volunteers and employees expend considerable
+F  Project Gutenberg volunteers and employees expend considerable
 effort to identify do copyright research on transcribe and proofread
 public domain works in creating the Project Gutenbergtm
 collection  Despite these efforts Project Gutenbergtm electronic
@@ -11563,22 +11563,22 @@ property infringement a defective or damaged disk or other medium a
 computer virus or computer codes that damage or cannot be read by
 your equipment
 
-1F2  LIMITED WARRANTY DISCLAIMER OF DAMAGES  Except for the Right
-of Replacement or Refund described in paragraph 1F3 the Project
+F  LIMITED WARRANTY DISCLAIMER OF DAMAGES  Except for the Right
+of Replacement or Refund described in paragraph F the Project
 Gutenberg Literary Archive Foundation the owner of the Project
 Gutenbergtm trademark and any other party distributing a Project
 Gutenbergtm electronic work under this agreement disclaim all
 liability to you for damages costs and expenses including legal
 fees  YOU AGREE THAT YOU HAVE NO REMEDIES FOR NEGLIGENCE STRICT
 LIABILITY BREACH OF WARRANTY OR BREACH OF CONTRACT EXCEPT THOSE
-PROVIDED IN PARAGRAPH F3  YOU AGREE THAT THE FOUNDATION THE
+PROVIDED IN PARAGRAPH F  YOU AGREE THAT THE FOUNDATION THE
 TRADEMARK OWNER AND ANY DISTRIBUTOR UNDER THIS AGREEMENT WILL NOT BE
 LIABLE TO YOU FOR ACTUAL DIRECT INDIRECT CONSEQUENTIAL PUNITIVE OR
 INCIDENTAL DAMAGES EVEN IF YOU GIVE NOTICE OF THE POSSIBILITY OF SUCH
 DAMAGE
 
-1F3  LIMITED RIGHT OF REPLACEMENT OR REFUND  If you discover a
-defect in this electronic work within 90 days of receiving it you can
+F  LIMITED RIGHT OF REPLACEMENT OR REFUND  If you discover a
+defect in this electronic work within  days of receiving it you can
 receive a refund of the money if any you paid for it by sending a
 written explanation to the person you received the work from  If you
 received the work on a physical medium you must return the medium with
@@ -11590,12 +11590,12 @@ receive the work electronically in lieu of a refund  If the second copy
 is also defective you may demand a refund in writing without further
 opportunities to fix the problem
 
-1F4  Except for the limited right of replacement or refund set forth
-in paragraph 1F3 this work is provided to you ASIS WITH NO OTHER
+F  Except for the limited right of replacement or refund set forth
+in paragraph F this work is provided to you ASIS WITH NO OTHER
 WARRANTIES OF ANY KIND EXPRESS OR IMPLIED INCLUDING BUT NOT LIMITED TO
 WARRANTIES OF MERCHANTIBILITY OR FITNESS FOR ANY PURPOSE
 
-1F5  Some states do not allow disclaimers of certain implied
+F  Some states do not allow disclaimers of certain implied
 warranties or the exclusion or limitation of certain types of damages
 If any disclaimer or limitation set forth in this agreement violates the
 law of the state applicable to this agreement the agreement shall be
@@ -11603,7 +11603,7 @@ interpreted to make the maximum disclaimer or limitation permitted by
 the applicable state law  The invalidity or unenforceability of any
 provision of this agreement shall not void the remaining provisions
 
-1F6  INDEMNITY  You agree to indemnify and hold the Foundation the
+F  INDEMNITY  You agree to indemnify and hold the Foundation the
 trademark owner any agent or employee of the Foundation anyone
 providing copies of Project Gutenbergtm electronic works in accordance
 with this agreement and any volunteers associated with the production
@@ -11615,7 +11615,7 @@ work b alteration modification or additions or deletions to any
 Project Gutenbergtm work and c any Defect you cause
 
 
-Section  2  Information about the Mission of Project Gutenbergtm
+Section    Information about the Mission of Project Gutenbergtm
 
 Project Gutenbergtm is synonymous with the free distribution of
 electronic works in formats readable by the widest variety of computers
@@ -11626,30 +11626,30 @@ people in all walks of life
 Volunteers and financial support to provide volunteers with the
 assistance they need is critical to reaching Project Gutenbergtms
 goals and ensuring that the Project Gutenbergtm collection will
-remain freely available for generations to come  In 2001 the Project
+remain freely available for generations to come  In  the Project
 Gutenberg Literary Archive Foundation was created to provide a secure
 and permanent future for Project Gutenbergtm and future generations
 To learn more about the Project Gutenberg Literary Archive Foundation
-and how your efforts and donations can help see Sections 3 and 4
+and how your efforts and donations can help see Sections  and 
 and the Foundation web page at httpwwwpglaforg
 
 
-Section 3  Information about the Project Gutenberg Literary Archive
+Section   Information about the Project Gutenberg Literary Archive
 Foundation
 
 The Project Gutenberg Literary Archive Foundation is a non profit
-501c3 educational corporation organized under the laws of the
+c educational corporation organized under the laws of the
 state of Mississippi and granted tax exempt status by the Internal
 Revenue Service  The Foundations EIN or federal tax identification
-number is 646221541  Its 501c3 letter is posted at
+number is   Its c letter is posted at
 httppglaforgfundraising  Contributions to the Project Gutenberg
 Literary Archive Foundation are tax deductible to the full extent
 permitted by US federal laws and your states laws
 
-The Foundations principal office is located at 4557 Melan Dr S
-Fairbanks AK 99712 but its volunteers and employees are scattered
+The Foundations principal office is located at  Melan Dr S
+Fairbanks AK  but its volunteers and employees are scattered
 throughout numerous locations  Its business office is located at
-809 North 1500 West Salt Lake City UT 84116 801 5961887 email
+ North  West Salt Lake City UT    email
 businesspglaforg  Email contact links and up to date contact
 information can be found at the Foundations web site and official
 page at httppglaforg
@@ -11660,7 +11660,7 @@ For additional contact information
      gbnewbypglaforg
 
 
-Section 4  Information about Donations to the Project Gutenberg
+Section   Information about Donations to the Project Gutenberg
 Literary Archive Foundation
 
 Project Gutenbergtm depends upon and cannot survive without wide
@@ -11668,11 +11668,11 @@ spread public support and donations to carry out its mission of
 increasing the number of public domain and licensed works that can be
 freely distributed in machine readable form accessible by the widest
 array of equipment including outdated equipment  Many small donations
-1 to 5000 are particularly important to maintaining tax exempt
+ to  are particularly important to maintaining tax exempt
 status with the IRS
 
 The Foundation is committed to complying with the laws regulating
-charities and charitable donations in all 50 states of the United
+charities and charitable donations in all  states of the United
 States  Compliance requirements are not uniform and it takes a
 considerable effort much paperwork and many fees to meet and keep up
 with these requirements  We do not solicit donations in locations
@@ -11695,7 +11695,7 @@ ways including including checks online payments and credit card
 donations  To donate please visit httppglaforgdonate
 
 
-Section 5  General Information About Project Gutenbergtm electronic
+Section   General Information About Project Gutenbergtm electronic
 works
 
 Professor Michael S Hart is the originator of the Project Gutenbergtm
