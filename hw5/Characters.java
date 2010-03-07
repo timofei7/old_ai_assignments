@@ -1,13 +1,10 @@
 package hw5;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
-import java.util.SortedSet;
 import java.util.StringTokenizer;
-import java.util.TreeSet;
 
 /**
  * Step 1: collect a count of all bigrams in the file. (A bigram is a pair of words, in sequence. So "international business" is a different bigram than "business international".) I'd recommend a hashtable.
@@ -20,7 +17,7 @@ public class Characters
 {	
 	public Map<String, Integer> bigrams;
 	public Map<String, Integer> trigrams;
-	public final char[] dict = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+	public final char[] dict = " abcdefghijklmnopqrstuvwxyz".toCharArray();
 	
 	public int bigramTotal;
 	public int trigramTotal;
@@ -69,7 +66,6 @@ public class Characters
 		while (true)
 		{
 			count++;
-			
 			if (temp2.size() < 2 && temp3.size() < 3)
 			{
 				break; //we're done here. 
@@ -78,7 +74,7 @@ public class Characters
 			if (count % 2 == 0 && temp2.size() >=2) //bigrams
 			{
 				bigramTotal++;
-				String two = temp2.get(0) + " " + temp2.get(1);
+				String two = "" + temp2.get(0) + temp2.get(1);
 
 				if (!bigrams.containsKey(two))
 				{
@@ -95,7 +91,7 @@ public class Characters
 			if (count % 3 == 0 && temp3.size() >=3) //trigrams
 			{
 				trigramTotal++;
-				String three = temp3.get(0) + " " + temp3.get(1) + " " + temp3.get(2);
+				String three = "" + temp3.get(0) + temp3.get(1) + temp3.get(2);
 
 				if (!trigrams.containsKey(three))
 				{
@@ -110,8 +106,8 @@ public class Characters
 			}
 		} 
 		
-		//System.out.println(trigrams);
-		//System.out.println(bigrams);
+		System.out.println(trigrams);
+		System.out.println(bigrams);
 		
 	}
 	
@@ -122,11 +118,11 @@ public class Characters
 	 * @param bigram
 	 * @return
 	 */
-	public Character nextWord(String bigram)
+	public Character nextChar(String bigram)
 	{
 		Random rand = new Random();
 		double dart = 0;
-		while (dart < .2)
+		while (dart < .5)  //TODO: play with this value to increase correctness
 			dart = rand.nextDouble();
 		
 		double accum = 0;
@@ -134,10 +130,10 @@ public class Characters
 		for (Character s : dict)
 		{
 			accum = accum + bigramCondProb(s, bigram);
-			//System.out.println("accum: " + accum + " s: " + s.string);
+			//System.out.println("accum: " + accum + " s: " + s);
 			if (accum >= dart)
 			{
-				//System.out.println(bigramCondProb(s.string, bigram));
+				//System.out.println(bigramCondProb(s, bigram));
 				return s;
 			}
 		}
@@ -154,14 +150,13 @@ public class Characters
 	public String build(String bigram)
 	{
 		String out = "";
-		String s  = bigram.split(" ")[1];
-		String ss = nextWord(bigram);
+		Character s  = bigram.charAt(1);
+		Character ss = nextChar(bigram);
 		out = bigram;
 		for (int i = 0; i< 13; i++)
 		{
-			String t = "";
-			out = out + " " + ss;
-			t = nextWord(s + " " +ss);
+			out = out + ss;
+			Character t = nextChar(""+s + ss);
 			s = ss;
 			ss = t;
 		}
@@ -178,16 +173,23 @@ public class Characters
 	{
 		double ret = 0d;
 		//System.out.println(s);
-		if (s.split(" ").length == 2)
+		if (s.length() ==2)
 		{
 			//System.out.println(bigrams.get(s).doubleValue() + " / " + (double)bigramTotal);
 			try{ ret = bigrams.get(s).doubleValue() / (double)bigramTotal;}
 			catch(Exception e){ret = 0d;}
 		}
-		else if (s.split(" ").length == 3)
+		else if (s.length() == 3)
 		{
+			double t = 0d;
+			try
+			{
+				t = trigrams.get(s).doubleValue(); //assume minimum count is one
+				if (t == 0) {t = 1d;}
+			}catch(Exception e) {ret = 1d;}
+			
 			//System.out.println(trigrams.get(s).doubleValue() + " / " + (double)trigramTotal);
-			try{ ret = trigrams.get(s).doubleValue() / (double)trigramTotal;}
+			try{ ret = t / (double)trigramTotal;}
 			catch(Exception e){ret = 0d;}
 		}
 
@@ -204,7 +206,7 @@ public class Characters
 	 */
 	public double bigramCondProb(Character A, String BC)
 	{
-		double bca = sP(BC+" "+A);
+		double bca = sP(BC+A);
 		double bc = sP(BC);
 		if (bc==0)
 			return 0;

@@ -115,6 +115,7 @@ public class HW4Main
 		// build the constraints
 		// ehaavat wbxr ng 41 jrfg jurrybpx: ebohfgarff vf sbe chffvrf
 		// TODO: make this simpler if not considering non-rectangular shapes
+		// TODO: make this work for problem 3
 		int ai = 0;
 		HashSet<Integer> seen = new HashSet<Integer>();
 		for (Rect a : cp.compList) //this is the first component of the binary constraint
