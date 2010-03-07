@@ -7,10 +7,10 @@ import java.util.Scanner;
 public class P1Main
 {
 
-	private static final String trainingFile = "hw5/gclean.txt";  //gulliverstravels
+	//private static final String trainingFile = "hw5/gclean.txt";  //gulliverstravels
 	//private static final String trainingFile = "hw5/hfclean.txt"; //huckfin
 	//private static final String trainingFile = "hw5/uclean.txt"; //ulysses
-	//private static final String trainingFile = "hw5/hw5test.txt"; //test
+	private static final String trainingFile = "hw5/hw5test.txt"; //test
 
 	
 	/**

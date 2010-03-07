@@ -1,6 +1,5 @@
 package hw5;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -134,6 +133,7 @@ public class Words
 		for (sortString s : sortedDict)
 		{
 			accum = accum + bigramCondProb(s.string, bigram);
+			//System.out.println(bigramCondProb(s.string, bigram));
 			//System.out.println("accum: " + accum + " s: " + s.string);
 			if (accum >= dart)
 			{

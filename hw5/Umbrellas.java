@@ -44,14 +44,17 @@ public class Umbrellas
 		norainT.put("-Rain", .7);
 		
 		rainS.put("+Umbrella", .9); 
-		rainS.put("-Umbrella", .2);
+		rainS.put("-Umbrella", .1); //TODO: not .2
 		norainS.put("+Umbrella", .2);
-		norainS.put("-Umbrella", .9);
+		norainS.put("-Umbrella", .8); //TODO: not .9
 		
 		transitionModel.put("+Rain", rainT);
 		transitionModel.put("-Rain", norainT);
 		sensorModel.put("+Rain", rainS);
 		sensorModel.put("-Rain", norainS);
+		
+		System.out.println(transitionModel);
+		System.out.println(sensorModel);
 	}
 	
 	
@@ -71,87 +74,69 @@ public class Umbrellas
 		HashMap<String, Node> ppaths = new HashMap<String, Node>();
 		for (String state : states)
 		{
-			ppaths.put(state, new Node(state, null, initial_probability.get(state), initial_probability.get(state)));
+			ppaths.put(state, new Node(state, null, initial_probability.get(state)));
 		}
 		
-		System.out.println(ppaths);
 		
 		//forward compute
 		for (String e : observations)  //for each observation in order of time t
 		{
-			t++;
-			System.out.println("t: " + t);
+			//System.out.println("OBS: " + e + " T: " + t);
 			HashMap<String, Node> nppaths = new HashMap<String, Node>();
+			
 			for (String tostate : states) //for each possible state that we can go TO
 			{
-				System.out.println("tostate: " + tostate);
-				Node nn = new Node(null, null, 0d, 0d);
-				double sum = 0;
-				for (Node fromstate : ppaths.values()) //calculate predict and update 
+				//System.out.println("TOSTATE: " + tostate);
+				
+				
+				Double myprob =1d;				
+				Node nn = new Node(null, null, 0d);
+				
+				for (Node fromstate : ppaths.values())
 				{
+					//System.out.println("FROMSTATE: " + fromstate.state);
 					
+					myprob = fromstate.probability;
 					
-					System.out.println("fromstate: " + fromstate);
+					Double predict = transitionModel.get(fromstate.state).get(tostate);
+					Double update = sensorModel.get(tostate).get(e); ///TODO: should this be tostate? OMG IT SHOULD
 					
+					if (t==0) predict=1d; //on the 0th step we don't have sensor information
 					
-					Double mystateprobability = 
-						transitionModel.get(fromstate.state).get(tostate) * //predict
-						fromstate.state_probability; //carry along  P(x_1,...,x_t-1,x_t|e_1:t)
-					Double mypathprobability =  
-						transitionModel.get(fromstate.state).get(tostate) * //predict
-						fromstate.path_probability; //carry along  P(x_1,...,x_t-1,x_t|e_1:t)
-
-					System.out.println("sp: " + 
-										    	transitionModel.get(fromstate.state).get(tostate) + " * " + 
-												fromstate.state_probability + " = " +
-										    	transitionModel.get(fromstate.state).get(tostate) * //predict
-												fromstate.state_probability); //carry along  P(x_1,...,x_t-1,x_t|e_1:t)
-//					
-//					System.out.println("pp: " + 
-//										    	transitionModel.get(fromstate.state).get(tostate) + " * " + 
-//										    	sensorModel.get(fromstate.state).get(e) + " * " +
-//												fromstate.path_probability + " = " +
-//										    	transitionModel.get(fromstate.state).get(tostate) * //predict
-//										    	sensorModel.get(fromstate.state).get(e) *  //P(e_t+1|X_t+1) update
-//												fromstate.path_probability); //carry along  P(x_1,...,x_t-1,x_t|e_1:t)
-//					Double mystateprobability = 
-//										    	transitionModel.get(fromstate.state).get(tostate) * //predict
-//										    	sensorModel.get(fromstate.state).get(e) *  //P(e_t+1|X_t+1) update
-//												fromstate.state_probability; //carry along  P(x_1,...,x_t-1,x_t|e_1:t)
-//					Double mypathprobability =  
-//				    							transitionModel.get(fromstate.state).get(tostate) * //predict
-//				    							sensorModel.get(fromstate.state).get(e) *  //P(e_t+1|X_t+1) update
-//				    							fromstate.path_probability; //carry along  P(x_1,...,x_t-1,x_t|e_1:t)
-					sum = sum + mystateprobability;
-					nn.updateMax(tostate, fromstate, mystateprobability, mypathprobability);
+					Double both = predict*update;
+					
+					//System.out.println(myprob + " * "+predict+" * " + update + " = " + myprob * predict * update);
+					
+					myprob *= both;
+					
+					nn.updateMax(tostate, fromstate, myprob);
 				}
-				System.out.println("total: " + sum);
-				nn.state_probability = sum;
-				System.out.println("newstate: " + nn);
 				nppaths.put(tostate, nn);
+										
 			}
+			if (t==0) normalize(nppaths); // normalize the first step ignore the rest
+			System.out.println(nppaths);
 			ppaths = nppaths;
+			t++;
 		}
 		
 		
 		//choose
 		if (t==observations.length)
 		{
-			Node max = new Node(null, null, 0d, 0d);
+			Node max = new Node(null, null, 0d);
 			double sum = 0;
 			for (String state : states)
 			{
 				Node from = ppaths.get(state);
-				sum = sum + from.state_probability;
-				max.updateMax(from.state, from.parent, from.state_probability, from.state_probability);
+				sum = sum + from.probability;
+				max.updateMax(from.state, from.parent, from.probability);
 			}
-			max.state_probability = sum;
+			max.probability = sum;
 			System.out.println(max);
 		}
 		
 	}
-	
-	
 	
 	
 	
@@ -160,23 +145,21 @@ public class Umbrellas
 	 * @param in
 	 * @return
 	 */
-	private HashMap<String, Double> normalize(HashMap<String, Double> in)
+	private void normalize(HashMap<String, Node> in)
 	{
 		Double tots = 0.0;
-		for (Double d : in.values())
+		for (Node d : in.values())
 		{
-			tots = tots + d;
+			tots = tots + d.probability;
 		}
 		
-		HashMap<String, Double> n = new HashMap<String, Double>();
 		Double alpha = 1.0/tots;
 		
-		for (String s : in.keySet())
+		for (Node s : in.values())
 		{
-			n.put(s, in.get(s) * alpha);
+			s.probability = s.probability * alpha;
 		}
-		
-		return n;
 	}
+
 	
 }

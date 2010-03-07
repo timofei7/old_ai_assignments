@@ -10,8 +10,7 @@ public class Node
 {
 	public String state; //this nodes state
 	public Node parent; //this nodes parent
-	public Double state_probability;  //the probability of this state
-	public Double path_probability;   //the probability of the path
+	public Double probability;  //the probability of this state
 	
 	
 	/**
@@ -21,17 +20,16 @@ public class Node
 	 * @param sp this state's probability
 	 * @param pp the most probably path probability to here
 	 */
-	public Node(String s, Node p, Double sp, Double pp)
+	public Node(String s, Node p, Double pr)
 	{
 		this.state= s;
 		this.parent = p;
-		this.state_probability = sp;
-		this.path_probability = pp;
+		this.probability = pr;
 	}
 	
 	public String toString()
 	{
-		String path = state; //reconstruct the path
+		String path = state; //reconstruct the path //TODO: do i need to put my own state at the end here?
 		Node a = parent;
 		while (a != null)
 		{
@@ -39,7 +37,7 @@ public class Node
 			a = a.parent;
 		}
 		
-		return "state_probability=" + state_probability+ ", path_probability="+path_probability + ", path="+path;
+		return "probability=" + probability+ ", path="+path;
 	}
 	
 	/**
@@ -49,14 +47,13 @@ public class Node
 	 * @param sp
 	 * @param pp
 	 */
-	public void updateMax(String s, Node p, Double sp, Double pp)
+	public void updateMax(String s, Node p, Double pr)
 	{
-		if (pp > this.path_probability)
+		if (pr > this.probability)
 		{
 			this.state= s;
 			this.parent = p;
-			this.state_probability = sp;
-			this.path_probability = pp;
+			this.probability = pr;
 		}
 	}
 }
