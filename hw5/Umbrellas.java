@@ -29,6 +29,7 @@ public class Umbrellas
 		sensorModel = new HashMap<String, HashMap<String, Double>>(); 
 		states = new String[] {"+Rain","-Rain"}; 
 		observations = new String[] {"+Umbrella", "+Umbrella", "-Umbrella", "+Umbrella", "+Umbrella"}; 
+		//observations = new String[] {"+Umbrella", "+Umbrella", "+Umbrella"};
 
 		initial_probability.put("+Rain", 0.5);
 		initial_probability.put("-Rain", 0.5);
@@ -53,8 +54,10 @@ public class Umbrellas
 		sensorModel.put("+Rain", rainS);
 		sensorModel.put("-Rain", norainS);
 		
+		System.out.println("my models: ");
 		System.out.println(transitionModel);
 		System.out.println(sensorModel);
+		System.out.println();
 	}
 	
 	
@@ -110,6 +113,7 @@ public class Umbrellas
 					myprob *= both;
 					
 					nn.updateMax(tostate, fromstate, myprob);
+					if (t==0) nn.parent=null; //if we're at zero make sure no parent
 				}
 				nppaths.put(tostate, nn);
 										
@@ -124,15 +128,13 @@ public class Umbrellas
 		//choose
 		if (t==observations.length)
 		{
+			System.out.println("most probable sequence:");
 			Node max = new Node(null, null, 0d);
-			double sum = 0;
 			for (String state : states)
 			{
 				Node from = ppaths.get(state);
-				sum = sum + from.probability;
 				max.updateMax(from.state, from.parent, from.probability);
 			}
-			max.probability = sum;
 			System.out.println(max);
 		}
 		
