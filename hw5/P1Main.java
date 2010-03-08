@@ -1,16 +1,20 @@
 package hw5;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+/**
+ * CS44 W10 HW5 p1
+ * @author tim
+ *
+ */
 public class P1Main
 {
 
-	//private static final String trainingFile = "hw5/gclean.txt";  //gulliverstravels
+	private static final String trainingFile = "hw5/gclean.txt";  //gulliverstravels
 	//private static final String trainingFile = "hw5/hfclean.txt"; //huckfin
 	//private static final String trainingFile = "hw5/uclean.txt"; //ulysses
-	private static final String trainingFile = "hw5/hw5test.txt"; //test
+	//private static final String trainingFile = "hw5/hw5test.txt"; //test
 
 	
 	/**
@@ -25,7 +29,7 @@ public class P1Main
 		try
 		{
 			sc = new Scanner(new File(trainingFile));
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		

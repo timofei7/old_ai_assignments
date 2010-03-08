@@ -1,9 +1,13 @@
 package hw5;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+/**
+ * CS44 W10 HW5 p2 
+ * @author tim
+ *
+ */
 public class P2Main
 {
 
@@ -20,12 +24,12 @@ public class P2Main
 	{
 		
 
-		System.out.println("reading in training data");
+		System.out.println("reading in training data..this may take some time...");
 		Scanner sc = null;
 		try
 		{
 			sc = new Scanner(new File(trainingFile));
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
@@ -41,7 +45,7 @@ public class P2Main
 
 		while (true)
 		{
-			System.out.print("Type in two characters to start some sentences with: ");
+			System.out.print("Type in two characters to start some sentences with (try 'th' or 'my': ");
 			String bigram = txtinput.next();
 			
 			for (int i=0;i<5; i++)

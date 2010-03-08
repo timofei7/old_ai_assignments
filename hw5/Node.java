@@ -11,6 +11,7 @@ public class Node
 	public String state; //this nodes state
 	public Node parent; //this nodes parent
 	public Double probability;  //the probability of this state
+	public boolean log;
 	
 	
 	/**
@@ -25,11 +26,21 @@ public class Node
 		this.state= s;
 		this.parent = p;
 		this.probability = pr;
+		this.log = false;
 	}
+	
+	public Node(String s, Node p, Double pr, boolean log)
+	{
+		this.state= s;
+		this.parent = p;
+		this.probability = pr;
+		this.log = log;
+	}
+	
 	
 	public String toString()
 	{
-		String path = state; //reconstruct the path //TODO: do i need to put my own state at the end here?
+		String path = state; //reconstruct the path
 		Node a = parent;
 		while (a != null)
 		{
@@ -37,8 +48,12 @@ public class Node
 			a = a.parent;
 		}
 		
-		return "probability=" + probability+ ", path="+path;
+		if (log)
+			return "probability=" + Math.exp(probability)+ ", path="+path;
+		else
+			return "probability=" + probability+ ", path="+path;
 	}
+	
 	
 	/**
 	 * updates this node only if the path probability is greater
@@ -49,7 +64,8 @@ public class Node
 	 */
 	public void updateMax(String s, Node p, Double pr)
 	{
-		if (pr > this.probability)
+		//System.out.println("compare: " + this.state + "=" +s +  " me: " + this.probability + " with: " + pr);
+		if (pr >= this.probability)
 		{
 			this.state= s;
 			this.parent = p;
