@@ -1,0 +1,56 @@
+CS44 W10 hw5
+Tim Tregubov
+
+
+P1. P1Main.java method sP() gives a simple probability, bigramCondProb() takes a bigram
+	and a third word and gives that conditional probability (p(A | B C) = p(B C A) / p(B C))
+P1b P1Main.java buildSentence() takes a bigram to start a sentence with and builds a 15 word sentence.
+	This part is sooo cool. Make some pretty funny sentences! I trained it on Mark Twain, Gullivers Travels.
+	It ran out of memory processing war and peace though. These would be better if it could be forced to
+	end with word + period.  I just realized that it is so slow to read in the text because I read it all into a string!
+	I allocate new strings every single line.  Oops. Please be patient as it loads the text... :-) 
+
+Some of my favorite sentences (using different things as training data):
+
+what if it could be when she got done this husky up and went to
+what if it just happens so that stirred up she comes next morning or else
+what if it just worked noble when jim bit into nothing but bread and float
+when i found that rotten old smelly dishcloth that got lost behind the tree he
+i will now give a shriek at the figure here annexed i told his majesty
+i will be linked to the scabbard i was invited by several contrivances that shall
+i will make you tear your own flesh and bones birds beasts and fishes to
+you will gratefully and humbly submit to incur the censure of pride singularity affectation ignorance
+you will support the project gutenberg license included with this agreement you must cease using
+i am able to forbear groaning and shedding tears and turning my head into his
+i am not altogether so robust and that some of them breaking into the sea
+
+
+P2. P2Main.java
+	appears to work, the sample training text is very short.  
+	
+P3a.  
+	"in your writeup, convince me that it worked. (e.g, you should get the same probabilities as in the figure!)"
+	
+	It works. Here is the printout:
+	{-Rain=probability=0.18181818181818182, path=-Rain, +Rain=probability=0.8181818181818181, path=+Rain}
+	{-Rain=probability=0.04909090909090909, path=+Rain,-Rain, +Rain=probability=0.5154545454545454, path=+Rain,+Rain}
+	{-Rain=probability=0.1237090909090909, path=+Rain,+Rain,-Rain, +Rain=probability=0.03608181818181817, path=+Rain,+Rain,+Rain}
+	{-Rain=probability=0.017319272727272725, path=+Rain,+Rain,-Rain,-Rain, +Rain=probability=0.03340145454545455, path=+Rain,+Rain,-Rain,+Rain}
+	{-Rain=probability=0.002424698181818181, path=+Rain,+Rain,-Rain,-Rain,-Rain, +Rain=probability=0.021042916363636366, path=+Rain,+Rain,-Rain,+Rain,+Rain}
+	most probable sequence:
+	probability=0.021042916363636366, path=+Rain,+Rain,-Rain,+Rain,+Rain
+	
+	All the numbers match the probabilities in the figure in the book.
+	
+	QED
+
+P3b.
+
+	Oy vey. I wasn't able to get this to work on time. My problem is my transition model.
+	I was thinking that I could use single characters and through a little bookeeping track
+	the last seen characters for the bigram.  I don't think I'm thinking about this correctly. 
+	
+
+
+
+

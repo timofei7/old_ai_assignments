@@ -1,0 +1,68 @@
+HW4 CS44 W10
+Tim Tregubov
+
+  
+    *  Describe the domain of a variable corresponding to a component of width w and height h, 
+    >  on a circuit board of width n and height m. Make sure the component fits completely on the board! 
+    
+    The domain is:  {(x,y) | x in 0:m-w, y in 0:n-h } That is all x,y coordinates (for the upper left starting corner)
+    that are for x between 0 and m-w and for y between 0 and n-h.  This is on a grid that has 0,0 in upper left.
+
+    * Consider component a and b above, on a 10x3 board.
+    > Write the constraint that enforces the fact that the two components may not overlap. 
+    > Write out legal pairs of locations explicitly. 
+     
+     
+     I make the assumption below that there are no legal pairs when either of the two pieces cannot fit on the board.
+     If the constraint were to ignore that there would be more pairs in the middle where -- is, but one of the pieces would
+     be off the side of the board, thus they are hereby ignored.
+     Additionally for shorthand the pairs are written with A first multiplied by the positions of B second. 
+     So 00(20,21) is shorthand for: {((0,0),(2,0)), ((0,0),(2,1))
+     
+     C = { (A,B), {00(30,40,50,31,41,51),10(40,50,41,51),20(50,51)  --   50(00,01),60(00,01,10,11),70(00,01,10,11,20,21),
+     			   01(30,40,50,31,41,51),11(40,50,41,51),21(50,51)  --   51(00,01),61(00,01,10,11),71(00,01,10,11,20,21)}}
+
+    * Write a java program, to solve the example problem with a, b, c, d, given as above. 
+    > Modify my backtrackingSearch to terminate when the first goal is found. 
+
+	Done.  I took longer than I should have trying to work on the cnf thing and didn't end up working on
+	good test cases.  I have two, one which works and one which fails.
+	
+	The biggest problem with my code is the part that generates the constraints, I had hoped to work on solving
+	non-rectangular pieces so I wrote that code checking every position of every position of every rectangle. 
+	At big sizes of the problem this gets extremely slow. Since I ended up not doing that extra credit I 
+	should rewrite this to just do much simpler h/v number comparisons instead. Oh well. 
+
+    * Write a new search method in CSP.java, backtrackingMRV, 
+    > that uses the MRV heuristic to find a solution more quickly. 
+
+	For the example problem I found that even finding all the solutions was extremely fast. However I
+	started counting the number of backtracking stack frames and no heuristic = 9130, mrv+forwardchecking = 7!
+	That is an intense speedup.  When I tried it without forwardchecking it was around 2500.  So just the ordering helped a ton.
+
+    * Write another method with additional heuristics. 
+    > Don't just modify your code, since you'll want to run each method to compare the effectiveness! 
+    > (And write about it in your writeup!) 
+    
+    I chose LVC with MRV but without forwardchecking.  Ended up with 314 backtrack stack frames.  Not bad!
+    However for some reason I couldn't add forwardchecking to this when I did it would stop finding a solution. Must be a bug. 
+
+    * Write a method in CSP.java that returns a list of propositional logic rules
+    > in CNF form that could be used to solve any CSP. Apply it to the mapcoloring problem and
+    > to a simple circuit-board example. It seems to me the easiest way to do this would be to have
+    > each propositional symbol correspond to a bit of one of the variables in the CSP. Describe and
+    > discuss your results in the writeup. 
+    
+    So I attempted to do the distributing 'and' over 'or' bit and if I understand it correctly it
+    should explode with 2^n clauses... I ignored that warning and went ahead and coded it up anyway as
+    I understood and it runs out of memory since for the sample 10x3 area with 4 blocks one of the
+    constraints generated is 84 pairs long. 
+
+	I have left that code in and it does some naive conversion for very small constraints. 
+	
+	I attempted to look into Tseitin transformation but did not get very far. 
+	
+	
+	
+	
+    
